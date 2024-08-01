@@ -64,17 +64,17 @@ example : E ∪ O = Set.univ := by
   simp
   tauto
 
-def A : ℕ → Set ℕ := λ n ↦ λ k ↦ padicValNat 2 k = n
+def A_Dow : ℕ → Set ℕ := λ n ↦ λ k ↦ padicValNat 2 k = n
 
-example : ⋃ n : ℕ, A n = Set.univ := by
-  unfold A
+example : ⋃ n : ℕ, A_Dow n = Set.univ := by
+  unfold A_Dow
   apply Set.ext
   intro x
   simp
   exists padicValNat 2 x
 
-example {m n:ℕ} (h : m ≠ n) : Disjoint (A m) (A n) := by
-  unfold A
+example {m n:ℕ} (h : m ≠ n) : Disjoint (A_Dow m) (A_Dow n) := by
+  unfold A_Dow
   refine Set.disjoint_iff_forall_ne.mpr ?_
   intro a ha b hb
   contrapose h
@@ -83,13 +83,13 @@ example {m n:ℕ} (h : m ≠ n) : Disjoint (A m) (A n) := by
   rw [← ha,hb]
 
 
-example {n:ℕ} : Infinite (A n) := by
+example {n:ℕ} : Infinite (A_Dow n) := by
   refine Set.infinite_coe_iff.mpr ?_
   refine Set.infinite_of_forall_exists_gt ?h
   intro a
   exists 2^n*(2*a+1)
   constructor
-  . unfold A padicValNat
+  . unfold A_Dow padicValNat
     have : 0 < 2^n*(2*a+1) := by
       exact Fin.size_pos'
     simp
@@ -125,12 +125,12 @@ example {n:ℕ} : Infinite (A n) := by
 def almost_disjoint (B : Set ℕ) (C : ℕ → Set ℕ) : Set ℕ :=
 λ n ↦ Finite (Set.inter (C n) B)
 
-def Abot : Set (Set ℕ) := λ B ↦ almost_disjoint B A = Set.univ
+def Abot : Set (Set ℕ) := λ B ↦ almost_disjoint B A_Dow = Set.univ
 
-def I    : Set (Set ℕ) := λ B ↦ ∃ n₀, ∀ n, n₀ ≤ n → n ∈ almost_disjoint B A
+def I_Dow : Set (Set ℕ) := λ B ↦ ∃ n₀, ∀ n, n₀ ≤ n → n ∈ almost_disjoint B A_Dow
 
-example : Abot ⊆ I := by
-  unfold Abot I
+example : Abot ⊆ I_Dow := by
+  unfold Abot I_Dow
   intro C hC
   exists 0
   intro n _

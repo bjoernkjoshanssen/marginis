@@ -1,4 +1,5 @@
 import Mathlib.MeasureTheory.Measure.Hausdorff
+import Marginis.Pathak2009
 /-
 
 Miyabe, Nies, Stephan, `Randomness and Solovay degrees`, JLA, 2018, page 3 says:
@@ -26,10 +27,8 @@ lemma geom_summable: Summable (λ n : ℕ ↦ (1:ℝ) / 2^n.succ) := by
       exact @NormedRing.summable_geometric_of_norm_lt_one
                 ℝ _ _ (1/2) (by simp; exact two_inv_lt_one)
 
-noncomputable def real_of_cantor :=
-  λ (x : ℕ → Bool) ↦ tsum (λ n : ℕ ↦ ite (x n = true) ((1:ℝ) / (2 ^ n.succ)) 0)
 
-noncomputable def CantorLebesgueMeasure : MeasureTheory.Measure (ℕ → Bool) :=
+noncomputable def CantorLebesgueMeasure₀ : MeasureTheory.Measure (ℕ → Bool) :=
 MeasureTheory.Measure.comap real_of_cantor MeasureTheory.volume
 
 def halfminus := λ n ↦ ite (n=0) false true
@@ -73,8 +72,8 @@ lemma real_of_cantor_noninjective :
             ring
           exact Eq.trans h₀ h₁.symm
 
-lemma because_real_of_cantor_not_injective : CantorLebesgueMeasure Set.univ = 0 := by
-  unfold CantorLebesgueMeasure
+lemma because_real_of_cantor_not_injective : CantorLebesgueMeasure₀ Set.univ = 0 := by
+  unfold CantorLebesgueMeasure₀
   unfold MeasureTheory.Measure.comap
   split_ifs with H
   . simp

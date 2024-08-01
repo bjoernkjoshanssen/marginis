@@ -11,18 +11,18 @@ A is the set of prime numbers, then we show that [A]_P = ℕ.
 -/
 
 
-def f : Nat → Fin 2 := λ n ↦ ⟨n % 2,by
+def f_Green : Nat → Fin 2 := λ n ↦ ⟨n % 2,by
   refine Nat.mod_lt n ?_
   exact Nat.zero_lt_succ 1
 ⟩
 
-def p : ℕ → ℕ → Prop := λ i j ↦ f i = f j
+def p : ℕ → ℕ → Prop := λ i j ↦ f_Green i = f_Green j
 
-def P : Set (Set ℕ) := {{a | f a = 0},{a | f a = 1}}
+def P_Green : Set (Set ℕ) := {{a | f_Green a = 0},{a | f_Green a = 1}}
 
 def A : Set ℕ := λ i ↦ i.Prime
 
-lemma primes_odd_even : ∀ i : Fin 2, (∃ n, n.Prime ∧ f n = i) := by
+lemma primes_odd_even : ∀ i : Fin 2, (∃ n, n.Prime ∧ f_Green n = i) := by
   intro i; by_cases h₀ : i = 0
   . subst h₀; exists 2
   . exists 3
@@ -34,7 +34,7 @@ lemma primes_odd_even : ∀ i : Fin 2, (∃ n, n.Prime ∧ f n = i) := by
 
 lemma A_p : ∀ n : ℕ, ∃ a ∈ A, p n a := by
   intro n
-  let i := f n
+  let i := f_Green n
   let Q := primes_odd_even i
   unfold A
   unfold p
@@ -42,18 +42,18 @@ lemma A_p : ∀ n : ℕ, ∃ a ∈ A, p n a := by
   exists a
   tauto
 
-lemma π_P (n : ℕ) : ∃ π ∈ P, π ∩ A ≠ ∅ := by
+lemma π_P (n : ℕ) : ∃ π ∈ P_Green, π ∩ A ≠ ∅ := by
   obtain ⟨a,ha⟩ := A_p n
-  unfold P
+  unfold P_Green
   simp
-  by_cases hf : f a = 0
+  by_cases hf : f_Green a = 0
   . left
-    suffices ∃ a, f a = 0 ∧ a ∈ A by
+    suffices ∃ a, f_Green a = 0 ∧ a ∈ A by
       exact Set.nonempty_iff_ne_empty.mp this
     exists a
     tauto
   . right
-    suffices ∃ a, f a = 1 ∧ a ∈ A by
+    suffices ∃ a, f_Green a = 1 ∧ a ∈ A by
       exact Set.nonempty_iff_ne_empty.mp this
     exists a
     constructor

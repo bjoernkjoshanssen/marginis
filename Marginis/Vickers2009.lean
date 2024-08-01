@@ -17,33 +17,34 @@ Localic completion of generalized metric spaces II: Powerlocales
 STEVEN VICKERS
 -/
 
-def F X := { A : Set X | Set.Finite A}
+
+def F_Vickers X := { A : Set X | Set.Finite A}
 
 -- The ordinary powerset can be defined in these two, identical, ways:
-def P X := (Set.univ : Set (Set X))
+def P_Vickers X := (Set.univ : Set (Set X))
 def P' X := 𝒫 (Set.univ : Set X)
 
-example : P X = P' X := by
-  unfold P P'
+example : P_Vickers X = P' X := by
+  unfold P_Vickers P'
   simp only [Set.setOf_true, Set.powerset_univ]
 
-example [Fintype X] : F X = P X := by
+example [Fintype X] : F_Vickers X = P_Vickers X := by
   ext x
   constructor
   . intro; trivial
   . intro; exact Set.toFinite x
 
-lemma l₁ [Infinite X]: F X ≠ P X := by
+lemma finite_powerset_improper [Infinite X]: F_Vickers X ≠ P_Vickers X := by
   intro hc
-  have h₀: ∀ S, S ∈ F X ↔ S ∈ P X := fun S ↦ Eq.to_iff (congrArg (Membership.mem S) hc)
-  have h₁: Set.univ ∈ P X := by unfold P; simp
-  have h₂: Set.univ ∈ F X := by rw [h₀];exact h₁
+  have h₀: ∀ S, S ∈ F_Vickers X ↔ S ∈ P_Vickers X := fun S ↦ Eq.to_iff (congrArg (Membership.mem S) hc)
+  have h₁: Set.univ ∈ P_Vickers X := by unfold P_Vickers; simp
+  have h₂: Set.univ ∈ F_Vickers X := by rw [h₀];exact h₁
   have h₃: Finite X := Set.finite_univ_iff.mp h₂
   exact not_finite X
 
-example : F ℕ ≠ P ℕ := l₁
-example : F ℤ ≠ P ℤ := l₁
-example : F ℚ ≠ P ℚ := l₁
+example : F_Vickers ℕ ≠ P_Vickers ℕ := finite_powerset_improper
+example : F_Vickers ℤ ≠ P_Vickers ℤ := finite_powerset_improper
+example : F_Vickers ℚ ≠ P_Vickers ℚ := finite_powerset_improper
 
 instance : Infinite ℝ := by
   exact @Infinite.of_injective ℝ ℕ _ (λ x ↦ x) (by
@@ -52,7 +53,7 @@ instance : Infinite ℝ := by
     exact h
   )
 
-example : F ℝ ≠ P ℝ := l₁
+example : F_Vickers ℝ ≠ P_Vickers ℝ := finite_powerset_improper
 
 instance : Infinite ℂ := by
   exact @Infinite.of_injective ℂ ℝ _ (λ x ↦ x) (by
@@ -60,4 +61,4 @@ instance : Infinite ℂ := by
     exact Complex.ofReal_inj.mp h
   )
 
-example : F ℂ ≠ P ℂ := l₁
+example : F_Vickers ℂ ≠ P_Vickers ℂ := finite_powerset_improper

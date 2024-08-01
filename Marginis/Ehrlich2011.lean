@@ -28,7 +28,7 @@ def pr (x : ℕ) := { y : ℕ // (y <ₛ x) }
 instance (x : ℕ) : IsTrichotomous { y : ℕ // y <ₛ x} (λ u v ↦ (u <ₛ v)) := instIsTrichotomousLt
 instance (x : ℕ) : IsTrans { y : ℕ // y <ₛ x} (λ u v ↦ (u <ₛ v)) := instIsTransLt
 instance (x : ℕ) : IsWellFounded { y : ℕ // y <ₛ x} (λ u v ↦ (u <ₛ v)) := Subtype.wellFoundedLT (fun y ↦ y < x)
-instance tree (x : ℕ) : IsWellOrder { y : ℕ // y <ₛ x} (λ u v ↦ (u <ₛ v)) := {} -- no fields are needed since they are all inferred
+instance ehrlich_tree (x : ℕ) : IsWellOrder { y : ℕ // y <ₛ x} (λ u v ↦ (u <ₛ v)) := {} -- no fields are needed since they are all inferred
 
  /- A maximal subclass wellordered by <ₛ is called a branch.
  Over ℕ we can only prove that all of ℕ itself is a branch.
