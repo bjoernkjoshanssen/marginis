@@ -2,7 +2,9 @@ import Mathlib.Init.Set
 import Mathlib.Data.Nat.Factors
 import Mathlib.NumberTheory.Padics.PadicVal
 
-/-
+/-!
+
+# Marginis
 
 Representation of Integers: A nonclassical point of view
 BOUDAOUD ABDELMADJID BELLAOUAR DJAMEL
