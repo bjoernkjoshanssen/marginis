@@ -53,16 +53,15 @@ example : Disjoint E O := by
   unfold O
   refine Set.disjoint_iff_forall_ne.mpr ?_
   intro a ha b hb
-  have : ¬ Odd a := by exact Nat.even_iff_not_odd.mp ha
+  have : ¬ Odd a := by simp_all;exact ha
   exact Ne.symm (ne_of_mem_of_not_mem hb this)
 
 example : E ∪ O = Set.univ := by
   unfold E O
-  simp
   apply Set.ext
   intro x
   simp
-  tauto
+  exact Nat.even_or_odd x
 
 def A_Dow : ℕ → Set ℕ := λ n ↦ λ k ↦ padicValNat 2 k = n
 
@@ -106,7 +105,7 @@ example {n:ℕ} : Infinite (A_Dow n) := by
     simp
     have h₀: Even (2*b) := by exact even_two_mul b
     have h₁: Odd (2*a+1) := by exact odd_two_mul_add_one a
-    have h₂ : ¬ Even (2*a+1) := by exact Nat.odd_iff_not_even.mp h₁
+    have h₂ : ¬ Even (2*a+1) := by simp_all
     intro hc
     rw [← hc] at h₀
     tauto

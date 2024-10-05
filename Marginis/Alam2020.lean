@@ -11,7 +11,7 @@ concerns integrals. Here we compute some.
 
 -/
 
-example : ∫ (t:ℝ) in Set.Icc (0:ℝ) (0:ℝ), (0:ℝ) = 0 := by
+example : ∫ (_:ℝ) in Set.Icc (0:ℝ) (0:ℝ), (0:ℝ) = 0 := by
   simp only [Set.Icc_self, MeasureTheory.Measure.restrict_singleton,
     MeasureTheory.measure_singleton, zero_smul, MeasureTheory.integral_zero]
 
@@ -42,7 +42,7 @@ example :
     simp only [Real.cos_sq_add_sin_sq]
     simp only [intervalIntegral.integral_const, sub_zero, smul_eq_mul, mul_one]
 
-example : (∫ (x:ℝ) in (0:ℝ)..(1:ℝ), (1:ℝ)) = 1 := by
+example : (∫ (_:ℝ) in (0:ℝ)..(1:ℝ), (1:ℝ)) = 1 := by
   let Q := @integral_one 0 1
   rw [Q]
   simp only [sub_zero]

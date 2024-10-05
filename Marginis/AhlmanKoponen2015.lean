@@ -53,7 +53,7 @@ example (f : Fin 2 → Fin 2) (hf : automorphism_of_fin_2 f) : f = id := by
     let Q₀₀ := hf.2 0 0
     simp at Q₀₀
     subst hl
-    exact Q₀₀.symm
+    exact Q₀₀
   |inr hr =>
     let Q₀₁ := hf.2 0 1
     subst hr

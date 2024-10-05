@@ -59,6 +59,7 @@ example : ¬ @WKL ℕ := by
   push_neg
   intro p
   use 2
+  simp
   show ¬ [p 0,p 1].length ≤ 1
   simp
 
@@ -67,7 +68,7 @@ theorem zerolist : ∀ (σ : List (Fin 1)), σ = List.replicate σ.length 0
 | [] => by simp
 | a :: y => by
   rw [zerolist y]
-  simp only [List.replicate, List.pure_def, List.bind_eq_bind, List.nil_bind, List.cons_ne_self]
+  simp only [List.replicate, List.pure_def, List.bind_eq_bind, List.bind_nil, List.cons_ne_self]
   rw [List.length_replicate]
   simp
   exact Fin.fin_one_eq_zero a

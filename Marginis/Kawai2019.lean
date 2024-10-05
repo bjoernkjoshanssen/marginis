@@ -26,7 +26,7 @@ lemma getbound {X : Type} [TopologicalSpace X] [CompactSpace X] [Nonempty X] {U 
         CompactSpace.isCompact_univ U hU h
       have hn : t.Nonempty := by
         refine Finset.nonempty_iff_ne_empty.mpr ?_
-        intro hc; subst hc; simp at ht; exact Set.empty_ne_univ ht
+        intro hc; subst hc; simp at ht
       use (t.max' hn).succ
       intro x hx; let S := ht hx; simp at S; obtain ⟨i, hi⟩ := S; simp;
       use ⟨i, Nat.lt_succ_of_le (Finset.le_max' t i hi.1)⟩; tauto

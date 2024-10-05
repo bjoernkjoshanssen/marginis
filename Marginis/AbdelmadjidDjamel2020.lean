@@ -1,23 +1,22 @@
-import Mathlib.Init.Set
 import Mathlib.Data.Nat.Factors
-import Mathlib.NumberTheory.Padics.PadicVal
+import Mathlib.NumberTheory.Padics.PadicVal.Defs
+import Mathlib.Data.Finset.Card
 
 /-!
 
-# Marginis
+# Representation of Integers: A nonclassical point of view
+# BOUDAOUD ABDELMADJID BELLAOUAR DJAMEL
 
-Representation of Integers: A nonclassical point of view
-BOUDAOUD ABDELMADJID BELLAOUAR DJAMEL
-
-In the Introduction, this paper defines functions ω and Ω which give the number of distinct prime divisors
+In the Introduction,
+this paper defines functions ω and Ω which give the number of distinct prime divisors
 and the total number of prime factors of a number.
 We define these and calculate some examples.
 
 -/
 
 def Ω (n:ℕ) : ℕ := (Nat.primeFactorsList n).length
-
-def ω (n : ℕ) := Finset.card (Finset.filter (λ p : Fin (n.succ) ↦ Nat.Prime p ∧ padicValNat p n > 0) Finset.univ)
+open Finset
+def ω (n : ℕ) := card (filter (fun p : Fin (n.succ) ↦ Nat.Prime p ∧ padicValNat p n > 0) univ)
 
 #eval ω 12
 
@@ -39,7 +38,8 @@ def ω (n : ℕ) := Finset.card (Finset.filter (λ p : Fin (n.succ) ↦ Nat.Prim
 
 example : 24 ≤ padicValNat 2 16777216 ↔ (List.replicate 24 2).Subperm
   (Nat.primeFactorsList 16777216) :=
-    le_padicValNat_iff_replicate_subperm_primeFactorsList Nat.prime_two (Ne.symm (Nat.zero_ne_add_one 16777215))
+    le_padicValNat_iff_replicate_subperm_primeFactorsList
+      Nat.prime_two <|Ne.symm <|Nat.zero_ne_add_one 16777215
 
 -- example : (List.replicate 4 2).Subperm
 --   (Nat.primeFactorsList 16) := by decide

@@ -3,7 +3,7 @@ import Mathlib.Algebra.Order.Group.Abs
 import Mathlib.Topology.MetricSpace.PiNat
 import Mathlib.SetTheory.ZFC.Basic
 import Mathlib.Order.Interval.Set.OrdConnected
-import Mathlib.Init.Set
+-- import Mathlib.Init.Set
 
  /-
 
@@ -119,7 +119,6 @@ example : ¬ is_uniformly_continuous₂ (λ x ↦ ((x.2^2 - x.1^2):ℝ)) := by
     use (1/δ + δ/2, 0)
     constructor
     . simp
-      rw [Eq.symm (div_pow δ 2 2)]
       refine (transition (δ / 2) δ ?h.left.ha hδ).mp ?h.left.a
       exact div_nonneg (le_of_lt hδ) zero_le_two
       exact div_two_lt_of_pos hδ

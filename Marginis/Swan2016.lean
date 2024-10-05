@@ -1,4 +1,4 @@
-import Mathlib.Init.Set
+-- import Mathlib.Init.Set
 import Mathlib.Data.Finite.Defs
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Set.Finite

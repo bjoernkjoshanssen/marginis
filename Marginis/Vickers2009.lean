@@ -36,7 +36,9 @@ example [Fintype X] : F_Vickers X = P_Vickers X := by
 
 lemma finite_powerset_improper [Infinite X]: F_Vickers X ≠ P_Vickers X := by
   intro hc
-  have h₀: ∀ S, S ∈ F_Vickers X ↔ S ∈ P_Vickers X := fun S ↦ Eq.to_iff (congrArg (Membership.mem S) hc)
+  have h₀: ∀ S, S ∈ F_Vickers X ↔ S ∈ P_Vickers X := by
+    unfold F_Vickers P_Vickers at *
+    simp_all
   have h₁: Set.univ ∈ P_Vickers X := by unfold P_Vickers; simp
   have h₂: Set.univ ∈ F_Vickers X := by rw [h₀];exact h₁
   have h₃: Finite X := Set.finite_univ_iff.mp h₂

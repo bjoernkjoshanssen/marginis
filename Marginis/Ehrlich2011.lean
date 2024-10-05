@@ -1,4 +1,4 @@
-import Mathlib.Init.Order.Defs
+-- import Mathlib.Init.Order.Defs
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Complex.Basic
