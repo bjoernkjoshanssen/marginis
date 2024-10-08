@@ -50,7 +50,7 @@ import Marginis.KolmogorovExtension4.ClosedProj
 import Marginis.KolmogorovExtension4.compProdNat
 import Marginis.KolmogorovExtension4.Content
 import Marginis.KolmogorovExtension4.DependsOn
-import Marginis.KolmogorovExtension4.IndependentFamily.lea
+import Marginis.KolmogorovExtension4.IndependentFamily
 import Marginis.KolmogorovExtension4.IonescuTulceaKernel
 import Marginis.KolmogorovExtension4.KolmogorovExtension
 import Marginis.KolmogorovExtension4.Ordered
