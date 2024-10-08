@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Rémy Degenne, Peter Pfaffelhuber
 -/
 import Mathlib.MeasureTheory.Measure.Trim
-import KolmogorovExtension4.Content
+import Marginis.KolmogorovExtension4.Content
 
 open Set
 

@@ -3,8 +3,8 @@ Copyright (c) 2023 Rémy Degenne. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Rémy Degenne, Etienne Marion
 -/
-import KolmogorovExtension4.Annexe
-import KolmogorovExtension4.DependsOn
+import Marginis.KolmogorovExtension4.Annexe
+import Marginis.KolmogorovExtension4.DependsOn
 import Mathlib.MeasureTheory.MeasurableSpace.PreorderRestrict
 
 open Finset ENNReal ProbabilityTheory MeasureTheory Function Preorder

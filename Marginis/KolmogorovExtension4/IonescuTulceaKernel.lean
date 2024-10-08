@@ -3,11 +3,11 @@ Copyright (c) 2024 Etienne Marion. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Etienne Marion
 -/
-import KolmogorovExtension4.compProdNat
-import KolmogorovExtension4.Projective
-import KolmogorovExtension4.DependsOn
+import Marginis.KolmogorovExtension4.compProdNat
+import Marginis.KolmogorovExtension4.Projective
+import Marginis.KolmogorovExtension4.DependsOn
 import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import KolmogorovExtension4.KolmogorovExtension
+import Marginis.KolmogorovExtension4.KolmogorovExtension
 import Batteries.Data.Nat.Lemmas
 
 open MeasureTheory ProbabilityTheory Finset ENNReal Filter Topology Function MeasurableSpace Preorder

@@ -3,11 +3,11 @@ Copyright (c) 2023 Rémy Degenne. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Rémy Degenne, Peter Pfaffelhuber
 -/
-import KolmogorovExtension4.CaratheodoryExtension
-import KolmogorovExtension4.Projective
-import KolmogorovExtension4.RegularityCompacts
+import Marginis.KolmogorovExtension4.CaratheodoryExtension
+import Marginis.KolmogorovExtension4.Projective
+import Marginis.KolmogorovExtension4.RegularityCompacts
 import Mathlib.MeasureTheory.Constructions.Polish.Basic
-import KolmogorovExtension4.RegularContent
+import Marginis.KolmogorovExtension4.RegularContent
 
 open Set
 
