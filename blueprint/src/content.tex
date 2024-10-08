@@ -5,3 +5,28 @@
 % If you want to split the blueprint content into several files then
 % the current file can be a simple sequence of \input. Otherwise It
 % can start with a \section or \chapter for instance.
+
+\begin{definition}
+	\label{def:auto}
+	\lean{Marginis.AhlmanKoponen2015.automorphism_of_fin_k}
+	\leanok
+	Being an automorphisms.
+\end{definition}
+\begin{definition}
+	\label{def:rigid}
+	\lean{Marginis.AhlmanKoponen2015.is_rigid}
+	\leanok
+	\uses{def:auto}
+	Being rigid means having no nontrivial automorphisms.
+\end{definition}
+
+
+\begin{theorem}
+	\label{thm:rigid}
+	\notready
+	\uses{def:auto}
+	The Turing degrees are rigid.
+\end{theorem}
+\begin{proof}
+	Let's see...
+\end{proof}
