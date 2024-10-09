@@ -122,15 +122,15 @@ example : @MeasureTheory.Measure.infinitePiNat (fun _ : ℕ => Bool) _
       MeasureTheory.measure_univ
     ]
 
-lemma l₀ (b : Bool) : fairCoin b = 1/2 := by
+lemma fairValue (b : Bool) : fairCoin b = 1/2 := by
   unfold fairCoin
   show (fun b : Bool => (1:ENNReal)/2) true = 1/2
   simp
 
-lemma l₁ (b : Bool) : β {b} = 1/2 := by
+lemma fairSingleton (b : Bool) : β {b} = 1/2 := by
   unfold β
   simp
-  have := l₀ b
+  have := fairValue b
   cases b
   simp_all
   rfl
@@ -145,9 +145,9 @@ instance : MeasureTheory.IsProbabilityMeasure μFair := by
   unfold μFair
   exact MeasureTheory.measure_univ
 
-lemma l₅: μFair Set.univ = 1 := MeasureTheory.measure_univ
+lemma fairUniv: μFair Set.univ = 1 := MeasureTheory.measure_univ
 
-lemma l₄ (b : Bool) (k : ℕ) : μFair {A | A k = b} = 1/2 := by
+lemma fairHalf (b : Bool) (k : ℕ) : μFair {A | A k = b} = 1/2 := by
       have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
         (fun _ => β) _ {k} (fun i => {b}) (by simp)
       simp_all
@@ -156,7 +156,7 @@ lemma l₄ (b : Bool) (k : ℕ) : μFair {A | A k = b} = 1/2 := by
       rw [← h₂] at h₀
       unfold μFair
       rw [h₀]
-      have nnreal := l₁ b
+      have nnreal := fairSingleton b
       simp_all
       clear h₀
       clear h₂
@@ -166,8 +166,8 @@ lemma l₄ (b : Bool) (k : ℕ) : μFair {A | A k = b} = 1/2 := by
       simp
 
 
-/-- Oct 8, 2024 -/
-lemma l₆ {s : ℕ} (b : Fin s → Bool) : μFair {A | ∀ k : Fin s, A k.1 = b k} = (1/2)^s := by
+/-- This mostly characterizes the measure. -/
+lemma fairBoxes {s : ℕ} (b : Fin s → Bool) : μFair {A | ∀ k : Fin s, A k.1 = b k} = (1/2)^s := by
   have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
     (fun _ => β) _ {k < s | true}
     (fun k => dite (k < s) (fun h => {b ⟨k,h⟩}) (fun _ => Set.univ))
@@ -195,16 +195,16 @@ lemma l₆ {s : ℕ} (b : Fin s → Bool) : μFair {A | ∀ k : Fin s, A k.1 = b
       intro x hx;
       split_ifs with j₀
       congr
-      have := l₁ <|b ⟨x, j₀⟩
+      have := fairSingleton <|b ⟨x, j₀⟩
       clear g₀ h₀ hx
       unfold β
       aesop
       cases b ⟨x, j₀⟩
       aesop
-      rw [l₀]
+      rw [fairValue]
       aesop
       simp
-      rw [l₀]
+      rw [fairValue]
       simp
       unfold β
       aesop
