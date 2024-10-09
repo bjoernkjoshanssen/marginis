@@ -92,7 +92,7 @@ lemma because_real_of_cantor_not_injective : CantorLebesgueMeasure₀ Set.univ =
 
 open Classical
 
-noncomputable instance p : PMF Bool := {
+noncomputable instance fairCoin : PMF Bool := {
   val := fun b => (1:ENNReal)/2
   property := by
     have h₀ :=  @hasSum_fintype ENNReal Bool _ _ _ (fun b => 1/2)
@@ -106,8 +106,8 @@ noncomputable instance p : PMF Bool := {
 }
 
 noncomputable def β : MeasureTheory.ProbabilityMeasure Bool := {
-  val := p.toMeasure
-  property := PMF.toMeasure.isProbabilityMeasure p
+  val := fairCoin.toMeasure
+  property := PMF.toMeasure.isProbabilityMeasure fairCoin
 }
 
 instance (n : ℕ) : MeasureTheory.IsProbabilityMeasure ((fun _ ↦ β.val) n) := by
@@ -122,8 +122,8 @@ example : @MeasureTheory.Measure.infinitePiNat (fun _ : ℕ => Bool) _
       MeasureTheory.measure_univ
     ]
 
-lemma l₀ (b : Bool) : p b = 1/2 := by
-  unfold p
+lemma l₀ (b : Bool) : fairCoin b = 1/2 := by
+  unfold fairCoin
   show (fun b : Bool => (1:ENNReal)/2) true = 1/2
   simp
 
