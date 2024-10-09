@@ -1,6 +1,6 @@
 import Mathlib.MeasureTheory.Measure.Hausdorff
 import Marginis.Pathak2009
-import Marginis.KolmogorovExtension4.ProductMeasure
+import KolmogorovExtension4.ProductMeasure
 import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 import Mathlib.Probability.ProbabilityMassFunction.Basic
 /-

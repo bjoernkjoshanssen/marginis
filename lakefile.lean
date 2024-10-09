@@ -15,6 +15,7 @@ lean_lib «Marginis» where
   -- add any library configuration options here
 
 require checkdecls from git "https://github.com/PatrickMassot/checkdecls.git"
+require kolmogorov_extension4 from git "https://github.com/sgouezel/kolmogorov_extension4"
 
 meta if get_config? env = some "dev" then
 require «doc-gen4» from git
