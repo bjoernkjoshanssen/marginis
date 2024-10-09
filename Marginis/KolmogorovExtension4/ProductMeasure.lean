@@ -563,8 +563,8 @@ theorem integral_stronglyMeasurable [DecidableEq ι] {E : Type*} [NormedAddCommG
   have this y : g (s.restrict y) = f y := by
     apply stronglyMeasurable_dependsOn' mf
     intro i hi
-    simp only [updateFinset, restrict, dite_eq_ite, ite_eq_then]
-    exact fun h ↦ (h hi).elim
+    simp only [updateFinset, restrict, dite_eq_ite]
+    aesop
   rw [← integral_congr_ae <| Eventually.of_forall this, integral_dep_productMeasure]
   exact mf.comp_measurable (measurable_updateFinset.mono (_root_.le_refl _) (ℱ.le s))
 
@@ -587,8 +587,8 @@ theorem lintegral_measurable [DecidableEq ι] {s : Finset ι}
   let g : ((i : s) → X i) → ℝ≥0∞ := fun y ↦ f (Function.updateFinset x _ y)
   have this y : g (s.restrict y) = f y := by
     refine measurable_dependsOn' mf fun i hi ↦ ?_
-    simp only [updateFinset, restrict, dite_eq_ite, ite_eq_then]
-    exact fun h ↦ (h hi).elim
+    simp only [updateFinset, restrict, dite_eq_ite]
+    aesop
   simp_rw [← this]
   rw [lintegral_dep]
   · rfl
