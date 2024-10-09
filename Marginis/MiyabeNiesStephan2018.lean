@@ -137,24 +137,24 @@ lemma l₁ (b : Bool) : β {b} = 1/2 := by
   simp_all
   rfl
 
-noncomputable def μ := @MeasureTheory.productMeasure Nat (fun _ => Bool)
+noncomputable def μFair := @MeasureTheory.productMeasure Nat (fun _ => Bool)
     _ (fun _ => β) _
 
-instance : MeasureTheory.IsProbabilityMeasure μ := by
+instance : MeasureTheory.IsProbabilityMeasure μFair := by
   refine MeasureTheory.isProbabilityMeasure_iff.mpr ?_
-  unfold μ
+  unfold μFair
   exact MeasureTheory.measure_univ
 
-lemma l₅: μ Set.univ = 1 := MeasureTheory.measure_univ
+lemma l₅: μFair Set.univ = 1 := MeasureTheory.measure_univ
 
-lemma l₄ (b : Bool) (k : ℕ) : μ {A | A k = b} = 1/2 := by
+lemma l₄ (b : Bool) (k : ℕ) : μFair {A | A k = b} = 1/2 := by
       have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
         (fun _ => β) _ {k} (fun i => {b}) (by simp)
       simp_all
       unfold Function.eval at h₀
       have h₂ : {f : ℕ → Bool | f k = b} = ((fun f ↦ f k) ⁻¹' {b}) := by aesop
       rw [← h₂] at h₀
-      unfold μ
+      unfold μFair
       rw [h₀]
       have nnreal := l₁ b
       simp_all
@@ -167,12 +167,12 @@ lemma l₄ (b : Bool) (k : ℕ) : μ {A | A k = b} = 1/2 := by
 
 
 /-- Oct 8, 2024 -/
-lemma l₆ {s : ℕ} (b : Fin s → Bool) : μ {A | ∀ k : Fin s, A k.1 = b k} = (1/2)^s := by
+lemma l₆ {s : ℕ} (b : Fin s → Bool) : μFair {A | ∀ k : Fin s, A k.1 = b k} = (1/2)^s := by
   have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
     (fun _ => β) _ {k < s | true}
     (fun k => dite (k < s) (fun h => {b ⟨k,h⟩}) (fun _ => Set.univ))
     (by simp)
-  unfold μ
+  unfold μFair
   have g₀ : (MeasureTheory.productMeasure fun x ↦ β.toMeasure)
     ((Set.Iio s).pi fun k ↦ if h : k < s then {b ⟨k, h⟩} else {false, true})
           = (MeasureTheory.productMeasure fun x ↦ β.toMeasure)
