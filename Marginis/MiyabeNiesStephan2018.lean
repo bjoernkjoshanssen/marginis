@@ -5,7 +5,12 @@ import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 import Mathlib.Probability.ProbabilityMassFunction.Basic
 /-
 
-Miyabe, Nies, Stephan, `Randomness and Solovay degrees`, JLA, 2018, page 3 says:
+# Randomness and Solovay degrees
+by
+
+## Miyabe, Nies, Stephan
+
+JLA, 2018. Page 3 says:
 
 `We sometimes identify a real α with its binary expansion X ∈ 2^ω`
 `and the corresponding set X = {n ∈ ℕ : X (n) = 1 }`

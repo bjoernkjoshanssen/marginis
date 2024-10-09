@@ -6,9 +6,9 @@ import Mathlib.Algebra.BigOperators.Group.Finset
 import Mathlib.RingTheory.Regular.RegularSequence
 
 /-!
-## Genericity and UD–random reals
+# Genericity and UD–random reals
 by
-# WESLEY CALVERT, JOHANNA N.Y. FRANKLIN.
+## WESLEY CALVERT, JOHANNA N.Y. FRANKLIN.
 
 This concerns the second sentence in the Introduction in the paper.
 
