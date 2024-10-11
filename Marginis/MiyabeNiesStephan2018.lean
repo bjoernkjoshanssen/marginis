@@ -199,7 +199,6 @@ lemma fairBoxes {s : ℕ} (b : Fin s → Bool) : μFair {A | ∀ k : Fin s, A k.
       = 1/2 := by
       intro x hx;
       split_ifs with j₀
-      congr
       have := fairSingleton <|b ⟨x, j₀⟩
       clear g₀ h₀ hx
       unfold β
@@ -223,3 +222,119 @@ lemma fairBoxes {s : ℕ} (b : Fin s → Bool) : μFair {A | ∀ k : Fin s, A k.
   rw [← g₀]
   rw [← g₁]
   simp_all
+
+
+instance γ : Group Bool := {
+    mul := xor
+    mul_assoc := fun a b c => by
+        show xor (xor a b) c = xor a (xor b c)
+        simp only [Bool.bne_assoc]
+    one := false
+    one_mul := fun a => by
+        show xor false a = a
+        simp
+    mul_one := fun a => by
+        show xor a false = a
+        simp
+    inv := fun a => a
+    inv_mul_cancel := fun a => by
+        show xor a a = false
+        simp
+}
+
+instance : TopologicalGroup (ℕ → Bool) := TopologicalGroup.mk
+
+noncomputable def ν := MeasureTheory.Measure.haarMeasure
+    {
+        carrier := (Set.univ : Set (ℕ → Bool))
+        isCompact' := CompactSpace.isCompact_univ
+        interior_nonempty' := by simp
+    }
+
+example : Unit := by
+  have h₀: ν Set.univ = 1 := by
+    apply MeasureTheory.Measure.haarMeasure_self
+  have h₁: ν ∅ = 0 := MeasureTheory.OuterMeasureClass.measure_empty ν
+  have h₂: {A | A 0 = false} ∪ {A | A 0 = true} = (Set.univ : Set (ℕ → Bool)) := by
+    aesop
+  have h₃: {A | A 0 = false} ∩ {A | A 0 = true} = (∅ : Set (ℕ → Bool)) := by
+    aesop
+  have h₄ : ν ({A | A 0 = false} ∪ {A | A 0 = true}) + ν ({A | A 0 = false} ∩ {A | A 0 = true}) =
+  ν {A | A 0 = false} + ν {A | A 0 = true}
+   := by
+    refine MeasureTheory.measure_union_add_inter' ?hs {A : ℕ → Bool | A 0 = true}
+    refine measurableSet_eq_fun_of_countable ?hs.hf ?hs.hg
+    exact measurable_pi_apply 0
+    exact measurable_const
+  have h₅ : 1 + 0 =
+  ν {A | A 0 = false} + ν {A | A 0 = true}
+   := by
+   aesop
+
+  have h₆ : ν {A | A 0 = false} = ν {A | A 0 = true}
+     := by
+    -- use translation invariance
+    have : MeasureTheory.Measure.IsMulLeftInvariant ν := by
+        unfold ν
+        exact
+          MeasureTheory.Measure.isMulLeftInvariant_haarMeasure
+            { carrier := Set.univ, isCompact' := ν.proof_2, interior_nonempty' := ν.proof_3 }
+    unfold MeasureTheory.Measure.IsMulLeftInvariant at this
+    -- unfold ν at this
+    have := this.map_mul_left_eq_self (fun n => ite (n=0) true false)
+    simp at this
+    nth_rewrite 1 [← this]
+
+    show (MeasureTheory.Measure.map
+        (fun x ↦
+            (fun n ↦ decide (n = 0)) * x
+        ) ν) {A | A 0 = false}
+        = ν {A | A 0 = true}
+    show (MeasureTheory.Measure.map
+        (fun x ↦
+            (fun n ↦ decide (n = 0)) * fun n => x n
+        ) ν) {A | A 0 = false}
+        = ν {A | A 0 = true}
+    show (MeasureTheory.Measure.map
+        (fun x ↦
+            (fun n ↦ xor (decide (n = 0)) (x n))
+        ) ν) {A | A 0 = false}
+        = ν {A | A 0 = true}
+    have : {A : ℕ → Bool | A 0 = true} =
+        {A | (fun x ↦
+            (fun n ↦ xor (decide (n = 0)) (x n))
+        ) A 0 = false} := by aesop
+    rw [this]
+    let f := (fun x : ℕ → Bool ↦
+            (fun n ↦ xor (decide (n = 0)) (x n))
+        )
+    have (S : Set (ℕ → Bool)) (h :  MeasurableSet S) :  (MeasureTheory.Measure.map f ν) S
+        = ν { A | f A ∈ S} := by
+        rw [MeasureTheory.Measure.map_apply]
+        congr
+
+        · unfold f; exact Measurable.const_div (fun ⦃t⦄ a ↦ a) fun n ↦ decide (n = 0)
+        · exact h
+    show (MeasureTheory.Measure.map f ν) {A | A 0 = false}
+        = ν {A | f A 0 = false}
+    apply this
+    refine measurableSet_eq_fun_of_countable ?h.hf ?h.hg
+    exact measurable_pi_apply 0
+    exact measurable_const
+  have h₇ : ν {A | A 0 = true} = 1/2 := by
+    rw [h₆] at h₅
+    simp at h₅
+    rw [h₅]
+    ring_nf
+    norm_cast
+    symm
+    have := @mul_div ENNReal _ (ν {A | A 0 = true}) 2 2
+    rw [← this]
+    ring_nf
+    have : (2 : ENNReal) / 2 = 1 := by
+        refine (ENNReal.div_eq_one_iff ?hb₀ ?hb₁).mpr rfl
+        exact Ne.symm (NeZero.ne' 2)
+        exact ENNReal.two_ne_top
+    rw [this]
+    simp
+  exact PUnit.unit
