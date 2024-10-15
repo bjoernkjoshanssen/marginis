@@ -97,7 +97,17 @@ lemma because_real_of_cantor_not_injective : CantorLebesgueMeasure₀ Set.univ =
 
 open Classical
 
-noncomputable instance fairCoin : PMF Bool := {
+
+noncomputable def coin (p : NNReal) (h : p ≤ 1) : PMF Bool := {
+  val := fun b => ite b p (1-p)
+  property := by
+    have h₀ :=  @hasSum_fintype ENNReal Bool _ _ _ fun b => ite b p (1-p)
+    aesop
+}
+
+noncomputable def fairCoin' : PMF Bool := coin (1/2) (by simp)
+
+noncomputable def fairCoin : PMF Bool := {
   val := fun b => (1:ENNReal)/2
   property := by
     have h₀ :=  @hasSum_fintype ENNReal Bool _ _ _ (fun b => 1/2)
@@ -110,10 +120,28 @@ noncomputable instance fairCoin : PMF Bool := {
     aesop
 }
 
+theorem fairCoin_characterize : fairCoin = fairCoin' := by
+  unfold fairCoin fairCoin'
+  ext b
+  congr
+  simp
+
 noncomputable def β : MeasureTheory.ProbabilityMeasure Bool := {
   val := fairCoin.toMeasure
-  property := PMF.toMeasure.isProbabilityMeasure fairCoin
+  property := PMF.toMeasure.isProbabilityMeasure _
 }
+
+/-- Bernoulli measure. -/
+noncomputable def βmeasure (p : NNReal) (hp : p ≤ 1) : MeasureTheory.ProbabilityMeasure Bool := {
+  val := (coin p hp).toMeasure
+  property := PMF.toMeasure.isProbabilityMeasure _
+}
+
+instance (n : ℕ)  (p : NNReal) (hp : p ≤ 1) : MeasureTheory.IsProbabilityMeasure
+    ((fun _ ↦ (βmeasure p hp).val) n) := by
+  simp
+  exact (βmeasure p hp).property
+
 
 instance (n : ℕ) : MeasureTheory.IsProbabilityMeasure ((fun _ ↦ β.val) n) := by
   simp
@@ -127,10 +155,28 @@ example : @MeasureTheory.Measure.infinitePiNat (fun _ : ℕ => Bool) _
       MeasureTheory.measure_univ
     ]
 
-lemma fairValue (b : Bool) : fairCoin b = 1/2 := by
-  unfold fairCoin
-  show (fun b : Bool => (1:ENNReal)/2) true = 1/2
+lemma fairValue (b : Bool) : fairCoin b = 1/2 := rfl
+
+lemma bernoulliValueTrue (p : NNReal) (hp : p ≤ 1) :
+    coin p hp true = p := rfl
+
+lemma bernoulliValueFalse (p : NNReal) (hp : p ≤ 1) :
+    coin p hp false = 1 - p := rfl
+
+lemma bernoulliSingletonTrue (p : NNReal) (hp : p ≤ 1) :
+    βmeasure p hp {true} = p := by
+  unfold βmeasure
   simp
+  have := bernoulliValueTrue p hp
+  simp_all
+
+lemma bernoulliSingletonFalse (p : NNReal) (hp : p ≤ 1) :
+    βmeasure p hp {false} = 1 - p := by
+  unfold βmeasure
+  simp
+  have := bernoulliValueFalse p hp
+  aesop
+
 
 lemma fairSingleton (b : Bool) : β {b} = 1/2 := by
   unfold β
@@ -142,6 +188,20 @@ lemma fairSingleton (b : Bool) : β {b} = 1/2 := by
   simp_all
   rfl
 
+noncomputable def μBernoulli (p : NNReal) (hp : p ≤ 1) :=
+    @MeasureTheory.productMeasure Nat (fun _ => Bool)
+    _ (fun _ => βmeasure p hp) _
+
+instance (p : NNReal) (hp : p ≤ 1) :
+    MeasureTheory.IsProbabilityMeasure <|μBernoulli p hp := by
+  refine MeasureTheory.isProbabilityMeasure_iff.mpr ?_
+  unfold μBernoulli
+  exact MeasureTheory.measure_univ
+
+lemma bernoulliUniv (p : NNReal) (hp : p ≤ 1) :
+    μBernoulli p hp Set.univ = 1 := MeasureTheory.measure_univ
+
+
 noncomputable def μFair := @MeasureTheory.productMeasure Nat (fun _ => Bool)
     _ (fun _ => β) _
 
@@ -152,24 +212,96 @@ instance : MeasureTheory.IsProbabilityMeasure μFair := by
 
 lemma fairUniv: μFair Set.univ = 1 := MeasureTheory.measure_univ
 
+lemma trueμBernoulli (p : NNReal) (hp : p ≤ 1) (k : ℕ) :
+    μBernoulli p hp {A | A k = true} = p := by
+  have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
+    (fun _ => βmeasure p hp) _ {k} (fun i => {true}) (by simp)
+  simp at h₀
+  have h₂ : {f : ℕ → Bool | f k = true} = ((fun f ↦ f k) ⁻¹' {true}) := by aesop
+  rw [← h₂] at h₀
+  unfold μBernoulli
+  rw [h₀]
+  have := bernoulliSingletonTrue p hp
+  have g₀ : (βmeasure p hp {true} : ENNReal) = p := by aesop
+  rw [← g₀]
+  simp
+
+lemma falseμBernoulli (p : NNReal) (hp : p ≤ 1) (k : ℕ) :
+    μBernoulli p hp {A | A k = false} = 1 - p := by
+  have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
+    (fun _ => βmeasure p hp) _ {k} (fun i => {false}) (by simp)
+  simp at h₀
+  have h₂ : {f : ℕ → Bool | f k = false} = ((fun f ↦ f k) ⁻¹' {false}) := by aesop
+  rw [← h₂] at h₀
+  unfold μBernoulli
+  rw [h₀]
+  have := bernoulliSingletonFalse p hp
+  have g₀ : (βmeasure p hp {false} : ENNReal) = 1 - p := by aesop
+  rw [← g₀]
+  simp
+
 lemma fairHalf (b : Bool) (k : ℕ) : μFair {A | A k = b} = 1/2 := by
       have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
         (fun _ => β) _ {k} (fun i => {b}) (by simp)
-      simp_all
-      unfold Function.eval at h₀
+      simp at h₀
       have h₂ : {f : ℕ → Bool | f k = b} = ((fun f ↦ f k) ⁻¹' {b}) := by aesop
       rw [← h₂] at h₀
       unfold μFair
       rw [h₀]
-      have nnreal := fairSingleton b
-      simp_all
-      clear h₀
-      clear h₂
-      have : (β {b} : NNReal) = (2⁻¹ : NNReal) := nnreal
-      have g₀ : (β {b} : ENNReal) = (2⁻¹ : ENNReal) := by aesop
+      have := fairSingleton b
+      have g₀ : (β {b} : ENNReal) = (1/2 : ENNReal) := by aesop
       rw [← g₀]
       simp
 
+
+lemma bernoulliBoxes {s : ℕ} (b : Fin s → Bool) (p : NNReal) (hp : p ≤ 1) : 0=0 := by
+  have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
+    (fun _ => βmeasure p hp) _ {k < s | true}
+    (fun k => dite (k < s) (fun h => {b ⟨k,h⟩}) (fun _ => Set.univ))
+    (by simp)
+  have g₀ : (MeasureTheory.productMeasure fun x ↦ (βmeasure p hp).toMeasure)
+    ((Set.Iio s).pi fun k ↦ if h : k < s then {b ⟨k, h⟩} else {false, true})
+          = (MeasureTheory.productMeasure fun x ↦ (βmeasure p hp).toMeasure)
+    {A | ∀ (k : Fin s), A k.1 = b k} := by
+    congr
+    ext A
+    simp
+    constructor
+    aesop
+    intro h
+    intro i hi
+    have := h ⟨i,hi⟩
+    simp_all
+  have g₁ : ∏ x ∈ Finset.Iio s, (βmeasure p hp).toMeasure
+    (if h : x < s then {b ⟨x, h⟩} else {false, true})
+    = p^ Finset.card {t | b t = true} * (1-p) ^ Finset.card {t | b t = false} := by
+    have g₂: ∀  x ∈ Finset.Iio s, (βmeasure p hp).toMeasure
+        (if h : x < s then {b ⟨x, h⟩} else {false, true})
+        = if h : x < s then coin p hp (b ⟨x,h⟩) else 1 := by
+      intro x hx
+      split_ifs with j₀
+      unfold βmeasure
+      cases b ⟨x, j₀⟩
+      · aesop
+      · aesop
+      aesop
+    have g₃ : ∏ x ∈ Finset.Iio s, p = p^s := by
+      have := @Finset.prod_const ℕ ENNReal (Finset.Iio s) _ p
+      aesop
+    have g₄ : ∏ x ∈ Finset.Iio s, (1 - p) = (1 - p)^s := by
+      have := @Finset.prod_const ℕ ENNReal (Finset.Iio s) _ (1 - p)
+      aesop
+    have : Finset.Iio s =
+        -- Finset.filter (fun t => b t = true ) (Finset.Iio s) ∪
+        Finset.filter (fun t =>
+            dite (t < s) (fun h => b ⟨t,h⟩ = true) (fun h => true)
+        ) (Finset.Iio s) ∪
+        Finset.filter (fun t =>
+            dite (t < s) (fun h => b ⟨t,h⟩ = false) (fun h => true)
+        ) (Finset.Iio s)
+        := by aesop
+    sorry
+  sorry
 
 /-- This mostly characterizes the measure. -/
 lemma fairBoxes {s : ℕ} (b : Fin s → Bool) : μFair {A | ∀ k : Fin s, A k.1 = b k} = (1/2)^s := by
