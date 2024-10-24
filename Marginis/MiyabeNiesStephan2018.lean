@@ -662,7 +662,7 @@ lemma noAtomsNNReal (ε : NNReal) (p : ℝ) (h₀ : 0 < p) (h₁ : p < 1) (h : 0
   have := noAtomsReal p ε h₀ h₁ h
   tauto
 
-lemma noAtomsENNReal (ε : ENNReal) (H : ε ≠ ⊤) (p : ℝ) (h₀ : 0 < p) (h₁ : p < 1) (h : 0 < ε) :
+lemma noAtomsENNReal {ε : ENNReal} (H : ε ≠ ⊤) {p : ℝ} (h₀ : 0 < p) (h₁ : p < 1) (h : 0 < ε) :
     ∃ n : ℕ, p^n ≤ ε.toReal := by
   have := noAtomsNNReal ε.toNNReal p h₀ h₁ (by
     refine ENNReal.toNNReal_pos ?ha₀ H
@@ -700,33 +700,66 @@ calc
             tauto
             tauto
 
-theorem extracted_1' (B : ℕ → Bool) (p : ENNReal) (hp : p ≤ 1) (ε : ENNReal)
+
+theorem binomial_left {p : ENNReal} (hp : p ≤ 1)
+    {u a : ℕ} (b : ℕ) (h : a ≥ u) :
+    p ^ a * (1 - p) ^ b ≤ p ^ u := by
+  have h1p : 1 - p ≤ 1 := by aesop
+  have : (1 - p) ^ b ≤ 1 := by calc
+                   _ ≤ (1:ENNReal) ^ b := pow_le_pow_left' h1p b
+                   _ = _ := by simp
+  calc _ ≤ p ^ a * 1 := mul_le_mul (le_refl _) this (zero_le _) (zero_le _)
+       _ = p ^ a     := by rw [mul_one]
+       _ ≤ p ^ u     := pow_le_pow_right_of_le_one' hp h
+
+
+theorem binom_distr_left {B : ℕ → Bool} {p : ENNReal} (hp : p ≤ 1)
+  {n₀ : ℕ}  (u : ℕ) (hu : n₀ ≤ u) (z : Bool)
+  (h : (filter (fun (t : Fin (2 * u)) ↦ B ↑t = z) univ).card ≥ u) :
+  p ^ (filter (fun (t : Fin (2 * u)) ↦ B t =  z) univ).card *
+      (1 - p) ^ (filter (fun (t : Fin (2 * u)) ↦ B t = !z) univ).card ≤ p ^ n₀ := by
+calc
+    _ ≤ p ^ u  := binomial_left hp (filter (fun (t : Fin (2 * u)) ↦ B t = !z) univ).card h
+    _ ≤ p ^ n₀ := pow_le_pow_right_of_le_one' hp hu
+
+
+theorem binom_distr_left_est (B : ℕ → Bool) (p : ENNReal) (hp : p ≤ 1) (ε : ENNReal)
   (n₀ : ℕ) (hn₀ : p ^ n₀ ≤ ε) (n₁ : ℕ) (z : Bool) (m : ENNReal)
-  (this : m ≤
+  (hm : m ≤
             p ^ (filter (fun (t : Fin (2 * max n₀ n₁)) ↦ B t =  z) univ).card *
       (1 - p) ^ (filter (fun (t : Fin (2 * max n₀ n₁)) ↦ B t = !z) univ).card)
   (h : (filter (fun (t : Fin (2 * max n₀ n₁)) ↦ B ↑t = z) univ).card ≥ max n₀ n₁) :
   m ≤ ε := by
-let M := max n₀ n₁
-have h1p : 1 - (p) ≤ 1 := by aesop
-calc
-    _ ≤ _ := this
-    _ ≤ (p) ^ (filter (fun (t : Fin (2 * M)) ↦ B t = z) univ).card * 1 :=
-        mul_le_mul (le_refl _) (by calc
-        _ ≤  (1:ENNReal) ^ (filter (fun (t : Fin (2 * M)) ↦ B t = !z) univ).card :=
-        pow_le_pow_left' h1p (filter (fun (t : Fin (2 * M)) ↦ B t = !z) univ).card
-        _ ≤ _ := by aesop
-        ) (by aesop) (by aesop)
-    _ = p ^ (filter (fun (t : Fin (2 * M)) ↦ B t = z) univ).card := by simp
-    _ ≤ _ := by calc
-        _ ≤ ( p) ^ M := by
-            refine pow_le_pow_right_of_le_one' ?ha h
-            exact hp
-            --exact ENNReal.coe_le_one_iff.mpr hp
-        _ ≤ p ^ n₀ := by
-            refine pow_le_pow_right_of_le_one' ?ha (by aesop)
-        _ ≤ _ := by
-            simp_all
+calc _ ≤ _ := hm
+     _ ≤ _ := binom_distr_left hp _ (Nat.le_max_left n₀ n₁) _ h
+     _ ≤ _ := hn₀
+
+theorem majority (B : ℕ → Bool) (m : ℕ) :
+    (filter (fun t : Fin (2 * m) ↦ B t =  true) univ).card ≥ m
+  ∨ (filter (fun t : Fin (2 * m) ↦ B t = false) univ).card ≥ m := by
+  by_contra hc
+  push_neg at hc
+  have htf : (univ : Finset (Fin (2 * m)))
+      = univ.filter (fun t : Fin (2 * m) => B t = true)
+      ∪ univ.filter (fun t => B t = false) := by aesop
+  have p₀: (univ : Finset (Fin (2 * m))).card < (2 * m) := by
+      rw [htf]
+      calc
+      _ ≤ _ := card_union_le (univ.filter fun t : Fin (2 * m) => B t =  true)
+                              (univ.filter fun t : Fin (2 * m) => B t = false)
+      _ < _ := by linarith
+  rw [card_fin (2 * m)] at p₀
+  simp at p₀
+
+theorem bound_of_toReal {p : ENNReal} (htop : p ≠ ⊤) {n₀ : ℕ}
+    (hn : p.toReal ^ n₀ ≤ ε.toReal) :
+          p        ^ n₀ ≤ ε := by
+  rw [← ENNReal.toReal_pow p n₀] at hn
+  apply ENNReal.le_of_top_imp_top_of_toNNReal_le
+  intro h
+  rw [ENNReal.pow_eq_top_iff] at h
+  exact False.elim <| htop h.1
+  exact fun _ _ => hn
 
 /-- Oct 22 2024. Needs serious golfing. -/
 theorem bernoulliNoAtoms'' {p : ENNReal} (hp : p ≤ 1)
@@ -743,91 +776,44 @@ theorem bernoulliNoAtoms'' {p : ENNReal} (hp : p ≤ 1)
   have h₂ : ∀ (s : ℕ), (μBernoulli'' p hp) {B} ≤
             p ^ (univ.filter fun t : Fin s ↦ B t =  true).card
     * (1 - p) ^ (univ.filter fun t : Fin s ↦ B t = false).card := by aesop
+  have h01p : 0 < 1 - p := by
+    simp_all only [implies_true, ne_eq, le_refl, tsub_eq_zero_of_le, tsub_pos_iff_lt]
+  have h01pr : 0 < (1 - p).toReal := by
+    refine ENNReal.toReal_pos ?_ <|ENNReal.sub_ne_top ENNReal.one_ne_top
+    contrapose h01p
+    simp at h01p
+    rw [h01p]
+    simp
+  have h1pr : (1 - p).toReal = (1 : ENNReal).toReal - p.toReal := by
+    refine ENNReal.toReal_sub_of_le hp ?ha
+    simp
+
   by_cases H : ε = ⊤
-  · aesop
-
+  · exact H ▸ OrderTop.le_top _
   have htop : p ≠ ⊤ := by aesop
-  have := @noAtomsENNReal ε H p.toReal (by
-
-    refine ENNReal.toReal_pos ?ha₀ htop
-    exact Ne.symm (ne_of_lt hn₀)
-  ) (by
-    clear h₂ h₁ hε H this B ε hp
-    refine (ENNReal.lt_ofReal_iff_toReal_lt htop).mp ?_
-    aesop
-  ) hε
-  obtain ⟨n₀,hn₀⟩ := this --noAtomsENNReal ε H p hn₀ hn₁ hε
-
-  have := @noAtomsENNReal ε H (1-p).toReal (by
-
-    apply ENNReal.toReal_pos
-    have : 1 - 1 < 1 - p := by
-      apply ENNReal.sub_lt_of_sub_lt
-      simp
-      left
-      simp
-      have : 1 - (1 - p) = p := by
-        refine ENNReal.sub_sub_cancel ?h hp
-        exact ENNReal.one_ne_top
-      rw [this]
-      tauto
-    have : 0 < 1 - p := by aesop
-    contrapose this
-    simp at this
-    rw [this]
-    simp
-
-    refine ENNReal.sub_ne_top ?ha_top.ha
-    simp
-  ) (by
-    have : (1 - p).toReal = (1 : ENNReal).toReal - p.toReal := by
-      refine ENNReal.toReal_sub_of_le hp ?ha
-      simp
-    rw [this]
+  obtain ⟨n₀,hn⟩ := noAtomsENNReal H
+    (ENNReal.toReal_pos (Ne.symm (ne_of_lt hn₀)) htop)
+    ((ENNReal.lt_ofReal_iff_toReal_lt htop).mp <|ENNReal.ofReal_one ▸ hn₁) hε
+  have h1prl : (1 - p).toReal < 1 := by
+    rw [h1pr]
     simp
     apply ENNReal.toReal_pos
-    aesop
-    tauto
-  ) hε
-  obtain ⟨n₁,hn₁⟩ := this --noAtomsENNReal ε H (1-p) (by aesop) (by aesop) hε
-  let M := 2 * max n₀ n₁
-  have h₀ : (univ.filter fun t : Fin M ↦ B t =  true).card ≥ max n₀ n₁ ∨
-            (univ.filter fun t : Fin M ↦ B t = false).card ≥ max n₀ n₁ := by
-        by_contra hc
-        push_neg at hc
-        have htf : (univ : Finset (Fin M))
-            = univ.filter (fun t : Fin M => B t = true)
-            ∪ univ.filter (fun t => B t = false) := by aesop
-        have p₀: (univ : Finset (Fin M)).card < M := by
-            rw [htf]
-            calc
-            _ ≤ _ := card_union_le (univ.filter fun t : Fin M => B t =  true)
-                                   (univ.filter fun t : Fin M => B t = false)
-            _ < _ := by unfold M;linarith
-        rw [card_fin M] at p₀
-        simp at p₀
-  cases h₀ with
+    · contrapose hn₀
+      rw [Decidable.not_not] at hn₀
+      rw [hn₀]
+      simp
+    exact htop
+  obtain ⟨n₁,hn₁⟩ := noAtomsENNReal H h01pr h1prl hε
+  let m := max n₀ n₁
+  cases majority B m with
   | inl h =>
-    exact extracted_1' B p hp ε n₀ (by
-      clear this h₁ h₂ h M B hn₁ n₁
-      have : p.toReal ^ n₀ = (p^n₀).toReal := by
-        exact Eq.symm (ENNReal.toReal_pow p n₀)
-      rw [this] at hn₀
-      clear this
-      apply ENNReal.le_of_top_imp_top_of_toNNReal_le
-      intro h;exfalso;simp at h;tauto
-      intros
-      aesop
-    ) n₁ true  (μBernoulli'' p hp {B})
-        (h₂ M) h
+    exact binom_distr_left_est B p hp ε n₀
+      (bound_of_toReal htop hn)
+      n₁ true (μBernoulli'' p hp {B}) (h₂ (2 * m)) h
   | inr h =>
-    exact extracted_1' B (1-p) (by aesop) ε n₁ (by
-      have : (1-p).toReal ^ n₁ = ((1-p)^n₁).toReal := by
-        exact Eq.symm (ENNReal.toReal_pow (1-p) n₁)
-      rw [this] at hn₁
-      apply ENNReal.le_of_top_imp_top_of_toNNReal_le
-      intro h;exfalso;simp at h;tauto;
-    ) n₀ false (μBernoulli'' p hp {B})
+    exact binom_distr_left_est B (1-p) (by aesop) ε n₁
+      (bound_of_toReal (show 1-p ≠ ⊤ by refine ENNReal.sub_ne_top ?ha) hn₁)
+      n₀ false (μBernoulli'' p hp {B})
         (by
             simp;rw [mul_comm]
             have w₀: 1 - (1 -  p) = p := by
@@ -836,7 +822,7 @@ theorem bernoulliNoAtoms'' {p : ENNReal} (hp : p ≤ 1)
                 · aesop
             rw [w₀]
             simp_all
-        ) (by rw [max_comm];tauto)
+        ) (by rw [max_comm];exact h)
 
 /-- Oct 15 2024 -/
 theorem bernoulliNoAtoms {p : NNReal} (hp : p ≤ 1)
@@ -855,8 +841,8 @@ theorem bernoulliNoAtoms {p : NNReal} (hp : p ≤ 1)
     * (1 - p) ^ (univ.filter fun t : Fin s ↦ B t = false).card := by aesop
   by_cases H : ε = ⊤
   · aesop
-  obtain ⟨n₀,hn₀⟩ := noAtomsENNReal ε H p hn₀ hn₁ hε
-  obtain ⟨n₁,hn₁⟩ := noAtomsENNReal ε H (1-p) (by aesop) (by aesop) hε
+  obtain ⟨n₀,hn₀⟩ := noAtomsENNReal H hn₀ hn₁ hε
+  obtain ⟨n₁,hn₁⟩ := @noAtomsENNReal ε H (1-p) (by aesop) (by aesop) hε
   let M := 2 * max n₀ n₁
   have h₀ : (univ.filter fun t : Fin M ↦ B t =  true).card ≥ max n₀ n₁ ∨
             (univ.filter fun t : Fin M ↦ B t = false).card ≥ max n₀ n₁ := by
@@ -941,9 +927,11 @@ lemma fairBoxes {s : ℕ} (b : Fin s → Bool) : μFair {A | ∀ k : Fin s, A k.
       have := fairSingleton <|b ⟨x, j₀⟩
       clear g₀ h₀ hx
       unfold β
-      aesop
+      simp_all only [one_div, MeasureTheory.ProbabilityMeasure.coe_mk, PMF.toMeasure_apply_fintype, Fintype.univ_bool,
+        mem_singleton, Bool.true_eq_false, not_false_eq_true, sum_insert, sum_singleton]
       cases b ⟨x, j₀⟩
-      aesop
+      simp_all only [Set.mem_singleton_iff, Bool.true_eq_false, not_false_eq_true, Set.indicator_of_not_mem,
+        Set.indicator_of_mem, zero_add]
       rw [fairValue]
       aesop
       simp
