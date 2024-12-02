@@ -776,17 +776,13 @@ theorem bernoulliNoAtoms'' {p : ENNReal} (hp : p ≤ 1)
   have h₂ : ∀ (s : ℕ), (μBernoulli'' p hp) {B} ≤
             p ^ (univ.filter fun t : Fin s ↦ B t =  true).card
     * (1 - p) ^ (univ.filter fun t : Fin s ↦ B t = false).card := by aesop
-  have h01p : 0 < 1 - p := by
-    simp_all only [implies_true, ne_eq, le_refl, tsub_eq_zero_of_le, tsub_pos_iff_lt]
-  have h01pr : 0 < (1 - p).toReal := by
-    refine ENNReal.toReal_pos ?_ <|ENNReal.sub_ne_top ENNReal.one_ne_top
-    contrapose h01p
-    simp at h01p
-    rw [h01p]
-    simp
-  have h1pr : (1 - p).toReal = (1 : ENNReal).toReal - p.toReal := by
-    refine ENNReal.toReal_sub_of_le hp ?ha
-    simp
+  have h01p : 0 < 1 - p := tsub_pos_iff_lt.mpr hn₁
+  have h01pr : 0 < (1 - p).toReal :=
+    ENNReal.toReal_pos
+      (fun hc => (lt_self_iff_false _).mp <|hc ▸ h01p)
+      <|ENNReal.sub_ne_top ENNReal.one_ne_top
+  have h1pr : (1 - p).toReal = (1 : ENNReal).toReal - p.toReal :=
+    ENNReal.toReal_sub_of_le hp ENNReal.one_ne_top
 
   by_cases H : ε = ⊤
   · exact H ▸ OrderTop.le_top _
@@ -796,13 +792,9 @@ theorem bernoulliNoAtoms'' {p : ENNReal} (hp : p ≤ 1)
     ((ENNReal.lt_ofReal_iff_toReal_lt htop).mp <|ENNReal.ofReal_one ▸ hn₁) hε
   have h1prl : (1 - p).toReal < 1 := by
     rw [h1pr]
-    simp
-    apply ENNReal.toReal_pos
-    · contrapose hn₀
-      rw [Decidable.not_not] at hn₀
-      rw [hn₀]
-      simp
-    exact htop
+    simp only [ENNReal.one_toReal, sub_lt_self_iff]
+    exact ENNReal.toReal_pos (fun hc => (lt_self_iff_false 0).mp <|hc ▸ hn₀) htop
+
   obtain ⟨n₁,hn₁⟩ := noAtomsENNReal H h01pr h1prl hε
   let m := max n₀ n₁
   cases majority B m with
@@ -812,15 +804,11 @@ theorem bernoulliNoAtoms'' {p : ENNReal} (hp : p ≤ 1)
       n₁ true (μBernoulli'' p hp {B}) (h₂ (2 * m)) h
   | inr h =>
     exact binom_distr_left_est B (1-p) (by aesop) ε n₁
-      (bound_of_toReal (show 1-p ≠ ⊤ by refine ENNReal.sub_ne_top ?ha) hn₁)
+      (bound_of_toReal (ENNReal.sub_ne_top ENNReal.one_ne_top) hn₁)
       n₀ false (μBernoulli'' p hp {B})
         (by
-            simp;rw [mul_comm]
-            have w₀: 1 - (1 -  p) = p := by
-                apply ENNReal.sub_sub_cancel
-                · simp
-                · aesop
-            rw [w₀]
+            rw [mul_comm]
+            rw [ENNReal.sub_sub_cancel ENNReal.one_ne_top hp]
             simp_all
         ) (by rw [max_comm];exact h)
 
@@ -1066,15 +1054,15 @@ example : Unit := by
     simp
   exact PUnit.unit
 
-example  (p : ENNReal) (hp : p ≤ 1) : Unit :=
-  have := @PMF.bernoulli_expectation p hp
-  sorry
+-- example  (p : ENNReal) (hp : p ≤ 1) : Unit :=
+--   have := @PMF.bernoulli_expectation p hp
+--   sorry
 
-example  (p : NNReal) (hp : p ≤ 1) :
-    ProbabilityTheory.variance
-    (fun A : Bool => ite (A) 1 0) (βmeasure p hp) = p * (1-p) := by
-  unfold ProbabilityTheory.variance ProbabilityTheory.evariance βmeasure coin
-  simp
-  rw [MeasureTheory.lintegral]
-  -- do a finite version of this instead of Nat → Bool
-  sorry
+-- example  (p : NNReal) (hp : p ≤ 1) :
+--     ProbabilityTheory.variance
+--     (fun A : Bool => ite (A) 1 0) (βmeasure p hp) = p * (1-p) := by
+--   unfold ProbabilityTheory.variance ProbabilityTheory.evariance βmeasure coin
+--   simp
+--   rw [MeasureTheory.lintegral]
+--   -- do a finite version of this instead of Nat → Bool
+--   sorry
