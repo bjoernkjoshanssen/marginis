@@ -5,62 +5,57 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Rat.Denumerable
 
-/-
+/-!
+
+## Localic completion of generalized metric spaces II: Powerlocales
+by STEVEN VICKERS
 
 The finite powerset of a set.
 We show that in the presence of a `Fintype` it is the same as the ordinary powerset,
 and in the case of `ℕ, ℚ, ℝ, ℂ` it is not the same.
 
-Inspired by:
-
-Localic completion of generalized metric spaces II: Powerlocales
-STEVEN VICKERS
 -/
 
 
-def F_Vickers X := { A : Set X | Set.Finite A}
+def setSetFin X := { A : Set X | Set.Finite A}
 
 -- The ordinary powerset can be defined in these two, identical, ways:
-def P_Vickers X := (Set.univ : Set (Set X))
-def P' X := 𝒫 (Set.univ : Set X)
+def setSetUniv X := (Set.univ : Set (Set X))
+def powersetUniv X := 𝒫 (Set.univ : Set X)
 
-example : P_Vickers X = P' X := by
-  unfold P_Vickers P'
+example : setSetUniv X = powersetUniv X := by
+  unfold setSetUniv powersetUniv
   simp only [Set.setOf_true, Set.powerset_univ]
 
-example [Fintype X] : F_Vickers X = P_Vickers X := by
+example [Fintype X] : setSetFin X = setSetUniv X := by
   ext x
   constructor
   . intro; trivial
   . intro; exact Set.toFinite x
 
-lemma finite_powerset_improper [Infinite X]: F_Vickers X ≠ P_Vickers X := by
+/-- The finite powerset of an infinite set `X` is distinct from the powerset of `X`. -/
+lemma finite_powerset_improper [Infinite X]: setSetFin X ≠ setSetUniv X := by
   intro hc
-  have h₀: ∀ S, S ∈ F_Vickers X ↔ S ∈ P_Vickers X := by
-    unfold F_Vickers P_Vickers at *
+  have h₀: ∀ S, S ∈ setSetFin X ↔ S ∈ setSetUniv X := by
+    unfold setSetFin setSetUniv at *
     simp_all
-  have h₁: Set.univ ∈ P_Vickers X := by unfold P_Vickers; simp
-  have h₂: Set.univ ∈ F_Vickers X := by rw [h₀];exact h₁
-  have h₃: Finite X := Set.finite_univ_iff.mp h₂
+  have h₁: Set.univ ∈ setSetUniv X := by unfold setSetUniv; simp
+  have h₂: Set.univ ∈ setSetFin X := by rw [h₀];exact h₁
+  have := Set.finite_univ_iff.mp h₂
   exact not_finite X
 
-example : F_Vickers ℕ ≠ P_Vickers ℕ := finite_powerset_improper
-example : F_Vickers ℤ ≠ P_Vickers ℤ := finite_powerset_improper
-example : F_Vickers ℚ ≠ P_Vickers ℚ := finite_powerset_improper
+example : setSetFin ℕ ≠ setSetUniv ℕ := finite_powerset_improper
+example : setSetFin ℤ ≠ setSetUniv ℤ := finite_powerset_improper
+example : setSetFin ℚ ≠ setSetUniv ℚ := finite_powerset_improper
 
-instance : Infinite ℝ := by
-  exact @Infinite.of_injective ℝ ℕ _ (λ x ↦ x) (by
-    intro x y h
-    simp only [Nat.cast_inj] at h
-    exact h
-  )
+/-- There are infinitely many real numbers. -/
+instance : Infinite ℝ := Infinite.of_injective (λ x : ℕ ↦ x)
+  fun _ _ => Nat.cast_inj.mp
 
-example : F_Vickers ℝ ≠ P_Vickers ℝ := finite_powerset_improper
+/-- There are infinitely many complex numbers. -/
+instance : Infinite ℂ := Infinite.of_injective (λ x : ℝ ↦ x)
+  fun _ _ => Complex.ofReal_inj.mp
 
-instance : Infinite ℂ := by
-  exact @Infinite.of_injective ℂ ℝ _ (λ x ↦ x) (by
-    intro x y h
-    exact Complex.ofReal_inj.mp h
-  )
+example : setSetFin ℝ ≠ setSetUniv ℝ := finite_powerset_improper
 
-example : F_Vickers ℂ ≠ P_Vickers ℂ := finite_powerset_improper
+example : setSetFin ℂ ≠ setSetUniv ℂ := finite_powerset_improper
