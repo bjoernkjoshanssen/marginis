@@ -13,6 +13,7 @@ import Marginis.BridgesHendtlassPalmgren2016
 import Marginis.BrunjesSerpe2007
 import Marginis.Butler2015
 import Marginis.CalvertFranklin2015
+import Marginis.ChristDemmelKnightScanlonYelick2024
 import Marginis.CoquandMaiettiPalmgren2019
 import Marginis.CoquandSchuster2011
 import Marginis.CoquandSpitters2012
