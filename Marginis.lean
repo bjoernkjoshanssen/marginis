@@ -19,6 +19,7 @@ import Marginis.CoquandSchuster2011
 import Marginis.CoquandSpitters2012
 import Marginis.DoraisHirstShafer2012
 import Marginis.Dow2016
+import Marginis.EagleLau2024
 import Marginis.Editors2018
 import Marginis.Ehrlich2011
 import Marginis.FranklinMcNicholl2020
