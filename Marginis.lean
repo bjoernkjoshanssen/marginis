@@ -24,6 +24,7 @@ import Marginis.Ehrlich2011
 import Marginis.FranklinMcNicholl2020
 import Marginis.Goldbring2011
 import Marginis.Green2013
+import Marginis.Hanson2024
 import Marginis.HensonRaynaud2011
 import Marginis.Hrbacek2020
 import Marginis.Jekel2023
