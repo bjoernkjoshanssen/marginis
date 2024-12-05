@@ -16,11 +16,11 @@ max (ln (ln 2)) 1 = 1,
 and arctan (ln 1) = arctan 0 = 0.
 -/
 
-noncomputable def f (t x : ℝ) : ℝ :=
+noncomputable def opris (t x : ℝ) : ℝ :=
   Real.arctan <|Real.log <|max (Real.log <| t^4 + Real.log (x^2 + 2)) 1
 
-example : f 0 0 = 0 := by
-  unfold f
+example : opris 0 0 = 0 := by
+  unfold opris
   simp
   right
   left
