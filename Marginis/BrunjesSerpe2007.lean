@@ -10,15 +10,15 @@ Lars Brünjes and Christian Serpé, JLA 2007.
 -/
 
 /- The equation 2 + 0 = 0 mod p -/
-def φ (p:ℕ) := (2 + 0) % p = 0 % p
+def φ₀ (p:ℕ) := (2 + 0) % p = 0 % p
 
 /- The equation holds mod p for some primes p, but not for all primes p -/
-theorem proof_of_concept : ¬ ∀ p q : ℕ, Nat.Prime p → Nat.Prime q → (φ p ↔ φ q) :=
+theorem proof_of_concept : ¬ ∀ p q : ℕ, Nat.Prime p → Nat.Prime q → (φ₀ p ↔ φ₀ q) :=
 by {
   intro hcontra
-  have : φ 2 → φ 3 := (hcontra 2 3 Nat.prime_two Nat.prime_three).mp
-  have h3 : φ 3 := this rfl
-  have : ¬φ 3 := Nat.ne_of_beq_eq_false rfl
+  have : φ₀ 2 → φ₀ 3 := (hcontra 2 3 Nat.prime_two Nat.prime_three).mp
+  have h3 : φ₀ 3 := this rfl
+  have : ¬φ₀ 3 := Nat.ne_of_beq_eq_false rfl
   exfalso
   exact this h3
 }
