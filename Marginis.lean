@@ -35,6 +35,7 @@ import Marginis.KjosHanssen2010
 import Marginis.Lubarsky2010
 import Marginis.MiyabeNiesStephan2018
 import Marginis.NeriPowell2023
+import Marginis.Opris2023
 import Marginis.Pathak2009
 import Marginis.PaulyFouche2017
 import Marginis.PaulyZiegler2013
