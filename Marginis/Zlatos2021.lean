@@ -10,11 +10,8 @@ Proposition 2.1.3 concerns the set D - D.
 Here we define in general A + B.
 -/
 
-instance (X : Type) [Add X] : HAdd (Set X) (Set X) (Set X) := by
-  exact {
-      hAdd := fun A B ↦ by
-        intro x
-        exact (∃ y z, y ∈ A ∧ z ∈ B ∧ x = y + z)
+instance (X : Type) [Add X] : HAdd (Set X) (Set X) (Set X) := {
+      hAdd := fun A B x ↦ (∃ y z, y ∈ A ∧ z ∈ B ∧ x = y + z)
   }
 
 theorem add_example : {x : ℕ | x ≤ 1} + {x : ℕ | x ≥ 2} = {x : ℕ | x ≥ 2} := by
