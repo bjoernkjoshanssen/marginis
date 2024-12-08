@@ -10,23 +10,32 @@
 	\label{def:auto}
 	\lean{automorphism_of_fin_k}
 	\leanok
-	Being an automorphisms.
+	Let $k\in\mathbb N$.
+	An automorphisms of $\mathbb Z/ k\mathbb Z$ is a bijection $f$ that preserves addition:
+	\[
+	f(x+y)=f(x)+f(y)
+	\]
 \end{definition}
 \begin{definition}
 	\label{def:rigid}
 	\lean{is_rigid}
 	\leanok
 	\uses{def:auto}
-	Being rigid means having no nontrivial automorphisms.
+	The additive structure $\mathbb Z/ k\mathbb Z$ is rigid if it has no nontrivial automorphisms.
 \end{definition}
 
 
 \begin{theorem}
 	\label{thm:rigid}
-	\notready
+	\lean{fin2_rigid}
+	\leanok
+	%\notready
 	\uses{def:auto}
-	The Turing degrees are rigid.
+	The additive structure $\mathbb Z/ 2\mathbb Z$ is rigid.
 \end{theorem}
 \begin{proof}
-	Let's see...
+	Otherwise $f(0)=1$ and $f(1)=0$, but then
+	\[
+	0=f(1)=f(1+0)=f(1)+f(0)=0+1=1.
+	\]
 \end{proof}

@@ -24,25 +24,10 @@ def automorphism_of_fin_2 (f : Fin 2 → Fin 2) :=
   ∀ x y, f x + f y = f (x + y)
 
 lemma fin2 (x : Fin 2) : x = 0 ∨ x = 1 := by
-    have : x.1 ≤ 1 := by exact Fin.is_le x
-    have : x.1 < 1 ∨ x.1 = 1 := by exact Nat.lt_succ_iff_lt_or_eq.mp x.2
-    cases this with
-    |inl hl =>
-      have h₀: x.1 = 0 := by exact Nat.lt_one_iff.mp hl
-      have : x = 0 := by
-        apply Fin.ext;
+    fin_cases x <;> tauto
 
-        exact h₀
-      tauto
-    |inr hr =>
-
-      have : x = 1 := by
-        apply Fin.ext;
-
-        exact hr
-      tauto
-
-example (f : Fin 2 → Fin 2) (hf : automorphism_of_fin_2 f) : f = id := by
+/-- `Fin 2` is rigid as an additive structure. -/
+lemma fin2_rigid (f : Fin 2 → Fin 2) (hf : automorphism_of_fin_2 f) : f = id := by
   apply funext
   intro x
   simp
