@@ -6,7 +6,7 @@ import Mathlib.Probability.ProbabilityMassFunction.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Base
 import Mathlib.Probability.Variance
 import Mathlib.Probability.ProbabilityMassFunction.Integrals
-/-
+/-!
 
 # Randomness and Solovay degrees
 by
@@ -25,15 +25,17 @@ the pullback measure as of June 23, 2024 as a basis for a measure on Cantor spac
 the Cantor space gets measure 0.
 
 However, if we use Etienne Marion's KolmogorovExtension4 library
-thinks work out well.
+things work out well.
  -/
 
 set_option maxHeartbeats 2000000
 
-lemma geom_value : ∑' (n : ℕ), ((1:ℝ) / 2 ^ n.succ)  = 1 := by
-        let E := tsum_geometric_two' 1;simp at E
-        nth_rewrite 2 [← E];apply tsum_congr;intro b
-        norm_num;ring_nf
+lemma tsum_geometric_two_succ : ∑' (n : ℕ), ((1:ℝ) / 2 ^ n.succ)  = 1 := by
+        nth_rewrite 2 [← tsum_geometric_two' 1]
+        apply tsum_congr
+        intro b
+        norm_num
+        ring_nf
 
 lemma geom_summable: Summable (λ n : ℕ ↦ (1:ℝ) / 2^n.succ) := by
       have : (fun i ↦ (1:ℝ) / 2^(i+1)) = (fun n ↦ (1/2)^(n) * (1/2)) := by
@@ -73,7 +75,10 @@ lemma real_of_cantor_noninjective :
               = 2⁻¹ + 2⁻¹
             ) by apply add_left_cancel; exact this
             rw [← Q]
-            let X := geom_value;simp at X;rw [X];ring_nf
+            let X := tsum_geometric_two_succ
+            simp at X
+            rw [X]
+            ring_nf
           have h₁: real_of_cantor halfplus = 1/2 := by
             unfold real_of_cantor halfplus
             simp
@@ -102,18 +107,6 @@ lemma because_real_of_cantor_not_injective : CantorLebesgueMeasure₀ Set.univ =
 
 open Classical
 
-/-- October 22: This is literally PMF.bernoulli p h -/
-noncomputable def coin (p : NNReal) (h : p ≤ 1) : PMF Bool := {
-  val := fun b => ite b p (1-p)
-  property := by
-    have h₀ :=  @hasSum_fintype ENNReal Bool _ _ _ fun b => ite b p (1-p)
-    aesop
-}
-
-
-
-noncomputable def fairCoin' : PMF Bool := coin (1/2) (by simp)
-
 noncomputable def fairCoin'' : PMF Bool := PMF.bernoulli (1/2) (by simp)
 
 noncomputable def fairCoin : PMF Bool := {
@@ -129,12 +122,6 @@ noncomputable def fairCoin : PMF Bool := {
     aesop
 }
 
-theorem fairCoin_characterize : fairCoin = fairCoin' := by
-  unfold fairCoin fairCoin'
-  ext b
-  congr
-  simp
-
 noncomputable def β : MeasureTheory.ProbabilityMeasure Bool := {
   val := fairCoin.toMeasure
   property := PMF.toMeasure.isProbabilityMeasure _
@@ -146,22 +133,10 @@ noncomputable def β' : MeasureTheory.ProbabilityMeasure Bool := {
 }
 
 
-/-- Bernoulli measure. -/
-noncomputable def βmeasure (p : NNReal) (hp : p ≤ 1) : MeasureTheory.ProbabilityMeasure Bool := {
-  val := (coin p hp).toMeasure
-  property := PMF.toMeasure.isProbabilityMeasure _
-}
-
 noncomputable def β'measure (p : ENNReal) (hp : p ≤ 1) : MeasureTheory.ProbabilityMeasure Bool := {
   val := (@PMF.bernoulli p hp).toMeasure
   property := PMF.toMeasure.isProbabilityMeasure _
 }
-
-
-instance (n : ℕ)  (p : NNReal) (hp : p ≤ 1) : MeasureTheory.IsProbabilityMeasure
-    ((fun _ ↦ (βmeasure p hp).val) n) := by
-  simp
-  exact (βmeasure p hp).property
 
 
 instance (n : ℕ) : MeasureTheory.IsProbabilityMeasure ((fun _ ↦ β.val) n) := by
@@ -182,24 +157,11 @@ lemma fairValue'' (b : Bool) : fairCoin'' b = 1/2 := by
   unfold fairCoin''
   simp
 
-lemma bernoulliValueTrue (p : NNReal) (hp : p ≤ 1) :
-    coin p hp true = p := rfl
-
 lemma bernoulliValueTrue'' (p : ENNReal) (hp : p ≤ 1) :
     PMF.bernoulli p hp true = p := rfl
 
-lemma bernoulliValueFalse (p : NNReal) (hp : p ≤ 1) :
-    coin p hp false = 1 - p := rfl
-
 lemma bernoulliValueFalse'' (p : ENNReal) (hp : p ≤ 1) :
     PMF.bernoulli p hp false = 1 - p := rfl
-
-lemma bernoulliSingletonTrue (p : NNReal) (hp : p ≤ 1) :
-    βmeasure p hp {true} = p := by
-  unfold βmeasure
-  simp
-  have := bernoulliValueTrue p hp
-  simp_all
 
 lemma bernoulliSingletonTrue'' (p : ENNReal) (hp : p ≤ 1) :
     β'measure p hp {true} = p := by
@@ -212,13 +174,6 @@ lemma bernoulliSingletonFalse'' (p : ENNReal) (hp : p ≤ 1) :
     β'measure p hp {false} = 1-p := by
   unfold β'measure
   simp
-
-lemma bernoulliSingletonFalse (p : NNReal) (hp : p ≤ 1) :
-    βmeasure p hp {false} = 1 - p := by
-  unfold βmeasure
-  simp
-  have := bernoulliValueFalse p hp
-  aesop
 
 lemma fairSingleton'' (b : Bool) : β' {b} = 1/2 := by
   unfold β'
@@ -242,31 +197,19 @@ lemma fairSingleton (b : Bool) : β {b} = 1/2 := by
   rfl
 
 /-- The Bernoulli measure with parameter `p`. -/
-noncomputable def μBernoulli'' (p : ENNReal) (hp : p ≤ 1) :=
+noncomputable def μ_bernoulli (p : ENNReal) (hp : p ≤ 1) :=
     @MeasureTheory.productMeasure Nat (fun _ => Bool)
     _ (fun _ => β'measure p hp) _
 
-noncomputable def μBernoulli (p : NNReal) (hp : p ≤ 1) :=
-    @MeasureTheory.productMeasure Nat (fun _ => Bool)
-    _ (fun _ => βmeasure p hp) _
-
-instance (p : NNReal) (hp : p ≤ 1) :
-    MeasureTheory.IsProbabilityMeasure <|μBernoulli p hp := by
-  refine MeasureTheory.isProbabilityMeasure_iff.mpr ?_
-  unfold μBernoulli
-  exact MeasureTheory.measure_univ
 
 instance (p : ENNReal) (hp : p ≤ 1) :
-    MeasureTheory.IsProbabilityMeasure <|μBernoulli'' p hp := by
+    MeasureTheory.IsProbabilityMeasure <|μ_bernoulli p hp := by
   refine MeasureTheory.isProbabilityMeasure_iff.mpr ?_
-  unfold μBernoulli''
+  unfold μ_bernoulli
   exact MeasureTheory.measure_univ
 
-lemma bernoulliUniv (p : NNReal) (hp : p ≤ 1) :
-    μBernoulli p hp Set.univ = 1 := MeasureTheory.measure_univ
-
 lemma bernoulliUniv'' (p : ENNReal) (hp : p ≤ 1) :
-    μBernoulli'' p hp Set.univ = 1 := MeasureTheory.measure_univ
+    μ_bernoulli p hp Set.univ = 1 := MeasureTheory.measure_univ
 
 noncomputable def μFair := @MeasureTheory.productMeasure Nat (fun _ => Bool)
     _ (fun _ => β) _
@@ -288,61 +231,33 @@ lemma fairUniv: μFair Set.univ = 1 := MeasureTheory.measure_univ
 
 lemma fairUniv'': μFair'' Set.univ = 1 := MeasureTheory.measure_univ
 
-lemma trueμBernoulli'' (p : ENNReal) (hp : p ≤ 1) (k : ℕ) :
-    μBernoulli'' p hp {A | A k = true} = p := by
+lemma trueμ_bernoulli (p : ENNReal) (hp : p ≤ 1) (k : ℕ) :
+    μ_bernoulli p hp {A | A k = true} = p := by
   have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
     (fun _ => β'measure p hp) _ {k} (fun i => {true}) (by simp)
   simp at h₀
   have h₂ : {f : ℕ → Bool | f k = true} = ((fun f ↦ f k) ⁻¹' {true}) := by aesop
   rw [← h₂] at h₀
-  unfold μBernoulli''
+  unfold μ_bernoulli
   rw [h₀]
   have := bernoulliSingletonTrue'' p hp
   have g₀ : (β'measure p hp {true} ) = p := by aesop
   simp_all
 
 
-lemma trueμBernoulli (p : NNReal) (hp : p ≤ 1) (k : ℕ) :
-    μBernoulli p hp {A | A k = true} = p := by
-  have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
-    (fun _ => βmeasure p hp) _ {k} (fun i => {true}) (by simp)
-  simp at h₀
-  have h₂ : {f : ℕ → Bool | f k = true} = ((fun f ↦ f k) ⁻¹' {true}) := by aesop
-  rw [← h₂] at h₀
-  unfold μBernoulli
-  rw [h₀]
-  have := bernoulliSingletonTrue p hp
-  have g₀ : (βmeasure p hp {true} : ENNReal) = p := by aesop
-  rw [← g₀]
-  simp
-
-
-lemma falseμBernoulli'' (p : ENNReal) (hp : p ≤ 1) (k : ℕ) :
-    μBernoulli'' p hp {A | A k = false} = 1 - p := by
+lemma falseμ_bernoulli (p : ENNReal) (hp : p ≤ 1) (k : ℕ) :
+    μ_bernoulli p hp {A | A k = false} = 1 - p := by
   have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
     (fun _ => β'measure p hp) _ {k} (fun i => {false}) (by simp)
   simp at h₀
   have h₂ : {f : ℕ → Bool | f k = false} = ((fun f ↦ f k) ⁻¹' {false}) := by aesop
   rw [← h₂] at h₀
-  unfold μBernoulli''
+  unfold μ_bernoulli
   rw [h₀]
   have := bernoulliSingletonFalse'' p hp
   have g₀ : β'measure p hp {false} = 1 - p := by aesop
   simp_all
 
-lemma falseμBernoulli (p : NNReal) (hp : p ≤ 1) (k : ℕ) :
-    μBernoulli p hp {A | A k = false} = 1 - p := by
-  have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
-    (fun _ => βmeasure p hp) _ {k} (fun i => {false}) (by simp)
-  simp at h₀
-  have h₂ : {f : ℕ → Bool | f k = false} = ((fun f ↦ f k) ⁻¹' {false}) := by aesop
-  rw [← h₂] at h₀
-  unfold μBernoulli
-  rw [h₀]
-  have := bernoulliSingletonFalse p hp
-  have g₀ : (βmeasure p hp {false} : ENNReal) = 1 - p := by aesop
-  rw [← g₀]
-  simp
 
 lemma fairHalf (b : Bool) (k : ℕ) : μFair {A | A k = b} = 1/2 := by
       have h₀ := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
@@ -478,155 +393,11 @@ lemma bernoulliBoxes'' {s : ℕ} (b : Fin s → Bool) (p : ENNReal) (hp : p ≤ 
       · cases b ⟨i,j⟩ <;> simp
       · cases b ⟨i,hi⟩ <;> simp
 
-
-/-- Not the simplest form of what we want to prove -/
-lemma bernoulliBoxes' {s : ℕ} (b : Fin s → Bool) (p : NNReal) (hp : p ≤ 1) :
-    ∏ x ∈ Iio s, (βmeasure p hp).toMeasure
-    (if h : x < s then {b ⟨x, h⟩} else {false, true})
-    = p^ card {t | b t = true} * (1-p) ^ card {t | b t = false} := by
-    have g₂: ∀  x ∈ Iio s, (βmeasure p hp).toMeasure
-        (if h : x < s then {b ⟨x, h⟩} else {false, true})
-        = if h : x < s then coin p hp (b ⟨x,h⟩) else 1 := by
-      intro x hx
-      split_ifs with j₀
-      unfold βmeasure
-      cases b ⟨x, j₀⟩ <;> aesop
-      aesop
-    have g₃ : ∏ _ ∈ Iio s, p = p^s := by
-      have := @prod_const ℕ ENNReal (Iio s) _ p
-      aesop
-    have g₄ : ∏ _ ∈ Iio s, (1 - p) = (1 - p)^s := by
-      have := @prod_const ℕ ENNReal (Iio s) _ (1 - p)
-      aesop
-    have QQ := @prod_union ℕ ENNReal (filter (fun t =>
-            dite (t < s) (fun h => b ⟨t,h⟩ = true) (fun _ => true)
-        ) (Iio s)) (filter (fun t =>
-            dite (t < s) (fun h => b ⟨t,h⟩ = false) (fun _ => true)
-        ) (Iio s)) (fun x => if h : x < s then coin p hp (b ⟨x,h⟩) else 1) _ _ (by
-            intro S hst hsf x hxs
-            have Qt := hst hxs
-            have Qf := hsf hxs
-            simp at Qt Qf
-            exfalso
-            clear hst hsf g₃ g₄ g₂ hp p
-            aesop
-        )
-    simp at QQ
-    unfold βmeasure
-    have QQ₀ : (∏ x ∈ filter (fun t ↦ ∀ (h : t < s), b ⟨t, h⟩ = true) (Iio s),
-      if h : x < s then (coin p hp) (b ⟨x, h⟩) else 1) =
-      (∏ x ∈ filter (fun t ↦ ∀ (h : t < s), b ⟨t, h⟩ = true) (Iio s),
-      if x < s then (p : ENNReal) else 1)
-      := by
-        refine prod_bijective id Function.bijective_id ?hst ?hfg
-        intro i
-        simp
-        intro i hi
-        simp at hi
-        simp
-        split_ifs with j
-        rw [hi.2 j]
-        rfl
-        rfl
-    have QQ₁ : (∏ x ∈ filter (fun t ↦ ∀ (h : t < s), b ⟨t, h⟩ = false) (Iio s),
-      if h : x < s then (coin p hp) (b ⟨x, h⟩) else 1) =
-      (∏ x ∈ filter (fun t ↦ ∀ (h : t < s), b ⟨t, h⟩ = false) (Iio s),
-      if h : x < s then (1 - p : ENNReal) else 1) := by
-        apply prod_bijective id Function.bijective_id
-        intro i
-        simp
-        intro i hi
-        simp at hi
-        simp
-        split_ifs with j
-        rw [hi.2 j]
-        rfl
-        rfl
-    rw [QQ₀, QQ₁] at QQ
-    have : Iio s =
-        filter (fun t => dite (t < s) (fun h => b ⟨t,h⟩ =  true) (fun _ => true)) (Iio s)
-        ∪
-        filter (fun t => dite (t < s) (fun h => b ⟨t,h⟩ = false) (fun _ => true)) (Iio s)
-        := by aesop
-    simp at this
-    rw [← this] at QQ
-    simp at QQ
-    have T (z : Bool) (q : NNReal) :
-        (∏ x ∈ filter (fun t ↦ ∀ (h : t < s), b ⟨t, h⟩ = z) (Iio s), if x < s then ENNReal.ofNNReal q else 1)
-      = (∏ _ ∈ filter (fun t ↦ ∀ (h : t < s), b ⟨t, h⟩ = z) (Iio s),  ↑q) := by
-        apply prod_bijective id Function.bijective_id
-        intro i
-        simp
-        intro i hi
-        simp at hi
-        simp
-        intro;exfalso;linarith
-    have T₁ :
-        (∏ x ∈ filter (fun t ↦ ∀ (h : t < s), b ⟨t, h⟩ = false) (Iio s), if x < s then (1 - ENNReal.ofNNReal p) else 1)
-      = (∏ x ∈ filter (fun t ↦ ∀ (h : t < s), b ⟨t, h⟩ = false) (Iio s),  (1 - ENNReal.ofNNReal p)) := by
-            apply prod_bijective id Function.bijective_id
-            · intro i
-              simp
-            · intro i hi
-              simp at hi
-              simp
-              intro;exfalso;linarith
-    rw [T true p, T₁] at QQ
-    simp at QQ
-    have Y (z : Bool) : (filter (fun t ↦ ∀ (h : t < s), b ⟨t, h⟩ = z) (Iio s)).card
-            = (filter (fun t ↦ b t = z) univ).card := by
-        apply card_bij (fun (a : ℕ)
-            (ha : a ∈ filter (fun t ↦ ∀ (h : t < s), b ⟨t, h⟩ = z) (Iio s))
-            => ⟨a,by simp at ha;tauto⟩)
-        intro a ha
-        simp
-        simp at ha
-        tauto
-        intro a₁ ha₁ a₂ ha₂ h
-        simp at h
-        tauto
-        intro k hk;simp at hk;simp;use k.1;use ⟨k.2,by tauto⟩
-    rw [← Y true, ← Y false, ← QQ]
-    apply prod_bijective id Function.bijective_id
-    · simp
-    · intro i hi
-      simp at hi
-      simp
-      split_ifs with j
-      · cases b ⟨i,j⟩ <;> simp
-      · cases b ⟨i,hi⟩ <;> simp
-
-/-- Basic fact about Bernoulli measure on 2^ℕ. -/
-theorem bernoulliBoxes {s : ℕ} (b : Fin s → Bool) (p : NNReal) (hp : p ≤ 1) :
-    μBernoulli p hp {A : ℕ → Bool | ∀ (k : Fin s), A k.1 = b k}
-    = p^ card {t | b t = true} * (1-p) ^ card {t | b t = false} := by
-    unfold μBernoulli
-    have g₀ : (MeasureTheory.productMeasure fun _ ↦ (βmeasure p hp).toMeasure)
-        ((Set.Iio s).pi fun k ↦ if h : k < s then {b ⟨k, h⟩} else {false, true})
-            = (MeasureTheory.productMeasure fun _ ↦ (βmeasure p hp).toMeasure)
-        {A | ∀ (k : Fin s), A k.1 = b k} := by
-        congr
-        ext A
-        simp
-        constructor
-        aesop
-        intro h
-        intro i hi
-        have := h ⟨i,hi⟩
-        simp_all
-    have h := bernoulliBoxes' b p hp
-    rw [← h]
-    have := @MeasureTheory.productMeasure_boxes ℕ (fun _ => Bool) _
-        (fun _ => βmeasure p hp) _ (Iio s)
-        (fun k => dite (k < s) (fun h => {b ⟨k,h⟩}) (fun _ => Set.univ))
-        (by simp)
-    simp_all
-
-/-- October 22 -/
+/-- Bernoulli measure of boxes. -/
 theorem bernoulliBoxes''' {s : ℕ} (b : Fin s → Bool) (p : ENNReal) (hp : p ≤ 1) :
-    μBernoulli'' p hp {A : ℕ → Bool | ∀ (k : Fin s), A k.1 = b k}
+    μ_bernoulli p hp {A : ℕ → Bool | ∀ (k : Fin s), A k.1 = b k}
     = p^ card {t | b t = true} * (1-p) ^ card {t | b t = false} := by
-    unfold μBernoulli''
+    unfold μ_bernoulli
     have g₀ : (MeasureTheory.productMeasure fun _ ↦ (β'measure p hp).toMeasure)
         ((Set.Iio s).pi fun k ↦ if h : k < s then {b ⟨k, h⟩} else {false, true})
             = (MeasureTheory.productMeasure fun _ ↦ (β'measure p hp).toMeasure)
@@ -763,18 +534,18 @@ theorem bound_of_toReal {p : ENNReal} (htop : p ≠ ⊤) {n₀ : ℕ}
   exact fun _ _ => hn
 
 /-- The Bernoulli measure with parameter `p` has no atoms. -/
-theorem bernoulliNoAtoms'' {p : ENNReal} (hp : p ≤ 1)
+theorem bernoulliNoAtoms {p : ENNReal} (hp : p ≤ 1)
                        (hn₀ : 0 < p) (hn₁ : p < 1) (B : ℕ → Bool) :
-    μBernoulli'' p hp {B} = 0 := by
+    μ_bernoulli p hp {B} = 0 := by
   refine le_antisymm ?_
     (show 0 ≤ (MeasureTheory.productMeasure fun _ ↦ (β'measure p hp)) {B} by simp)
   apply le_of_forall_le_of_dense
   intro ε hε
-  have (s : ℕ) : μBernoulli'' p hp {B} ≤
-                 μBernoulli'' p hp {A | ∀ (k : Fin s), A k.1 = B k.1} :=
-    MeasureTheory.OuterMeasureClass.measure_mono (μBernoulli'' p hp) (by aesop)
+  have (s : ℕ) : μ_bernoulli p hp {B} ≤
+                 μ_bernoulli p hp {A | ∀ (k : Fin s), A k.1 = B k.1} :=
+    MeasureTheory.OuterMeasureClass.measure_mono (μ_bernoulli p hp) (by aesop)
   have h₁ (s : ℕ) := bernoulliBoxes''' (fun k : Fin s => B k.1) p hp -- key!
-  have h₂ : ∀ (s : ℕ), (μBernoulli'' p hp) {B} ≤
+  have h₂ : ∀ (s : ℕ), (μ_bernoulli p hp) {B} ≤
             p ^ (univ.filter fun t : Fin s ↦ B t =  true).card
     * (1 - p) ^ (univ.filter fun t : Fin s ↦ B t = false).card := by aesop
   have h01p : 0 < 1 - p := tsub_pos_iff_lt.mpr hn₁
@@ -802,72 +573,16 @@ theorem bernoulliNoAtoms'' {p : ENNReal} (hp : p ≤ 1)
   | inl h =>
     exact binom_distr_left_est B p hp ε n₀
       (bound_of_toReal htop hn)
-      n₁ true (μBernoulli'' p hp {B}) (h₂ (2 * m)) h
+      n₁ true (μ_bernoulli p hp {B}) (h₂ (2 * m)) h
   | inr h =>
     exact binom_distr_left_est B (1-p) (by aesop) ε n₁
       (bound_of_toReal (ENNReal.sub_ne_top ENNReal.one_ne_top) hn₁)
-      n₀ false (μBernoulli'' p hp {B})
+      n₀ false (μ_bernoulli p hp {B})
         (by
             rw [mul_comm]
             rw [ENNReal.sub_sub_cancel ENNReal.one_ne_top hp]
             simp_all
         ) (by rw [max_comm];exact h)
-
-/-- Oct 15 2024 -/
-theorem bernoulliNoAtoms {p : NNReal} (hp : p ≤ 1)
-                       (hn₀ : 0 < p) (hn₁ : p < 1) (B : ℕ → Bool) :
-    μBernoulli p hp {B} = 0 := by
-  refine le_antisymm ?_
-    (show 0 ≤ (MeasureTheory.productMeasure fun _ ↦ (βmeasure p hp)) {B} by simp)
-  apply le_of_forall_le_of_dense
-  intro ε hε
-  have (s : ℕ) : μBernoulli p hp {B} ≤
-                 μBernoulli p hp {A | ∀ (k : Fin s), A k.1 = B k.1} :=
-    MeasureTheory.OuterMeasureClass.measure_mono (μBernoulli p hp) (by aesop)
-  have h₁ (s : ℕ) := bernoulliBoxes (fun k : Fin s => B k.1) p hp -- key!
-  have h₂ : ∀ (s : ℕ), (μBernoulli p hp) {B} ≤
-            p ^ (univ.filter fun t : Fin s ↦ B t =  true).card
-    * (1 - p) ^ (univ.filter fun t : Fin s ↦ B t = false).card := by aesop
-  by_cases H : ε = ⊤
-  · aesop
-  obtain ⟨n₀,hn₀⟩ := noAtomsENNReal H hn₀ hn₁ hε
-  obtain ⟨n₁,hn₁⟩ := @noAtomsENNReal ε H (1-p) (by aesop) (by aesop) hε
-  let M := 2 * max n₀ n₁
-  have h₀ : (univ.filter fun t : Fin M ↦ B t =  true).card ≥ max n₀ n₁ ∨
-            (univ.filter fun t : Fin M ↦ B t = false).card ≥ max n₀ n₁ := by
-        by_contra hc
-        push_neg at hc
-        have htf : (univ : Finset (Fin M))
-            = univ.filter (fun t : Fin M => B t = true)
-            ∪ univ.filter (fun t => B t = false) := by aesop
-        have p₀: (univ : Finset (Fin M)).card < M := by
-            rw [htf]
-            calc
-            _ ≤ _ := card_union_le (univ.filter fun t : Fin M => B t =  true)
-                                   (univ.filter fun t : Fin M => B t = false)
-            _ < _ := by unfold M;linarith
-        rw [card_fin M] at p₀
-        simp at p₀
-  cases h₀ with
-  | inl h =>
-    exact extracted_1 B    p          hp ε n₀        hn₀ n₁ true  (μBernoulli p hp {B})
-        (h₂ M) h
-  | inr h =>
-    exact extracted_1 B (1-p) (by aesop) ε n₁ (by aesop) n₀ false (μBernoulli p hp {B})
-        (by
-            simp;rw [mul_comm]
-            have w₀: 1 - (1 - ENNReal.ofNNReal p) = p := by
-                apply ENNReal.sub_sub_cancel
-                · simp
-                · aesop
-            rw [w₀]
-            simp_all
-        ) (by rw [max_comm];tauto)
-
-instance (p : NNReal) (hp : p ≤ 1) (h₀ : 0 < p) (h₁ : p < 1) :
-    MeasureTheory.NoAtoms <|μBernoulli p hp := {
-    measure_singleton := bernoulliNoAtoms hp h₀ h₁
-}
 
 /-- This mostly characterizes the measure. -/
 lemma fairBoxes {s : ℕ} (b : Fin s → Bool) : μFair {A | ∀ k : Fin s, A k.1 = b k} = (1/2)^s := by

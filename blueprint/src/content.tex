@@ -26,8 +26,8 @@ If we suspect that a sequence is random with respect to a measure given by the v
 
 The more specific point is that the information about the distribution $p$ required for randomness testing can be encoded in a set of effective randomness tests; and the encoding is intrinsic in the sense that the ordering of the tests does not matter, and further tests may be added: passing any collection of tests that include these is enough to guarantee randomness. From a syntactic point of view, whereas randomness with respect to $p$ is naturally a $\Sigma^0_2(p)$ class, our results show that it is actually an intersection of $\Sigma^0_{2}$ classes.
 
-\begin{definition}
-	\lean{μBernoulli''}
+\begin{definition}\label{bernoulli}
+	\lean{μ_bernoulli}
 	\leanok
 The Bernoulli measure $\mu_{p}$ is defined by the stipulation that for each $n\in\omega=\{0,1,2,\ldots\}$, 
 \[
@@ -41,7 +41,7 @@ and $X(0),X(1),X(2),\ldots$ are mutually independent random variables.
 If $X$ is a $\{0,1\}$-valued random variable such that $\mathbb P(X=1) = p$ then $X$ is called a Bernoulli($p$) random variable.
 		
 
-\begin{definition}
+\begin{definition}\label{MLR}
 	A $\mu_p$-ML-randomness test is a sequence $\{U^p_n\}_n$ that is uniformly $\Sigma^0_1(p)$ with $\mu(U^p_n)\le 2^{-n}$, where $2^{-n}$ may be replaced by any computable function that goes to zero effectively. 
 	 
 	A $\mu_p$-ML-randomness test is \emph{Hippocratic} if there is a $\Sigma^0_1$ class $S\subseteq 2^\omega\times\omega$ such that $S=\{(X,n):X\in U_n^p\}$. Thus, $U_n=U_n^p$ does not depend on $p$ and is uniformly $\Sigma^0_1$.  
