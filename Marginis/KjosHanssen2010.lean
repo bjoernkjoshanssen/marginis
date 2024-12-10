@@ -145,29 +145,11 @@ calc
 -- #eval 3*(1/2)
 
 open Nat
-theorem choose_two (n:ℕ) : 2 * choose n 2  = n*(n-1) := match n with
-  |0 => rfl
-  |Nat.succ n =>
-    calc
-    _ = 2 * (choose n 1 + choose n 2)    := rfl
-    _ = 2 * (choose n 1) + 2* choose n 2 := Nat.mul_add 2 (choose n 1) (choose n 2)
-    _ = 2 * (n) + (n*(n-1))              := by rw[choose_two,choose_one_right]
-    _ = 2 * (n) + (n*n - n*1)            := by rw [Nat.mul_sub_left_distrib]
-    _ = 2 * (n) + (n*n - n)              := by ring_nf
-    _ = (2 * (n) + (n*n)) - n            := (Nat.add_sub_assoc (Nat.le_mul_self n) _).symm
-    _ = (n*(n) + n) + n - n              := by ring_nf
-    _ = (n*(n) + n)                      := Nat.add_sub_cancel (n * n + n) n
-    _ = (n+1) * n                        := by linarith
-    _ = (n+1) * ((n+1) - 1)              := rfl
-    _ = Nat.succ n * (Nat.succ n - 1)    := by linarith
-
-
-theorem choose_two_formula (n:ℕ) : choose n 2  = (n*(n-1))/2 := calc
-choose n 2 = choose n 2 * 2 / 2 := (Nat.mul_div_cancel _ zero_lt_two).symm
-_ = 2 * choose n 2 / 2 := by ring_nf
-_ = n*(n-1) / 2 := by rw[choose_two]
-
-theorem caution : ∃ n : ℕ, (n*(n-1))/2 ≠ n*((n-1)/2) := by {exists 2}
+theorem choose_two (n:ℕ) : 2 * choose n 2  = n*(n-1) := by
+  rw [choose_two_right]
+  ring_nf
+  refine div_two_mul_two_of_even ?_
+  exact even_mul_pred_self n
 
 theorem page7_bottom (n:ℕ) : choose n 2 * choose 4 2 = 3*n*(n-1) := calc
   _ = choose n 2 * 6       := rfl
@@ -183,6 +165,16 @@ Page 2
 open Classical
 
 noncomputable def one_on (P : Prop) : ℕ := ite P 1 0
+
+noncomputable def oneOn (S : Set ℕ) (x : ℕ) := one_on (x ∈ S)
+
+noncomputable def oneOn' {X : Type*} (S : Set X) (x : X) := Set.indicator S (fun _ => 1) x
+
+theorem one_one_inequality_indicator (x a : ℕ) :
+  a * Set.indicator (Set.Ici a) (fun _ => 1) x ≤ x := by
+  unfold Set.indicator
+  simp
+  aesop
 
 theorem one_on_inequality (x a : ℕ) : a * one_on (a ≤ x) ≤ x := by
   by_cases h : (a ≤ x)
@@ -208,3 +200,7 @@ theorem real_one_on_inequality (x a : ℝ) (g : 0 ≤ x) : a * one_on (a ≤ x) 
   rw [this]
   simp
   exact g
+
+theorem real_one_on_inequality' (x a : ℝ) (g : 0 ≤ x) :
+  Set.indicator (Set.Ici a) (fun _ => a) x ≤ x := by
+  exact Set.indicator_apply_le' (fun a ↦ a) fun _ ↦ g
