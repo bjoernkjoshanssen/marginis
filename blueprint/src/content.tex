@@ -25,6 +25,62 @@ If we suspect that a sequence is random with respect to a measure given by the v
 
 The more specific point is that the information about the distribution $p$ required for randomness testing can be encoded in a set of effective randomness tests; and the encoding is intrinsic in the sense that the ordering of the tests does not matter, and further tests may be added: passing any collection of tests that include these is enough to guarantee randomness. From a syntactic point of view, whereas randomness with respect to $p$ is naturally a $\Sigma^0_2(p)$ class, our results show that it is actually an intersection of $\Sigma^0_{2}$ classes.
 
+The Bernoulli measure $\mu_{p}$ is defined by the stipulation that for each $n\in\omega=\{0,1,2,\ldots\}$, 
+\[
+\mu_p(\{X: X(n)=1\})=p \text{ and }
+\]
+\[
+\mu_p(\{X:X(n)=0\})=1-p
+\]
+and $X(0),X(1),X(2),\ldots$ are mutually independent random variables. If $X$ is a $\{0,1\}$-valued random variable such that $\mathbb P(X=1) = p$ then $X$ is called a Bernoulli($p$) random variable.
+		
+
+\begin{definition}
+	A $\mu_p$-ML-randomness test is a sequence $\{U^p_n\}_n$ that is uniformly $\Sigma^0_1(p)$ with $\mu(U^p_n)\le 2^{-n}$, where $2^{-n}$ may be replaced by any computable function that goes to zero effectively. 
+	 
+	A $\mu_p$-ML-randomness test is \emph{Hippocratic} if there is a $\Sigma^0_1$ class $S\subseteq 2^\omega\times\omega$ such that $S=\{(X,n):X\in U_n^p\}$. Thus, $U_n=U_n^p$ does not depend on $p$ and is uniformly $\Sigma^0_1$.  
+If $X$ passes all $\mu_p$-randomness tests then $X$ is \emph{$\mu_p$-random}. If $X$ passes all Hippocratic tests then $X$ is \emph{Hippocrates $\mu$-random}.
+\end{definition}
+
+To explain the terminology: like the ancient medic Hippocrates we are not consulting the oracle of Delphi ($p$) but rather looking for ``natural causes''. This level of randomness recently arose in the study of randomness extraction from subsets of random sets \cite{MRL}.
+
+We will often write ``$\mu_p$-random'' instead of ``$\mu_p$-ML-random'', as we work in the Martin-L\"of mode of randomness throughout, except when discussing a conjecture at the end of this paper.
+
+%\newpage
+
+
+\section{Chebyshev's inequality}
+
+We develop this basic inequality from scratch here, in order to emphasize how generally it holds. For an event $A$ in a probability space, we let $\mathbf 1_A$, the indicator function of $A$, equal 1 if $A$ occurs, and $0$ otherwise. The \emph{expectation} of a discrete random variable $X$ is 
+\[
+\E(X)=\sum_x x\,\cdot\,\P(X=x).
+\]
+where $\P$ denotes probability and the sum is over all outcomes in the sample space. Thus $\E(X)$ is the average value of $X$ over repeated experiments. It is immediate that
+\[
+\E (\mathbf 1_{A}) = \P(A).
+\]
+Next we observe that the random variable that is equal to $a$ when a nonnegative random variable $X$ satisfies $X\ge a$ and $0$ otherwise, is always dominated by $X$. That is, 
+\[
+a\cdot \mathbf 1_{\{X\ge a\}} \le X.
+\]
+Therefore, taking expectations of both sides,
+\[
+a\cdot \P{\{X\ge a\}} \le \E(X).
+\]
+In particular, for any random variable $X$ with $\E(X)=\mu\in\mathbb R$ we have 
+\[
+a^2\cdot \P{\{(X-\mu)^2\ge a^2\}} \le \E ((X-\mu)^2)=:\sigma^2
+\]
+so
+\[
+\P{\{|X-\mu|\ge |a|\}} \le \sigma^2/a^2
+\]
+If we let $k\in\omega$ and replace $a$ by $k\sigma$, then
+\[
+\P{\{|X-\mu|\ge k\sigma\}} \le \sigma^2/(k\sigma)^2 = 1/k^2.
+\]
+This is Chebyshev's inequality, which in words says that the probability that we exceed the mean $\mu$ by $k$ many standard deviations $\sigma$ is rather small.
+
 \chapter{Ahlman \& Koponen (2015)}
 \begin{definition}
 	\label{def:auto}
