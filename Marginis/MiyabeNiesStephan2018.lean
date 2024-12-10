@@ -241,6 +241,7 @@ lemma fairSingleton (b : Bool) : β {b} = 1/2 := by
   simp_all
   rfl
 
+/-- The Bernoulli measure with parameter `p`. -/
 noncomputable def μBernoulli'' (p : ENNReal) (hp : p ≤ 1) :=
     @MeasureTheory.productMeasure Nat (fun _ => Bool)
     _ (fun _ => β'measure p hp) _
@@ -761,7 +762,7 @@ theorem bound_of_toReal {p : ENNReal} (htop : p ≠ ⊤) {n₀ : ℕ}
   exact False.elim <| htop h.1
   exact fun _ _ => hn
 
-/-- Oct 22 2024. Needs serious golfing. -/
+/-- The Bernoulli measure with parameter `p` has no atoms. -/
 theorem bernoulliNoAtoms'' {p : ENNReal} (hp : p ≤ 1)
                        (hn₀ : 0 < p) (hn₁ : p < 1) (B : ℕ → Bool) :
     μBernoulli'' p hp {B} = 0 := by
