@@ -87,6 +87,144 @@ If we let $k\in\omega$ and replace $a$ by $k\sigma$, then
 \]
 This is Chebyshev's inequality, which in words says that the probability that we exceed the mean $\mu$ by $k$ many standard deviations $\sigma$ is rather small.
 
+%\newpage
+\section{Results for ordinary randomness}
+
+We first prove a version of the phenomenon that for samples of sufficiently fast growing size, the sample averages almost surely converge quickly to the mean.
+					
+\begin{proposition}\label{one}
+Consider a sequence $Y=\{Y_n\}_{n\in\omega}$ of independent Bernoulli($p$) random variables, with the sample average 
+\[
+\Y_n := \frac{1}{n}\sum_{i=0}^{n-1} Y_i.
+\]
+Let $N(b)=2^{3b-1}$ and let 
+\[
+U_d=\bigcup_{b\ge d}\{Y: |\Y_{N(b)}-p|\ge 2^{-b}\}.
+\]
+Then $U_d$ is uniformly $\Sigma^0_1(p)$, and $\mu_p(U_d)\le 2^{-d}$, i.e., $\{U_d\}_{d\in\omega}$ is a $\mu_p$-ML-test.
+\end{proposition} 
+The idea of the proof is to use Chebyshev's inequality and the fact that the variance of a Bernoulli($p$) random variable is bounded (in fact, bounded by $1/4$).
+
+
+\begin{proof}%[Proof that $\mu_p(U_d)\le 2^{-d}$.]
+The fact that $U_d$ is $\Sigma^0_1(p)$ is immediate, so we prove the bound on its $\mu_p$-measure. We have 
+\[
+\E(\Y_n) = p \text{ and }\sigma^2(\Y_n) = \sigma^2/n
+\]
+where $\sigma^2=p(1-p)\le 1/4$ is the variance of $Y_0$ and $\sigma^2(\Y_n)$ denotes the variance of $\Y_n$. Thus $\sigma\le 1/2$, and
+\[
+\bbP\left\{|\Y_n-p|\ge k\cdot\sigma(\Y_n)\right\} \le 1/k^2,
+\]
+so 
+\[
+\bbP\left\{|\Y_n-p|\ge \frac{k}{2\sqrt{n}}\right\} \le
+%\]
+%\[
+\bbP\left\{|\Y_n-p|\ge \frac{k\cdot\sigma}{\sqrt{n}}\right\} \le 1/k^2 =: 2^{-(b+1)}.
+\]
+Now, we claim that $2^{-b}\ge\frac{k}{2\sqrt{n}}$ by taking $n$ large enough as a function of $b$:
+\[
+n\ge k^2 4^{b-1}=2^{b+1}4^{b-1}=2^{3b-1}.
+\]
+Thus, if $n\ge N(b):=2^{3b-1}$, 
+\[
+\bbP\left\{|\Y_n-p|\ge 2^{-b}\right\} \le 2^{-(b+1)}
+\]
+so
+\[
+\bbP\left\{\exists b\ge d\,\,|\Y_{N(b)}-p|\ge 2^{-b}\right\} \le \sum_{b\ge d} 2^{-(b+1)}=2^{-d}.
+\]
+\end{proof}
+
+%\newpage
+The following result in a sense encapsulates the essence of statistics.
+
+\begin{theorem}\label{logicbike} %In fact, if $Y$ is Schnorr random with respect to the measure $\mu_p$ then $Y\ge_T p$.
+	If $Y$ is $\mu_p$-ML-random then $Y$ Turing computes $p$. 
+\end{theorem}
+\begin{proof}
+We may assume $p$ is not computable, else there is nothing to prove; in particular we may assume $p$ is not a dyadic rational.
+
+Let $\{U_d\}_{d\in\omega}$ be as in \Cref{one}. Since $Y$ is $\mu_p$-random, $Y\not\in\cap_d U_d$, so fix $d$ with $Y\not\in U_d$. Then for all $b\ge d$, we have
+\[
+|\Y_{N(b)}-p|< 2^{-b} \tag{*}
+\]
+where $N(b)=2^{3b-1}$. 
+
+If the real number $p$ is represented as a member of $2^\omega$ via
+\[
+p = \sum_{n\in\omega} p_n 2^{-n-1} = .p_0 p_1 p_2\cdots
+\]
+in binary notation, then we have to define a Turing functional $\Psi_d$ such that $p_n=\Psi_d^Y(n)$.
+
+We pick $b\ge n+1$ such that $\Y_{N(b)}=.y_0\cdots y_n\cdots$ is not of either of the forms
+\[
+.y_0\,\cdots \,y_{n} \,1^{b-(n+1)} \cdots
+\]
+\[
+.y_0\,\cdots \,y_{n} \,0^{b-(n+1)} \cdots
+\]
+where as usual $1^k$ denotes a string of $k$ ones.
+Since $p$ is not a dyadic rational, such a $b$ exists. Then by (*) it must be that the bits $y_0\,\cdots\,y_{n}$ are the first $n+1$ bits of $p$. In particular, $y_n=p_n$. So we let $\Psi_d^Y(n)=y_n$.
+\end{proof}
+
+
+%\newpage
+\section{Hippocratic results}
+
+In the last section we made it too easy for ourselves; now we will obtain the same results assuming only Hippocratic randomness. 
+
+\begin{theorem}\label{Hippo}
+There is a Hippocratic $\mu_p$-test such that if $Y$ passes this test then $Y$ computes an accumulation point $q$ of the sequence of sample averages 
+\[
+\{\Y_n\}_{n\in\omega}.
+\] 
+\end{theorem}
+
+\begin{proof}
+The point is that the usual proof that each convergent sequence is Cauchy gives a $\Sigma^0_1$ class that has small $\mu_p$-measure for all $p$ simultaneously. Namely, let
+\[
+V_d:=\{Y: \exists a,b\ge d\,\,|\Y_{N(a)}-\Y_{N(b)}|\ge 2^{-a}+ 2^{-b}\}.
+\]
+Then $\{V_d\}_{d\in\omega}$ is uniformly $\Sigma^0_1$. Recall from \Cref{one} that we defined
+\[
+U^{p}_d=\{Y:\exists b\ge d\,\, |\Y_{N(b)}-p|\ge 2^{-b}\}.
+\]
+If there is a $p$ such that $|\Y_{N(b)}-p|<2^{-b}$ for all $b\ge d$, then 
+\[
+|\Y_{N(a)}-\Y_{N(b)}|\le |\Y_{N(a)}-p|+|p-\Y_{N(b)}|< 2^{-a}+2^{-b}
+\]
+for all $a,b\ge d$; thus we have 
+\[
+V_d\subseteq \cap_{p} U^{p}_d
+\]
+and therefore 
+\[
+\mu_p(V_d)\le\mu_p(U^{p}_d)\le 2^{-d}
+\]
+for all $p$. 
+ Thus if $Y$ is Hippocrates $\mu_p$-random then $Y\not\in V_d$ for some $d$. %This allows $Y$ to compute the limit $q$ of the sequence $\{\Y_{N(b)}\}_{b\ge d}$ as follows:
+
+We next note that for any numbers $c> b$, 
+\[
+|\Y_{N(b)} - \Y_{N(c)}| < 2^{-b}+2^{-c} < 2^{-(b-1)},
+\]
+so $\{\Y_{N(c)}\}_{c\ge d}$ will remain within $2^{-(b-1)}$ of $\Y_{N(b)}$ for all $c>b$. That is, $\{\Y_{N(n)}\}_{n\ge d}$ is a Cauchy sequence (for each $b$ there is an $N(b)$ such that for all $n,m\ge N(b)$, $|\Y_n-\Y_m|\le 2^{-b}$) hence $q:=\lim_n \Y_{N(n)}$ exists. Write $q=.q_0q_1q_2\cdots$. Then
+\[
+|\Y_{N(b)}-q| <  2^{-(b-1)}, \text{ so }
+\]
+\[
+|\Y_{N(b+1)}-q| <  2^{-b};
+\]
+if we define $\Theta_d$ as $\Psi_d$ in \Cref{logicbike} except with $N(\cdot)$ replaced by $N(\cdot+1)$, then
+\[
+q_n = \Theta_d^Y(n).
+\] 
+and so $Y$ computes $q$ using the Turing reduction $\Theta_d$. 
+\end{proof}
+
+
+
 \chapter{Ahlman \& Koponen (2015)}
 \begin{definition}
 	\label{def:auto}
