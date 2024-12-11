@@ -282,6 +282,7 @@ so $\bbP(\exists n\ge N\,\, |\Y_n-p|\ge a)$ is bounded by
 This bound suffices to obtain our desired result:
 
 \begin{theorem}\label{satisfy_LLN}
+	\uses{bernoulli}
 If $Y$ is Hippocrates $\mu_p$-random then $Y$ satisfies the Strong Law of Large Numbers for $p$.
 \end{theorem}
 \begin{proof}
@@ -308,7 +309,7 @@ By \Cref{Hippo}, $Y$ computes the limit of a subsequence $\{\Y_{N(b)}\}_{b\in\om
 
 Note that the randomness test in \Cref{satisfy_LLN} depends on the pair $(q_1,q_2)$, so we actually needed infinitely many tests to guarantee that $Y$ computes $p$. This is no coincidence. Let $Y\ge_T p$ abbreviate the statement that $Y$ Turing computes $p$, i.e., $p$ is Turing reducible to $Y$.
         
-\begin{theorem}\label{steveagrees}
+\begin{theorem}\label{not_compute_test}
 	\uses{bernoulli}
 For all $p$, if there is a Hippocratic $\mu_p$-test $\{U_n\}_{n\in\omega}$ such that $\{X:X\not\ge_T p\}\subseteq\cap_n U_n$, then $p$ is computable.
 \end{theorem}
@@ -317,11 +318,11 @@ Let $\{U_n\}_{n\in\omega}$ be such a test. By standard computability theoretic b
 \end{proof}
 
 \begin{corollary}\label{noUniv}
-	\uses{Hippo_compute, steveagrees}
+	\uses{Hippo_compute, not_compute_test}
 There is no universal Hippocratic $\mu_p$-test, unless $p$ is computable. 
 \end{corollary}
 \begin{proof}
-If there is such a test then by \Cref{Hippo_compute} there is a test $\{U_n\}_{n\in\omega}$ as in the hypothesis of \Cref{steveagrees}, whence $p$ is computable.
+If there is such a test then by \Cref{Hippo_compute} there is a test $\{U_n\}_{n\in\omega}$ as in the hypothesis of \Cref{not_compute_test}, whence $p$ is computable.
 \end{proof}
 
 
