@@ -261,17 +261,17 @@ S_n^4/n^4 \ge a^4 \cdot \mathbf 1_{\{S_n^4/n^4\ge a^4\}}
 \]
 surely, so (as in the proof of Chebyshev's inequality)
 \[
-\E(S_n^4/n^4) \ge a^4 \cdot \E(\mathbf 1_{\{S_n^4/n^4\ge a^4\}}) = a^4\cdot \P( S_n^4/n^4\ge a^4)
+\E(S_n^4/n^4) \ge a^4 \cdot \E(\mathbf 1_{\{S_n^4/n^4\ge a^4\}}) = a^4\cdot \bbP( S_n^4/n^4\ge a^4)
 \]
 giving
 \[
-\P(\overline X_n = S_n/n \ge a) \le \frac{3K}{n^2 a^{4}}
+\bbP(\overline X_n = S_n/n \ge a) \le \frac{3K}{n^2 a^{4}}
 \]
 We now applying this to $X_n=Y_n-\E(Y_n) = Y_n - p$ (so that $K=K_p$). Note that (writing $\overline p=1-p$)
 \[
 K_p=\E[(Y_1-p)^4] = (1-p)^4\cdot p + p^4\cdot p = p\overline p ({\overline p}^3+p^3) \le \frac{1}{4}\cdot 2 = \frac{1}{2},
 \]
-so $\P(\exists n\ge N\,\, |\Y_n-p|\ge a)$ is bounded by 
+so $\bbP(\exists n\ge N\,\, |\Y_n-p|\ge a)$ is bounded by 
 \[
 \sum_{n\ge N} \frac{3K_p}{n^2 a^4} \le \frac{3}{2a^4} \sum_{n\ge N} \frac{1}{n^2}
 %\]
@@ -281,7 +281,7 @@ so $\P(\exists n\ge N\,\, |\Y_n-p|\ge a)$ is bounded by
 %As a function of $N$ this goes to 0 effectively.
 This bound suffices to obtain our desired result:
 
-\begin{theorem}\label{heartless}
+\begin{theorem}\label{satisfy_LLN}
 If $Y$ is Hippocrates $\mu_p$-random then $Y$ satisfies the Strong Law of Large Numbers for $p$.
 \end{theorem}
 \begin{proof}
@@ -298,27 +298,30 @@ Thus if $Y$ is Hippocrates $\mu_p$-random then $Y\not\in\cap_n W_n$, i.e., $\Y_n
 
 
 %\newpage
-\begin{corollary}\label{bikerepair}
+\begin{corollary}\label{Hippo_compute}
+	\uses{Hippo, satisfy_LLN}
 If $Y$ is Hippocrates $\mu_p$-random then $Y$ Turing computes $p$.
 \end{corollary}
 \begin{proof}
-By \Cref{Hippo}, $Y$ computes the limit of a subsequence $\{\Y_{N(b)}\}_{b\in\omega}$. By \Cref{heartless}, this limit must be $p$.
+By \Cref{Hippo}, $Y$ computes the limit of a subsequence $\{\Y_{N(b)}\}_{b\in\omega}$. By \Cref{satisfy_LLN}, this limit must be $p$.
 \end{proof}
 
-Note that the randomness test in \Cref{heartless} depends on the pair $(q_1,q_2)$, so we actually needed infinitely many tests to guarantee that $Y$ computes $p$. This is no coincidence. Let $Y\ge_T p$ abbreviate the statement that $Y$ Turing computes $p$, i.e., $p$ is Turing reducible to $Y$.
+Note that the randomness test in \Cref{satisfy_LLN} depends on the pair $(q_1,q_2)$, so we actually needed infinitely many tests to guarantee that $Y$ computes $p$. This is no coincidence. Let $Y\ge_T p$ abbreviate the statement that $Y$ Turing computes $p$, i.e., $p$ is Turing reducible to $Y$.
         
 \begin{theorem}\label{steveagrees}
+	\uses{bernoulli}
 For all $p$, if there is a Hippocratic $\mu_p$-test $\{U_n\}_{n\in\omega}$ such that $\{X:X\not\ge_T p\}\subseteq\cap_n U_n$, then $p$ is computable.
 \end{theorem}
 \begin{proof}
 Let $\{U_n\}_{n\in\omega}$ be such a test. By standard computability theoretic basis theorems, the complement $U_1^c$ has a low member $X_1$ and a hyperimmune-free member $X_2$. By assumption $X_1\ge_T p$ and $X_2\ge_T p$, so $p$ is both low and hyperimmune-free, hence by another basic result of computability theory \cite{Soare}, $p$ is computable.
 \end{proof}
 
-\begin{corollary}
+\begin{corollary}\label{noUniv}
+	\uses{Hippo_compute, steveagrees}
 There is no universal Hippocratic $\mu_p$-test, unless $p$ is computable. 
 \end{corollary}
 \begin{proof}
-If there is such a test then by \Cref{bikerepair} there is a test $\{U_n\}_{n\in\omega}$ as in the hypothesis of \Cref{steveagrees}, whence $p$ is computable.
+If there is such a test then by \Cref{Hippo_compute} there is a test $\{U_n\}_{n\in\omega}$ as in the hypothesis of \Cref{steveagrees}, whence $p$ is computable.
 \end{proof}
 
 
