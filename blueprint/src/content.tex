@@ -227,6 +227,100 @@ q_n = \Theta_d^Y(n).
 and so $Y$ computes $q$ using the Turing reduction $\Theta_d$. 
 \end{proof}
 
+%HERE
+
+To argue that the accumulation point $q$ of \Cref{Hippo} is actually equal to $p$ under the weak assumption of Hippocratic randomness, we need: 
+\paragraph{An analysis of the strong law of large numbers.} Let $\{X_n\}_{n\in\omega}$ be independent and identically distributed random variables with mean 0, and let $S_n=\sum_{i=0}^n X_i$. Then $S_n^4$ will be a linear combination (with binomial coefficients as coefficients) of the terms
+\[
+\sum_i X_i^4, \text{ }
+\sum_{i<j} X^3_iX_j, \text{  }
+\sum_{i<j<k} X_i^2 X_j X_k,
+%\]
+%\[
+\sum_{i<j<k<\ell} X_i X_j X_k X_\ell, \text{ and } \sum_{i<j} X_i^2 X_j^2.
+\]
+Since $\E(X_i)=0$, and $\E(X_i^aX_j^b)=\E(X_i^a)\E(X_j^b)$ by independence, and each $X_i$ is identically distributed with $X_1$ and $X_2$, we get 
+\[
+\E(S_n^4) = n \,\E(X_1^4) + {n\choose 2}{4\choose 2} \,\E(X_1^2X_2^2)
+\]
+\[
+= n \,\E(X_1^4) + {n\choose 2}{4\choose 2} \,\E(X_1^2)\E(X_2^2)
+= n \,\E(X_1^4) + {n\choose 2}{4\choose 2} \,\E(X_1^2)^2.
+\]
+Since $0\le\sigma^2(X_1^2) = \E(X_1^4)-\E(X_1^2)^2$, this is (writing $K:=\E(X_1^4)$)
+\[
+\le  n \,\E(X_1^4) + {n\choose 2}{4\choose 2} \,\E(X_1^4) = (n+3n(n-1)) \E(X_1^4) = (3n^2-2n) K
+\]
+so 
+$%\[
+\E(S_n^4/n^4) \le \frac{3K}{n^2}.
+$ %\]
+ Now 
+\[
+S_n^4/n^4 \ge a^4 \cdot \mathbf 1_{\{S_n^4/n^4\ge a^4\}}
+\]
+surely, so (as in the proof of Chebyshev's inequality)
+\[
+\E(S_n^4/n^4) \ge a^4 \cdot \E(\mathbf 1_{\{S_n^4/n^4\ge a^4\}}) = a^4\cdot \P( S_n^4/n^4\ge a^4)
+\]
+giving
+\[
+\P(\overline X_n = S_n/n \ge a) \le \frac{3K}{n^2 a^{4}}
+\]
+We now applying this to $X_n=Y_n-\E(Y_n) = Y_n - p$ (so that $K=K_p$). Note that (writing $\overline p=1-p$)
+\[
+K_p=\E[(Y_1-p)^4] = (1-p)^4\cdot p + p^4\cdot p = p\overline p ({\overline p}^3+p^3) \le \frac{1}{4}\cdot 2 = \frac{1}{2},
+\]
+so $\P(\exists n\ge N\,\, |\Y_n-p|\ge a)$ is bounded by 
+\[
+\sum_{n\ge N} \frac{3K_p}{n^2 a^4} \le \frac{3}{2a^4} \sum_{n\ge N} \frac{1}{n^2}
+%\]
+%\[
+\le \frac{3}{2a^4} \int_{N-1}^\infty \frac{1}{x^2}\,dx = \frac{3}{2a^4(N-1)}.
+\]
+%As a function of $N$ this goes to 0 effectively.
+This bound suffices to obtain our desired result:
+
+\begin{theorem}\label{heartless}
+If $Y$ is Hippocrates $\mu_p$-random then $Y$ satisfies the Strong Law of Large Numbers for $p$.
+\end{theorem}
+\begin{proof}
+Let $q_1$, $q_2$ be rational numbers with $q_1<p<q_2$.
+Let
+\[
+W_N:=\{Y: \exists n\ge N\,\,\Y_n\le q_1\}\cup\{Y: \exists n\ge N\,\,\Y_n\ge q_2\}
+\]
+Then $\{W_N\}_{N\in\omega}$ is uniformly $\Sigma^0_1$, and $\mu_p W_N\to 0$ effectively:
+\[\mu_p \{Y: \exists n\ge N\,\,\Y_n\le q_1\} \le \frac{3}{2(p-q_1)^4(N-1)}\]
+Thus if $Y$ is Hippocrates $\mu_p$-random then $Y\not\in\cap_n W_n$, i.e., $\Y_n$ is eventually always in the interval $(q_1,q_2)$. 
+\end{proof}
+
+
+
+%\newpage
+\begin{corollary}\label{bikerepair}
+If $Y$ is Hippocrates $\mu_p$-random then $Y$ Turing computes $p$.
+\end{corollary}
+\begin{proof}
+By \Cref{Hippo}, $Y$ computes the limit of a subsequence $\{\Y_{N(b)}\}_{b\in\omega}$. By \Cref{heartless}, this limit must be $p$.
+\end{proof}
+
+Note that the randomness test in \Cref{heartless} depends on the pair $(q_1,q_2)$, so we actually needed infinitely many tests to guarantee that $Y$ computes $p$. This is no coincidence. Let $Y\ge_T p$ abbreviate the statement that $Y$ Turing computes $p$, i.e., $p$ is Turing reducible to $Y$.
+        
+\begin{theorem}\label{steveagrees}
+For all $p$, if there is a Hippocratic $\mu_p$-test $\{U_n\}_{n\in\omega}$ such that $\{X:X\not\ge_T p\}\subseteq\cap_n U_n$, then $p$ is computable.
+\end{theorem}
+\begin{proof}
+Let $\{U_n\}_{n\in\omega}$ be such a test. By standard computability theoretic basis theorems, the complement $U_1^c$ has a low member $X_1$ and a hyperimmune-free member $X_2$. By assumption $X_1\ge_T p$ and $X_2\ge_T p$, so $p$ is both low and hyperimmune-free, hence by another basic result of computability theory \cite{Soare}, $p$ is computable.
+\end{proof}
+
+\begin{corollary}
+There is no universal Hippocratic $\mu_p$-test, unless $p$ is computable. 
+\end{corollary}
+\begin{proof}
+If there is such a test then by \Cref{bikerepair} there is a test $\{U_n\}_{n\in\omega}$ as in the hypothesis of \Cref{steveagrees}, whence $p$ is computable.
+\end{proof}
+
 
 
 \chapter{Ahlman \& Koponen (2015)}
