@@ -42,6 +42,7 @@ If $X$ is a $\{0,1\}$-valued random variable such that $\mathbb P(X=1) = p$ then
 		
 
 \begin{definition}\label{MLR}
+	\uses{bernoulli}
 	A $\mu_p$-ML-randomness test is a sequence $\{U^p_n\}_n$ that is uniformly $\Sigma^0_1(p)$ with $\mu(U^p_n)\le 2^{-n}$, where $2^{-n}$ may be replaced by any computable function that goes to zero effectively. 
 	 
 	A $\mu_p$-ML-randomness test is \emph{Hippocratic} if there is a $\Sigma^0_1$ class $S\subseteq 2^\omega\times\omega$ such that $S=\{(X,n):X\in U_n^p\}$. Thus, $U_n=U_n^p$ does not depend on $p$ and is uniformly $\Sigma^0_1$.  
@@ -92,7 +93,8 @@ This is Chebyshev's inequality, which in words says that the probability that we
 
 We first prove a version of the phenomenon that for samples of sufficiently fast growing size, the sample averages almost surely converge quickly to the mean.
 					
-\begin{proposition}\label{one}
+\begin{proposition}\label{is_test}
+	\uses{bernoulli}
 Consider a sequence $Y=\{Y_n\}_{n\in\omega}$ of independent Bernoulli($p$) random variables, with the sample average 
 \[
 \Y_n := \frac{1}{n}\sum_{i=0}^{n-1} Y_i.
@@ -139,13 +141,14 @@ so
 %\newpage
 The following result in a sense encapsulates the essence of statistics.
 
-\begin{theorem}\label{logicbike} %In fact, if $Y$ is Schnorr random with respect to the measure $\mu_p$ then $Y\ge_T p$.
+\begin{theorem}\label{random_computes} %In fact, if $Y$ is Schnorr random with respect to the measure $\mu_p$ then $Y\ge_T p$.
+	\uses{bernoulli, is_test, MLR}
 	If $Y$ is $\mu_p$-ML-random then $Y$ Turing computes $p$. 
 \end{theorem}
 \begin{proof}
 We may assume $p$ is not computable, else there is nothing to prove; in particular we may assume $p$ is not a dyadic rational.
 
-Let $\{U_d\}_{d\in\omega}$ be as in \Cref{one}. Since $Y$ is $\mu_p$-random, $Y\not\in\cap_d U_d$, so fix $d$ with $Y\not\in U_d$. Then for all $b\ge d$, we have
+Let $\{U_d\}_{d\in\omega}$ be as in \Cref{is_test}. Since $Y$ is $\mu_p$-random, $Y\not\in\cap_d U_d$, so fix $d$ with $Y\not\in U_d$. Then for all $b\ge d$, we have
 \[
 |\Y_{N(b)}-p|< 2^{-b} \tag{*}
 \]
@@ -175,6 +178,7 @@ Since $p$ is not a dyadic rational, such a $b$ exists. Then by (*) it must be th
 In the last section we made it too easy for ourselves; now we will obtain the same results assuming only Hippocratic randomness. 
 
 \begin{theorem}\label{Hippo}
+	\uses{is_test, random_computes}
 There is a Hippocratic $\mu_p$-test such that if $Y$ passes this test then $Y$ computes an accumulation point $q$ of the sequence of sample averages 
 \[
 \{\Y_n\}_{n\in\omega}.
@@ -186,7 +190,7 @@ The point is that the usual proof that each convergent sequence is Cauchy gives 
 \[
 V_d:=\{Y: \exists a,b\ge d\,\,|\Y_{N(a)}-\Y_{N(b)}|\ge 2^{-a}+ 2^{-b}\}.
 \]
-Then $\{V_d\}_{d\in\omega}$ is uniformly $\Sigma^0_1$. Recall from \Cref{one} that we defined
+Then $\{V_d\}_{d\in\omega}$ is uniformly $\Sigma^0_1$. Recall from \Cref{is_test} that we defined
 \[
 U^{p}_d=\{Y:\exists b\ge d\,\, |\Y_{N(b)}-p|\ge 2^{-b}\}.
 \]
@@ -216,7 +220,7 @@ so $\{\Y_{N(c)}\}_{c\ge d}$ will remain within $2^{-(b-1)}$ of $\Y_{N(b)}$ for a
 \[
 |\Y_{N(b+1)}-q| <  2^{-b};
 \]
-if we define $\Theta_d$ as $\Psi_d$ in \Cref{logicbike} except with $N(\cdot)$ replaced by $N(\cdot+1)$, then
+if we define $\Theta_d$ as $\Psi_d$ in \Cref{random_computes} except with $N(\cdot)$ replaced by $N(\cdot+1)$, then
 \[
 q_n = \Theta_d^Y(n).
 \] 
