@@ -3,15 +3,14 @@ import Mathlib.Algebra.Order.Group.Abs
 import Mathlib.Topology.MetricSpace.PiNat
 import Mathlib.SetTheory.ZFC.Basic
 import Mathlib.Order.Interval.Set.OrdConnected
--- import Mathlib.Init.Set
 
- /-
+ /-!
 
-In the paper
-A constructive proof of Simpson’s Rule
-THIERRY COQUAND BAS SPITTERS
+# A constructive proof of Simpson’s Rule
+by THIERRY COQUAND
+BAS SPITTERS
 
-uniform continuity is discussed.
+In the paper, uniform continuity is discussed.
 
 We define it in a concrete setting here, and prove formally that:
 
@@ -54,7 +53,7 @@ lemma extraabs (a : ℝ) (h : 0 < a) : 1 ≤ |1 + a| := by
   exact h4
 
 
-example : is_uniformly_continuous (λ x ↦ 2 * x) := by
+lemma mul2UniformlyCont : is_uniformly_continuous (λ x ↦ 2 * x) := by
   unfold is_uniformly_continuous
   intro ε hε
   use ε / 2
@@ -83,7 +82,7 @@ lemma transition (x y : ℝ) (ha : 0 ≤ x) (hb : 0 < y) : x < y ↔ x^2 < y^2 :
 
 
 
-example : ¬ is_uniformly_continuous (λ x ↦ x^2) := by
+lemma SqNotUniformlyCont : ¬ is_uniformly_continuous (λ x ↦ x^2) := by
   unfold is_uniformly_continuous
   contrapose
   push_neg
@@ -106,7 +105,7 @@ example : ¬ is_uniformly_continuous (λ x ↦ x^2) := by
       exact Hδ δ hδ
 
 
-example : ¬ is_uniformly_continuous₂ (λ x ↦ ((x.2^2 - x.1^2):ℝ)) := by
+lemma SaddleNotUniformlyCont : ¬ is_uniformly_continuous₂ (λ x ↦ ((x.2^2 - x.1^2):ℝ)) := by
   unfold is_uniformly_continuous₂
   contrapose
   intro
@@ -134,7 +133,7 @@ def is_uniformly_continuous_on' (R S : Set ℝ) (h : R ⊆ S) (f : ↑S → ℝ)
   ∀ ε : ℝ, ε > 0 → ∃ δ : ℝ, δ > 0 ∧
   ∀ x y : ↑R, |x.1 - y.1| < δ → |(f ⟨x.1, h x.2⟩) - (f ⟨y.1, h y.2⟩)| < ε
 
-example : is_uniformly_continuous_on' (Set.Icc 0 1) univ h (λ x ↦ x^2) := by
+lemma uniformlyContOnSq : is_uniformly_continuous_on' (Set.Icc 0 1) univ h (λ x ↦ x^2) := by
   unfold is_uniformly_continuous_on'
   intro ε hε
   use ε / 2

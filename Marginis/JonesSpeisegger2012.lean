@@ -1,9 +1,11 @@
 import Mathlib.Analysis.SpecialFunctions.ExpDeriv
 
-/-
-The paper
-Generating the Pfaffian closure with total Pfaffian functions
+/-!
+
+# Generating the Pfaffian closure with total Pfaffian functions
 by GARETH JONES and PATRICK SPEISSEGGER
+
+The paper
 concerns Pfaffian functions for which
 `df/dx = P(x,f(x))`
 for a definable function P.
@@ -20,12 +22,12 @@ def P : ℝ × ℝ → ℝ := Prod.snd
 noncomputable def f : ℝ → ℝ := Real.exp
 
 
-example (x:ℝ) : deriv f x = P (x, (f x)) := by
+lemma P_satisfies_diffEq (x:ℝ) : deriv f x = P (x, (f x)) := by
   unfold P f
   rw [Real.deriv_exp]
 
 def Q : ℝ → ℝ → ℝ := λ _ y ↦ y
 
-example (x:ℝ) : deriv f x = Q x (f x) := by
+lemma Q_satisfies_diffEq (x:ℝ) : deriv f x = Q x (f x) := by
   unfold Q f
   rw [Real.deriv_exp]

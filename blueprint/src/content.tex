@@ -177,7 +177,7 @@ Since $p$ is not a dyadic rational, such a $b$ exists. Then by (*) it must be th
 
 In the last section we made it too easy for ourselves; now we will obtain the same results assuming only Hippocratic randomness. 
 
-\begin{theorem}\label{Hippo}
+\begin{theorem}\label{accumulate}
 	\uses{is_test, random_computes}
 There is a Hippocratic $\mu_p$-test such that if $Y$ passes this test then $Y$ computes an accumulation point $q$ of the sequence of sample averages 
 \[
@@ -229,7 +229,7 @@ and so $Y$ computes $q$ using the Turing reduction $\Theta_d$.
 
 %HERE
 
-To argue that the accumulation point $q$ of \Cref{Hippo} is actually equal to $p$ under the weak assumption of Hippocratic randomness, we need: 
+To argue that the accumulation point $q$ of \Cref{accumulate} is actually equal to $p$ under the weak assumption of Hippocratic randomness, we need: 
 \paragraph{An analysis of the strong law of large numbers.} Let $\{X_n\}_{n\in\omega}$ be independent and identically distributed random variables with mean 0, and let $S_n=\sum_{i=0}^n X_i$. Then $S_n^4$ will be a linear combination (with binomial coefficients as coefficients) of the terms
 \[
 \sum_i X_i^4, \text{ }
@@ -304,7 +304,7 @@ Thus if $Y$ is Hippocrates $\mu_p$-random then $Y\not\in\cap_n W_n$, i.e., $\Y_n
 If $Y$ is Hippocrates $\mu_p$-random then $Y$ Turing computes $p$.
 \end{corollary}
 \begin{proof}
-By \Cref{Hippo}, $Y$ computes the limit of a subsequence $\{\Y_{N(b)}\}_{b\in\omega}$. By \Cref{satisfy_LLN}, this limit must be $p$.
+By \Cref{accumulate}, $Y$ computes the limit of a subsequence $\{\Y_{N(b)}\}_{b\in\omega}$. By \Cref{satisfy_LLN}, this limit must be $p$.
 \end{proof}
 
 Note that the randomness test in \Cref{satisfy_LLN} depends on the pair $(q_1,q_2)$, so we actually needed infinitely many tests to guarantee that $Y$ computes $p$. This is no coincidence. Let $Y\ge_T p$ abbreviate the statement that $Y$ Turing computes $p$, i.e., $p$ is Turing reducible to $Y$.

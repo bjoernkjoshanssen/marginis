@@ -2,8 +2,13 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Complex.Basic
 
-/- The first displayed equation in the paper "Covering entropy for types in tracial W^*- algebras" by
-DAVID JEKEL includes the term
+/-!
+
+# Covering entropy for types in tracial W^*- algebras
+by DAVID JEKEL
+
+The first displayed equation in the paper
+includes the term
 `τ (X₁ * Y * X₂ * Z) ^ 2`
 Here τ is the trace and * is matrix multiplication.
 There are two ways to parenthesize this and here we prove their inequivalence.

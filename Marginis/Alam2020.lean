@@ -2,47 +2,44 @@ import Mathlib.Data.Real.Sqrt
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Integrals
 
-/-
+/-!
 
-Limiting probability measures
-Irfan Alam
+# Limiting probability measures
+by Irfan Alam
 
 concerns integrals. Here we compute some.
 
 -/
 
-example : ∫ (_:ℝ) in Set.Icc (0:ℝ) (0:ℝ), (0:ℝ) = 0 := by
+lemma int000 : ∫ (_:ℝ) in Set.Icc 0 0, (0:ℝ) = 0 := by
   simp only [Set.Icc_self, MeasureTheory.Measure.restrict_singleton,
     MeasureTheory.measure_singleton, zero_smul, MeasureTheory.integral_zero]
 
-example :
+lemma int01xminus1 :
   (∫ (x:ℝ) in (0)..(2), (x:ℝ)) - 1 = 1 := by
   have Q := @integral_id 0 2
   ring_nf at Q
   rw [Q]
   ring_nf
 
-example :
+lemma int02pisin :
   (∫ (x:ℝ) in (0)..(2*Real.pi), (Real.sin x)) = 0 := by
   let Q := @integral_sin 0 (2 * Real.pi)
   rw [Q]
   simp only [Real.cos_zero, Real.cos_two_pi, sub_self]
 
-example :
+lemma int02picos :
   (∫ (x:ℝ) in (0)..(2*Real.pi), (Real.cos x)) = 0 := by
   let Q := @integral_cos 0 (2 * Real.pi)
   rw [Q]
   simp only [Real.sin_two_pi, Real.sin_zero, sub_self]
 
-example ( x : ℝ) : (Real.cos x)^2 + (Real.sin x)^2 = 1 := by
-  simp only [Real.cos_sq_add_sin_sq]
-
-example :
+lemma int01cosSqAddSinSq :
   (∫ (x:ℝ) in (0)..(1), ((Real.cos x)^2 + (Real.sin x)^2)) = 1 := by
     simp only [Real.cos_sq_add_sin_sq]
     simp only [intervalIntegral.integral_const, sub_zero, smul_eq_mul, mul_one]
 
-example : (∫ (_:ℝ) in (0:ℝ)..(1:ℝ), (1:ℝ)) = 1 := by
+lemma int011 : (∫ (_:ℝ) in (0:ℝ)..(1:ℝ), (1:ℝ)) = 1 := by
   let Q := @integral_one 0 1
   rw [Q]
   simp only [sub_zero]

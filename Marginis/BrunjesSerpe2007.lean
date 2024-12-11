@@ -1,11 +1,11 @@
 import Mathlib.Data.Nat.Prime.Defs
 
-/-
+/-!
 
-Formal marginalia for
-Enlargements of schemes
-by
-Lars Brünjes and Christian Serpé, JLA 2007.
+# Enlargements of schemes
+by Lars Brünjes and Christian Serpé
+
+JLA 2007
 
 -/
 

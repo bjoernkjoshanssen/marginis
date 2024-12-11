@@ -2,16 +2,13 @@ import Mathlib.MeasureTheory.Measure.Hausdorff
 
 /-
 
-The paper
-
-Quantifier elimination in the theory of
-Lp(Lq)-Banach lattices
+# Quantifier elimination in the theory of Lp(Lq)-Banach lattices
 C WARD HENSON
 YVES RAYNAUD
 
 (JLA 2011)
 
-concerns q.e. (for positive sentences) but does not give a definition of it.
+The paper concerns q.e. (for positive sentences) but does not give a definition of it.
 Here we show how to eliminate a quantifier for a positive sentence
 when calculating the range of a
 simple Möbius transformation.

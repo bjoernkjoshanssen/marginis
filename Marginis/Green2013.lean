@@ -1,10 +1,11 @@
 import Mathlib.Data.Nat.Prime.Defs
 import Mathlib.Data.Set.Lattice
-/- This illustrates the concept of [A]_P from the footnote on the
-first page of
-`Embedding an analytic equivalence relation in`
-`the transitive closure of a Borel relation`
-by EDWARD J GREEN.
+/-!
+
+# Embedding an analytic equivalence relation in the transitive closure of a Borel relation
+by EDWARD J GREEN
+
+This illustrates the concept of [A]_P from the footnote on the first page.
 
 Specifically, if P is the partition of ℕ into even and odd numbers and
 A is the set of prime numbers, then we show that [A]_P = ℕ.

@@ -1,17 +1,14 @@
 import Mathlib.Topology.Defs.Basic
 import Mathlib.MeasureTheory.Measure.Hausdorff
 import Mathlib.Topology.Homeomorph
-/-
+/-!
 
-The paper
-
-Preface to the special issue for
-The Fifth Workshop on Formal Topology
-THIERRY COQUAND
+# Preface to the special issue for The Fifth Workshop on Formal Topology
+by THIERRY COQUAND
 MARIA EMILIA MAIETTI
 ERIK PALMGREN
 
-introduces Formal Topology, which is a constructive approach to pointfree topology.
+The paper introduces Formal Topology, which is a constructive approach to pointfree topology.
 Here we instead look at topologies *with points*, over finite sets and show:
  - there is a unique topology on `Fin 0`;
  - there is a unique topology on `Fin 1`;
@@ -22,8 +19,8 @@ Here we instead look at topologies *with points*, over finite sets and show:
 
 -/
 
--- There is only one topology on `Fin 0`:
-example ( σ τ : TopologicalSpace (Fin 0)) : σ.IsOpen = τ.IsOpen := by
+/-- There is only one topology on `Fin 0`. -/
+lemma uniqueTopFin0 ( σ τ : TopologicalSpace (Fin 0)) : σ.IsOpen = τ.IsOpen := by
   apply funext
   intro S
   have : S = ∅ := by
@@ -39,8 +36,8 @@ example ( σ τ : TopologicalSpace (Fin 0)) : σ.IsOpen = τ.IsOpen := by
   . intro; exact @isOpen_empty _ τ
   . intro; exact @isOpen_empty _ σ
 
--- There is only one topology on `Fin 1`:
-example ( σ τ : TopologicalSpace (Fin 1)) : σ.IsOpen = τ.IsOpen := by
+/-- There is only one topology on `Fin 0`. -/
+lemma uniqueTopFin1 ( σ τ : TopologicalSpace (Fin 1)) : σ.IsOpen = τ.IsOpen := by
   apply funext
   intro S
   by_cases H : S = ∅
@@ -70,8 +67,8 @@ example ( σ τ : TopologicalSpace (Fin 1)) : σ.IsOpen = τ.IsOpen := by
     tauto
 
 
--- There are two distinct topologies on `Fin 2`:
-example : ∃ ( σ τ : TopologicalSpace (Fin 2)), σ.IsOpen ≠ τ.IsOpen := by
+/-- There are two distinct topologies on `Fin 2`. -/
+lemma nonUniqueTopFin2 : ∃ ( σ τ : TopologicalSpace (Fin 2)), σ.IsOpen ≠ τ.IsOpen := by
   use ⊥ -- discrete topology
   use ⊤ -- trivial topology
   intro hc
@@ -89,9 +86,9 @@ example : ∃ ( σ τ : TopologicalSpace (Fin 2)), σ.IsOpen ≠ τ.IsOpen := by
     aesop
   aesop
 
--- Here are two more topologies on `Fin 2`.
--- In fact a topology on `Fin 2` must contain `Set.univ` and `∅`,
--- and then there are four possibilities depending on which of `{0}`, `{1}` are included.
+/-- Here are two more topologies on `Fin 2`.
+ In fact a topology on `Fin 2` must contain `Set.univ` and `∅`,
+ and then there are four possibilities depending on which of `{0}`, `{1}` are included. -/
 def mytop (z : Fin 2): TopologicalSpace (Fin 2) :=
 {
   IsOpen := λ S ↦ S = ∅ ∨ S = Set.univ ∨ S = {z}
@@ -141,8 +138,7 @@ def mytop (z : Fin 2): TopologicalSpace (Fin 2) :=
           |inr h => subst h;simp;tauto
 }
 
--- We can show that the latter two topologies are homeomorphic:
-
+/-- We can show that the latter two topologies are homeomorphic. -/
 def myequiv := @Equiv.mk (Fin 2) (Fin 2) (λ x ↦ x + 1) ((λ x ↦ x + 1))
   (by
     refine Function.leftInverse_iff_comp.mpr ?_

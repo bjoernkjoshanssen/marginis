@@ -1,13 +1,12 @@
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
-/-
+/-!
 
-The paper
-
-Geometric spaces with no points
+# Geometric spaces with no points
 ROBERT S. LUBARSKY
 
-discusses the fact that "there is no continuous square root function on any
+
+The paper discusses the fact that "there is no continuous square root function on any
 neighborhood of 0 in the complex numbers."
 
 Less justifiably, the Pythagoreans were hesitant to accept √2.

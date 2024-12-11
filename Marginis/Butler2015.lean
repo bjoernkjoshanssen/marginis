@@ -2,11 +2,11 @@ import Mathlib.Algebra.BigOperators.Group.Finset
 import Mathlib.RingTheory.Regular.RegularSequence
 
 
-/-
-Corollary 2.2 in the paper
-`First order irrationality criteria for series`
-by `LEE A. BUTLER`
-is inspired by some work of `Viggo Brun`.
+/-!
+# First order irrationality criteria for series
+by LEE A. BUTLER
+
+Corollary 2.2 in the paper is inspired by some work of `Viggo Brun`.
 It is mentioned that Corollary 2.2 applies to the sequence qₙ below.
 We verify that fact in `corollary_2_2_example` below.
 In fact, the assumption `n ≥ 1` is not needed.

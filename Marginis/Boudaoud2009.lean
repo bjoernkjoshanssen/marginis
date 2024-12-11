@@ -1,10 +1,12 @@
 import Mathlib.Algebra.BigOperators.Group.Finset
 import Mathlib.RingTheory.Regular.RegularSequence
 
-/- We define the Lucas sequences from the paper
-Decomposition of terms in Lucas sequences
+/-!
+
+# Decomposition of terms in Lucas sequences
 by ABDELMADJID BOUDAOUD
-and verify that the Fibonacci sequence appears.
+
+We define the Lucas sequences from the paper and verify that the Fibonacci sequence appears.
 -/
 
 def U (P Q : ℤ) : ℕ → ℤ := λ n ↦ match n with
@@ -17,8 +19,10 @@ def V (P Q : ℤ) : ℕ → ℤ := λ n ↦ match n with
 | 1 => P
 | Nat.succ (Nat.succ n) => P * V P Q n.succ - Q * V P Q n
 
--- Fibonacci sequence
-#eval λ i : Fin 15 ↦ U 1 (-1) i.1
+-- #eval λ i : Fin 15 ↦ U 1 (-1) i.1
+/-- Fibonacci sequence appearing in Lucas sequence. -/
+lemma fibonacciLucas : (λ i : Fin 15 ↦ U 1 (-1) i.1) = ![0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377] := by
+  decide
 
 def D {P Q : ℤ} := P^2 - 4*Q
 

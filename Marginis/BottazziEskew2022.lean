@@ -1,12 +1,11 @@
 import Mathlib.Topology.MetricSpace.PiNat
 import Mathlib.MeasureTheory.Measure.Hausdorff
-/-
+/-!
 
-The paper
-Integration with filters
-by
-Emanuele Bottazzi, Monroe Eskew
-concerns measures over [0,∞].
+# Integration with filters
+by Emanuele Bottazzi, Monroe Eskew
+
+The paper concerns measures over [0,∞].
 
 In Lean this interval is known as the type `ENNReal`, the extended nonnegative reals.
 The number `∞` is represented as `⊤`.
@@ -51,7 +50,7 @@ example (a : Real) (b : Real) : a ^ b = a ^ b := rfl
 example : Real.sqrt (-1) = (-1: Real) ^ ((1:Real)/2) := by
   exact Real.sqrt_eq_rpow (-1)
 
-example : (-1: Real) ^ ((1:Real)/2) = 0 := by
+lemma iReal : (-1: Real) ^ ((1:Real)/2) = 0 := by
   rw [← Real.sqrt_eq_rpow]
   ring_nf
   refine Real.sqrt_eq_zero_of_nonpos ?h

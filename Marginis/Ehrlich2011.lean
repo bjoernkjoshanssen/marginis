@@ -4,9 +4,9 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Fin.Basic
 
-/-
+/-!
 
-Conway names, the simplicity hierarchy and the surreal number tree
+# Conway names, the simplicity hierarchy and the surreal number tree
 PHILIP EHRLICH
 
 A tree ⟨A,<ₛ⟩ is a partially  ordered  class  such  that  for  each x ∈ A,

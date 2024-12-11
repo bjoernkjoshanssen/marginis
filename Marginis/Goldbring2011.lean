@@ -8,14 +8,12 @@ import Mathlib.Topology.MetricSpace.Basic
 
 import Mathlib.Combinatorics.Quiver.Basic
 import Mathlib.Combinatorics.Quiver.Path
-/-
+/-!
 
-Inspired by the paper
-
-Ends of groups: a nonstandard perspective
+# Ends of groups: a nonstandard perspective
 Isaac Goldbring
 
-we give a definition of the Cayley graph of a group.
+Inspired by the paper we give a definition of the Cayley graph of a group.
 We start from Kyle Miller's Lean 3 code at
 https://leanprover-community.github.io/archive/stream/217875-Is-there-code-for-X%3F/topic/graph.2C.20expander.20graph.2C.20cayley.20graph.2C.20.2E.2E.2E.html
 

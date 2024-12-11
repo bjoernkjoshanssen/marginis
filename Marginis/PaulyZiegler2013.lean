@@ -5,7 +5,7 @@ import Mathlib.Data.Fin.Basic
 
 /-
 
-Relative computability and uniform continuity of relations
+# Relative computability and uniform continuity of relations
 Arno M Pauly, Martin A. Ziegler
 
 We formalize their n-fold version of the Henkin quantifier property

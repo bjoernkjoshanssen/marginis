@@ -3,10 +3,11 @@ import Mathlib.Data.Finite.Defs
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Set.Finite
 
-/-
-On page 2 of the paper
-`An Algebraic Weak Factorisation System on 01-Substitution Sets: A Constructive Proof`
-by ANDREW SWAN, JLA 2016,
+/-!
+# An Algebraic Weak Factorisation System on 01-Substitution Sets: A Constructive Proof
+by ANDREW SWAN, JLA 2016
+
+On page 2 of the paper,
 Perm(𝔸) is the set of all finite permutations of 𝔸, i.e.,
 the set of permutations π such that π a = a for all but finitely many a.
 We show that Perm(𝔸) is closed under composition and contains the identity.

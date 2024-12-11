@@ -6,9 +6,9 @@ import Mathlib.Topology.MetricSpace.PiNat
 import Mathlib.MeasureTheory.Measure.Hausdorff
 
 
-/-
+/-!
 
-Discretisations of higher order and the theorems of Faa di Bruno and DeMoivre-Laplace
+# Discretisations of higher order and the theorems of Faa di Bruno and DeMoivre-Laplace
 
 IMME VAN DEN BERG
 

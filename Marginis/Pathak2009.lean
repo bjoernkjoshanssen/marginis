@@ -1,8 +1,10 @@
 import Mathlib.MeasureTheory.Measure.Hausdorff
-/-
+/-!
 
-In `A computational aspect of the Lebesgue differentiation theorem` by NOOPUR PATHAK she writes
+# A computational aspect of the Lebesgue differentiation theorem
+by NOOPUR PATHAK
 
+She writes
 `Another characterization of random points in ℝ^d is given by Solovay's Lemma. [...]`
 `The proof given by Simpson is given for sets in the Cantor space, but the proof applies here as well.`
 

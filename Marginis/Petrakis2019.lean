@@ -2,9 +2,9 @@ import Mathlib.Topology.MetricSpace.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Topology.UniformSpace.Basic
 
-/-
+/-!
 
-Constructive uniformities of pseudometrics and Bishop topologies1
+# Constructive uniformities of pseudometrics and Bishop topologies1
 IOSIF PETRAKIS
 
 discusses uniformities.

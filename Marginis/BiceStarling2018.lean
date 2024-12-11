@@ -2,13 +2,12 @@ import Mathlib.Topology.Defs.Basic
 import Mathlib.MeasureTheory.Measure.Hausdorff
 import Mathlib.Topology.Homeomorph
 
-/-
-In the paper
+/-!
 
-Locally compact Stone duality
-Tristan Bice, Charles Starling
+# Locally compact Stone duality
+by Tristan Bice, Charles Starling
 
-it is proved that "Compact clopen pseudobasic posets are characterized by separativity."
+It is proved that "Compact clopen pseudobasic posets are characterized by separativity."
 
 As a first formal step in that direction we prove some basic results about clopen sets.
 

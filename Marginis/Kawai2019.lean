@@ -3,10 +3,12 @@ import Mathlib.Data.Vector.Basic
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.MeasureTheory.Measure.Hausdorff
 
-/-
+/-!
 
-Kawai's 2019 paper "Principles of bar induction and continuity on Baire space"
-mentions the Uniform Continuity principle UC that each continuous function
+# Principles of bar induction and continuity on Baire space
+Kawai, 2019
+
+The paper mentions the Uniform Continuity principle UC that each continuous function
 
 f : (ℕ → Bool) → ℕ
 

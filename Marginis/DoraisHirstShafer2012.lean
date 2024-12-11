@@ -1,10 +1,12 @@
 import Mathlib.Topology.MetricSpace.PiNat
 import Mathlib.Data.Real.Basic
 
-/-
-We formalize Weak König's Lemma in the form of
-Dorais, Hirst and Shafer's `Reverse mathematics, trichotomy, and dichotomy`,
-Theorem 16, item 2:
+/-!
+
+# Reverse mathematics, trichotomy, and dichotomy
+by Dorais, Hirst and Shafer
+
+We formalize Weak König's Lemma in the form of their Theorem 16, item 2:
 
 If α_i^j, i ≤ n_j, j ∈ ℕ is a sequence of finite sequences of reals,
 then there is a function h : ℕ → ℕ such that ∀ j ∈ ℕ, ∀ i ≤ n_j, α_{h(j)}^j ≤ α_i^j

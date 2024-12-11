@@ -1,7 +1,7 @@
 import Mathlib.Combinatorics.SimpleGraph.Basic
 import Mathlib.Topology.MetricSpace.Basic
 
-/-
+/-!
 
 Franklin and McNicholl define a metric on a graph by:
 d_G(v₀,v₁) =
@@ -16,7 +16,7 @@ generalize it, by replacing 1 and 2 by real numbers
 -/
 
 open Classical
-noncomputable instance {U : Type}  (G : SimpleGraph U) (a b : ℝ)
+noncomputable instance franklinMcNichollMetric {U : Type}  (G : SimpleGraph U) (a b : ℝ)
 (h₀ : 0 < a) (h₁ : a ≤ b + b) (h₂ : b ≤ a + a)
 : MetricSpace U := {
   dist := λ x y ↦ ite (x=y) 0 (ite (G.Adj x y) a b)

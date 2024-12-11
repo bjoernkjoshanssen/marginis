@@ -1,12 +1,11 @@
 import Mathlib.Topology.MetricSpace.PiNat
 
-/-
-The paper
+/-!
 
-Unique paths as formal points
-Thierry Coquand, Peter Schuster
+# Unique paths as formal points
+by Thierry Coquand, Peter Schuster
 
-mentions Weak König's Lemma.
+The paper mentions Weak König's Lemma.
 
 We (define and) prove:
 
@@ -27,7 +26,7 @@ def has_a_path {α : Type} (T : Set (List α)) : Prop :=
 
 def WKL {α : Type} := ∀ T : Set (List α), tree T → Infinite T → has_a_path T
 
-example : @WKL (Fin 0) := by
+lemma wklFin0 : @WKL (Fin 0) := by
   intro T _ hi
   exfalso
   contrapose hi
@@ -35,7 +34,7 @@ example : @WKL (Fin 0) := by
   exact Subtype.finite
 
 
-example : ¬ @WKL ℕ := by
+lemma notWklFinNat : ¬ @WKL ℕ := by
   unfold WKL
   push_neg
   use (λ σ ↦ σ.length ≤ 1)
@@ -73,7 +72,7 @@ theorem zerolist : ∀ (σ : List (Fin 1)), σ = List.replicate σ.length 0
   simp
   exact Fin.fin_one_eq_zero a
 
-example : @WKL (Fin 1) := by
+lemma wklFin1 : @WKL (Fin 1) := by
   intro T hT hi
   use (λ _ ↦ 0)
   intro k

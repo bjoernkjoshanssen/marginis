@@ -1,11 +1,11 @@
 import Mathlib.Data.Vector.Basic
 
-/-
+/-!
 
-Definition 29 of
-"Projective sets, intuitionistically"
+# Projective sets, intuitionistically
 by Veldman
-gives two inductive conditions (i),(ii)
+
+Definition 29 gives two inductive conditions (i),(ii)
 for membership in a set CB.
 Condition (iii) states that all members of CB are
 given by (i) and (ii).

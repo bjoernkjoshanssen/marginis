@@ -1,9 +1,13 @@
 import Mathlib.Algebra.BigOperators.Group.Finset
 import Mathlib.RingTheory.Regular.RegularSequence
 
-/- We prove a special case of Dickson's Conjecture as stated in
-`On factoring of unlimited integers` by KAREL HRBACEK:
-the case where:
+/-!
+
+# On factoring of unlimited integers
+by KAREL HRBACEK
+
+We prove a special case of Dickson's Conjecture as stated in the paper:
+the case where
 * `gcd(a,b)>1` or `b=1`
 
 n = gcd(a,b) > 1 implies n | f(k) = a+bk for all k,

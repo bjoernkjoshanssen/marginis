@@ -1,10 +1,10 @@
 import Mathlib.Topology.MetricSpace.PiNat
 import Mathlib.Data.Real.Basic
 
-/-
+/-!
 
-A metastable dominated convergence theorem.
-Jeremy Avigad, Edward T Dean, Jason Rute.
+# A metastable dominated convergence theorem.
+by Jeremy Avigad, Edward T Dean, Jason Rute.
 
 We prove the equivalence between the two first displayed
 equations mentioned on page 2.
@@ -13,7 +13,7 @@ equations mentioned on page 2.
 
 open Classical
 
-example (a : ℕ → ℝ) :
+lemma metastableEquiv (a : ℕ → ℝ) :
   (∀ ε > 0, ∃ m, ∀ n ≥ m, ∀ n' ≥ m, |a n - a n'| < ε) ↔
   (
     ∀ ε > 0, ∀ F : ℕ → ℕ, ∃ m,
