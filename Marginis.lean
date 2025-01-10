@@ -20,6 +20,7 @@ import Marginis.ChristDemmelKnightScanlonYelick2024
 import Marginis.CoquandMaiettiPalmgren2019
 import Marginis.CoquandSchuster2011
 import Marginis.CoquandSpitters2012
+import Marginis.DienerHendtlass2020
 import Marginis.DoraisHirstShafer2012
 import Marginis.Dow2016
 import Marginis.EagleLau2024
