@@ -34,20 +34,20 @@ lemma moebius_one (a b y : ℝ) (ha : a ≠ b) : (∃ x, y = (x + a) / (x + b)) 
     obtain ⟨x,hx⟩ := h
     by_cases H : x+b=0
     . rw [H] at hx
-      contrapose hx
+      revert hx
       simp
     . have h₀: 1 * (x+b) = (x+a)/(x+b) * (x+b) :=
         by rw [hx]
       have : (x + a) / (x +b) * (x + b) = x+a := by
         exact div_mul_cancel₀ (x + a) H
-      contrapose ha
+      revert ha
       simp
       linarith
   · intro h
     exists (a-b * y)/(y-1)
     apply eq_div_of_mul_eq
     . intro hc
-      contrapose ha
+      revert ha
       simp
       have : (a - b * y) = -b * (y-1) := by
         symm; exact mul_of_div (by linarith) (minu h)

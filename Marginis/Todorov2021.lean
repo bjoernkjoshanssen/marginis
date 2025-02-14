@@ -24,16 +24,17 @@ lemma indep₂ (c : Fin 3 → ℝ)
   fin_cases i <;> aesop
 
 lemma indep₃ (c : Fin 3 → ℝ)
-(h : c 0 • Function.update (0 : Fin 3 → ℝ) 0 1
-   + c 1 • Function.update (0 : Fin 3 → ℝ) 1 1
-   + c 2 • Function.update (0 : Fin 3 → ℝ) 2 1 = 0) : c = 0 := by
-  have : Function.update (0 : Fin 3 → ℝ) 0 1 = ![1,0,0] := by
+(h : c 0 • @Pi.single (Fin 3) (fun _ => ℝ) _ _ 0 1
+   + c 1 • @Pi.single (Fin 3) (fun _ => ℝ) _ _ 1 1
+   + c 2 • @Pi.single (Fin 3) (fun _ => ℝ) _ _ 2 1 = 0) : c = 0 := by
+  have := @Pi.single (Fin 3) (fun _ => ℝ) _ _ 0 1
+  have : @Pi.single (Fin 3) (fun _ => ℝ) _ _ 0 1 = ![1,0,0] := by
     ext i;fin_cases i <;> aesop
   rw [this] at h
-  have : Function.update (0 : Fin 3 → ℝ) 1 1 = ![0,1,0] := by
+  have : @Pi.single (Fin 3) (fun _ => ℝ) _ _ 1 1 = ![0,1,0] := by
     ext i;fin_cases i <;> aesop
   rw [this] at h
-  have : Function.update (0 : Fin 3 → ℝ) 2 1 = ![0,0,1] := by
+  have : @Pi.single (Fin 3) (fun _ => ℝ) _ _ 2 1 = ![0,0,1] := by
     ext i;fin_cases i <;> aesop
   rw [this] at h
   exact indep₂ c h

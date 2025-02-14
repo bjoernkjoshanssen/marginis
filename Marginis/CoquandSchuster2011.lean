@@ -29,7 +29,7 @@ def WKL {α : Type} := ∀ T : Set (List α), tree T → Infinite T → has_a_pa
 lemma wklFin0 : @WKL (Fin 0) := by
   intro T _ hi
   exfalso
-  contrapose hi
+  revert hi
   refine not_infinite_iff_finite.mpr ?_
   exact Subtype.finite
 
@@ -43,7 +43,7 @@ lemma notWklFinNat : ¬ @WKL ℕ := by
   intro σ hσ
   intro τ hτ
   obtain ⟨u,hu⟩ := hτ
-  aesop
+  subst hu
   have : (τ ++ u).length ≤ 1 := hσ
   show τ.length ≤ 1
   calc
@@ -112,7 +112,7 @@ lemma wklFin1 : @WKL (Fin 1) := by
           by_contra hc
           simp at hc
           unfold tree at hT
-          contrapose hi
+          revert hi
           simp
 
           have Q := @hT τ hτ (List.replicate k 0) (by

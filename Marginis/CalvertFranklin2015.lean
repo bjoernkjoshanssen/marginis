@@ -1,8 +1,4 @@
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Finset.Card
-import Mathlib.Data.Fintype.Basic
-import Mathlib.Order.Interval.Set.Basic
-import Mathlib.Algebra.BigOperators.Group.Finset
 import Mathlib.RingTheory.Regular.RegularSequence
 
 /-!
@@ -30,11 +26,19 @@ def uniformly_distributed (x : ℕ → Set.Ico (0:ℝ) 1) :=
 lemma zero_not_uniformly_distributed : ¬ uniformly_distributed (λ _ ↦ ⟨0,by simp⟩) := by
   unfold uniformly_distributed uniformly_distributed_at
   push_neg
-  use (1:ℝ)/2;use (1:ℝ);use (1:ℝ)/2
-  constructor;aesop;constructor;exact one_half_lt_one
-  constructor;rfl;constructor;aesop
-  intro n₀;use n₀
-  constructor;rfl;simp
-  split_ifs with h
-  . exfalso;contrapose h;simp
-  . simp;ring_nf;apply @le_abs_self ℝ
+  use 1/2, 1, 1/2
+  constructor
+  · aesop
+  · constructor
+    · exact one_half_lt_one
+    · constructor
+      · rfl
+      · constructor
+        · aesop
+        · intro n₀;use n₀
+          constructor
+          · rfl
+          · simp
+            split_ifs with h
+            . exfalso;revert h;simp
+            . simp;ring_nf;apply le_abs_self

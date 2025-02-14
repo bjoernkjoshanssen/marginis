@@ -20,10 +20,9 @@ def Henkin {n:ℕ} {U : Type} (R : (Fin n → U) → (Fin n → U) → Prop) :=
 
 example (R : (Fin n → U) → (Fin n → U) → Prop) :
   Henkin R → ∀ x, ∃ y, R x y := by
-  intro h x
-  obtain ⟨Y,hY⟩ := h
+  intro ⟨Y,hY⟩ x
   use (λ k ↦ Y k (x k))
-  tauto
+  exact hY _
 
 -- How large a domain do we need in order to separate these? n=0 is not enough:
 

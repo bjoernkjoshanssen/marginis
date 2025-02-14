@@ -36,7 +36,7 @@ lemma uniqueTopFin0 ( σ τ : TopologicalSpace (Fin 0)) : σ.IsOpen = τ.IsOpen 
   . intro; exact @isOpen_empty _ τ
   . intro; exact @isOpen_empty _ σ
 
-/-- There is only one topology on `Fin 0`. -/
+/-- There is only one topology on `Fin 1`. -/
 lemma uniqueTopFin1 ( σ τ : TopologicalSpace (Fin 1)) : σ.IsOpen = τ.IsOpen := by
   apply funext
   intro S
@@ -172,18 +172,13 @@ def myhomeo := @Homeomorph.mk (Fin 2) (Fin 2) (mytop 0) (mytop 1) myequiv (by
   |inl h => subst h;left;simp
   |inr h => cases h with
     |inl h => subst h;right;left;simp
-    |inr h => subst h;right;right;ext x;simp;
-              constructor
-              . intro h; unfold myequiv at h; simp at h;
-                have : x.1 = 0 ∨ x.1 = 1 := by
-                  refine Nat.le_one_iff_eq_zero_or_eq_one.mp ?_
-                  exact Fin.is_le x
-                have : x = 0 ∨ x = 1 := by
-                  cases this with
-                  | inl h => left;exact Eq.symm (Fin.eq_of_val_eq (id (Eq.symm h)))
-                  | inr h => right;exact Eq.symm (Fin.eq_of_val_eq (id (Eq.symm h)))
-                cases this with
-                | inl h₀ => subst h₀;simp at h
-                | inr h₀ => subst h₀;rfl
-              . intro h; subst h;rfl
+    |inr h =>
+      subst h;right;right;ext x;simp
+      constructor
+      . intro h; unfold myequiv at h; simp at h;
+        have : x = 0 ∨ x = 1 := by fin_cases x <;> tauto
+        cases this with
+        | inl h₀ => subst h₀;simp at h
+        | inr h₀ => subst h₀;rfl
+      . intro h; subst h;rfl
 )
