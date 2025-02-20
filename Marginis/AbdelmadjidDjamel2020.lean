@@ -5,7 +5,8 @@ import Mathlib.Data.Finset.Card
 /-!
 
 # Representation of Integers: A nonclassical point of view
-# BOUDAOUD ABDELMADJID BELLAOUAR DJAMEL
+
+[Bellaouar Djamel, Boudaoud Abdelmadjid 2020](http://logicandanalysis.org/index.php/jla/article/view/4)
 
 In the Introduction,
 this paper defines functions ω and Ω which give the number of distinct prime divisors

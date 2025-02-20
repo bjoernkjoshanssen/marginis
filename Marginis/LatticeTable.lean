@@ -4,8 +4,15 @@ import Mathlib.Analysis.Convex.Function
 import Mathlib.Data.Real.Basic
 import Mathlib.Logic.Basic
 import Mathlib.Order.Defs
+import Mathlib.Order.Sublattice
+import Mathlib.Data.Real.Hyperreal
+import Mathlib.Data.Matrix.Basic
+import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 
--- lattice tables...
+/-!
+
+# Lattice tables
+as used in computability theory. -/
 
 structure latticeTable (A : Type*) where
   (Θ : Set <| A → A → Prop)
@@ -15,6 +22,96 @@ structure latticeTable (A : Type*) where
     (∀ α ∈ Θ, ∀ β ∈ Θ, Relation.Join (Relation.ReflTransGen  (fun x y => α x y ∨ β x y)) ∈ Θ) ∧ -- need eq. closure
     ∀ α ∈ Θ, IsEquiv _ α)
 
+lemma Relation_Transgen_refl {A : Type*} {R : A → A → Prop}
+    (h : Reflexive R):
+    Reflexive (Relation.TransGen R) := by
+  intro x
+  exact Relation.TransGen.single (h x)
+
+lemma Relation_Transgen_symm {A : Type*} {R : A → A → Prop}
+    (h : Symmetric R):
+    Symmetric (Relation.TransGen R) := fun x y h₁ => by
+  induction h₁ with
+  | single h₂ =>
+    apply Relation.TransGen.single
+    exact h h₂
+  | tail _ f e =>
+    exact Relation.TransGen.head (h (h (h f))) e
+
+
+
+/-- Get lattice representations as IsSubLattice of this: -/
+instance (A : Type*) : Lattice {α : A → A → Prop // IsEquiv _ α} := {
+  le := fun α β => ∀ x y : A, β.1 x y → α.1 x y
+  lt := fun α β =>
+      (∀ x y : A, β.1 x y → α.1 x y) ∧
+    ¬ (∀ x y : A, α.1 x y → β.1 x y)
+  sup := fun α β => ⟨fun x y => α.1 x y ∧ β.1 x y, {
+        refl := fun _ => ⟨α.2.refl _, β.2.refl _⟩
+        trans := by
+            have := α.2.trans
+            have := β.2.trans
+            tauto
+        symm := fun _ _ h => ⟨α.2.symm _ _ h.1, β.2.symm _ _ h.2⟩
+    }⟩
+  le_refl := by simp
+  le_trans := by simp_all
+  le_antisymm  := fun α β h₀ h₁ => by aesop
+  le_sup_left  := fun _ _ _ _ h => h.1
+  le_sup_right := fun _ _ _ _ h => h.2
+  sup_le       := fun _ _ _ _ _ => by aesop
+  inf := fun α β => ⟨Relation.TransGen fun x y => α.1 x y ∨ β.1 x y,
+    {
+        refl := fun a => by
+            have := α.2.refl
+            have := @Relation_Transgen_refl A (fun x y ↦ α.1 x y ∨ β.1 x y)
+                (fun x => Or.inl <| α.2.refl x)
+            apply this
+        trans := fun _ _ _ => Relation.TransGen.trans
+        symm := by
+            apply Relation_Transgen_symm
+            have := α.2.symm
+            have := β.2.symm
+            tauto
+    }⟩
+  inf_le_left  := fun _ _ _ _ h => Relation.TransGen.single <| Or.inl h
+  inf_le_right := fun _ _ _ _ h => Relation.TransGen.single <| Or.inr h
+  le_inf := fun α _ _ _ _ _ _ h => by
+    have := α.2.trans
+    induction h <;> tauto
+}
+
+def 𝓢 (f : ℕ → ℕ) := Σ n, Π i : Fin n, Fin <| f i.1
+
+def σ : 𝓢 (fun k => k.succ) := ⟨2, fun i => i⟩
+
+
+
+instance : Sublattice ({α : Fin 2 → Fin 2 → Prop // IsEquiv _ α}) := {
+    carrier := by
+        exact Set.univ
+    infClosed' := by exact fun ⦃a⦄ a ⦃b⦄ _ ↦ a
+    supClosed' := by exact fun ⦃a⦄ a ⦃b⦄ _ ↦ a
+
+}
+
+-- instance (A : Type*) (T : latticeTable A) : Lattice T.Θ := {
+--   le := fun α β => ∀ x y : A, β.1 x y → α.1 x y
+--   sup := fun α β => ⟨fun x y => α.1 x y ∧ β.1 x y, T.h.2.2.1 _ α.2 _ β.2⟩
+--   le_refl := fun α x y => id
+--   le_trans := fun α β γ h₀ h₁ => by
+--     unfold LE.le at *
+--     simp_all
+--   le_antisymm := fun α β => sorry
+--   le_sup_left := sorry
+--   le_sup_right := sorry
+--   sup_le := sorry
+--   inf := sorry
+--   inf_le_left := sorry
+--   inf_le_right := sorry
+--   le_inf := sorry
+--   lt_iff_le_not_le := sorry
+-- }
 
 /-- The 0-1 lattice is a lattice table. -/
 def smallLatTab {A : Type*} : latticeTable A := by
@@ -643,12 +740,408 @@ theorem EndPart_eq_pp {A : Type*} : End Partition = @principal_preserving A := b
         subst this
         apply End_Partition_const
 
-/-
-                (Infinite case)         (Finite case)
 
-EndPart = clone ()
-        = pp    (`pp_eq_clone_of_inf`)
+def smul' {k : ℕ} (c : ℝ) (a : Fin k → ℝ) : Fin k → ℝ := fun i => c * a i
 
+theorem linear_logic_equation (a : Fin 2 → ℝ) (b : Fin 3 → ℝ) (v : Fin 5 → ℝ) :
+    (∀ c d : ℝ, Matrix.dotProduct (smul' c a) ![v 0, v 1]
+                  + Matrix.dotProduct (smul' d b) ![v 2, v 3, v 4] = 0) ↔
+    ∃ p q, Matrix.dotProduct p a = 0
+         ∧ Matrix.dotProduct q b = 0 ∧ v = ![p 0, p 1, q 0, q 1, q 2] := by
+  constructor
+  · intro h
+    use ![v 0, v 1], ![v 2, v 3, v 4]
+    simp_all [smul', Matrix.dotProduct, Finset.sum]
+    constructor
+    · rw [← h 1 0]
+      ring
+    · constructor
+      rw [← h 0 1]
+      ring
+      · ext x
+        fin_cases x <;> rfl
+  · intro ⟨p,q,h⟩ c d
+    have := h.2.2
+    subst this
+    unfold smul' Matrix.dotProduct Finset.sum at *
+    simp_all
+    ring_nf
+    have : c * a 0 * p 0 + c * a 1 * p 1 + d * b 0 * q 0 + d * b 1 * q 1 + d * b 2 * q 2
+         = c * (a 0 * p 0 + a 1 * p 1)   + d * (b 0 * q 0 + b 1 * q 1 + b 2 * q 2) := by ring
+    rw [this]
+    simp [mul_comm] at h -- !
+    rw [h.1]
+    simp
+    rw [← h.2]
+    ring_nf
+    tauto
 
+lemma great {k : ℕ} (c : ℝ) (a p : Fin k → ℝ) :
+    Matrix.dotProduct (c • a) p = c * Matrix.dotProduct a p := by
+  unfold Matrix.dotProduct
+  simp
+  simp_rw [mul_assoc]
+  exact Eq.symm (Finset.mul_sum Finset.univ (fun i ↦ a i * p i) c)
 
+-- example (a : ℝ) (b : Fin 2 → ℝ) : smul' a b = a • b := by
+--   unfold smul'
+--   symm
+--   rfl
+
+open Matrix -- needed for ⬝ᵥ
+
+lemma finfin {k l : ℕ} (v₀ : Fin k → ℝ) (v₁ q : Fin l → ℝ)
+    (H : Fin.append v₀ v₁ = Fin.append v₀ q) :
+    v₁ = q := by
+      ext i
+      have : v₁ i = Fin.append v₀ v₁ (Fin.natAdd k i) := by simp
+      rw [this, H]
+      simp
+
+lemma nifnif {k l : ℕ} (v₀ : Fin k → ℝ) (v₁ : Fin l → ℝ) (p : Fin k → ℝ)
+  (q : Fin l → ℝ)
+  (H : Fin.append v₀ v₁ = Fin.append p q) : v₀ = p := by
+      ext i
+      have : v₀ i = Fin.append v₀ v₁ (Fin.castAdd l i) := by simp
+      rw [this, H]
+      simp
+
+/--
+1-dimensional subspaces version of:
+(A ⊕ B)^⊥ = A^⊥ ⊕ B^⊕
+(v is ⊥ to anything in A ⊕ B) ↔ (v is in the span of some p ∈ A⊥ and some q ∈ B⊥)
 -/
+theorem linear_logic_equation' {k l : ℕ}
+    (a : Fin k → ℝ) (b : Fin l → ℝ) (v₀ : Fin k → ℝ) (v₁ : Fin l → ℝ) :
+    (∀ c d : ℝ, c • a ⬝ᵥ v₀
+              + d • b ⬝ᵥ v₁ = 0) ↔
+    ∃ p q, p ⬝ᵥ a = 0
+         ∧ q ⬝ᵥ b = 0 ∧ Fin.append v₀ v₁ = Fin.append p q := by
+  constructor
+  · intro h
+    use v₀, v₁
+    simp_all [dotProduct, Finset.sum]
+    constructor
+    · rw [← h 1 0]
+      ring_nf
+      simp
+      simp_rw [mul_comm]
+    · rw [← h 0 1]
+      ring_nf
+      simp
+      simp_rw [mul_comm]
+  · intro ⟨p,q,h⟩ c d
+    have H := h.2.2
+    have : v₀ = p := by
+      apply nifnif; exact H
+    subst this
+    have : v₁ = q := by
+      apply finfin; exact H
+    subst this
+    rw [great,great]
+    nth_rewrite 1 [dotProduct_comm]
+    nth_rewrite 2 [dotProduct_comm]
+    rw [h.1, h.2.1]
+    simp
+
+/--
+(A ⊕ B)^⊥ = A^⊥ ⊕ B^⊕
+(v is ⊥ to anything in A ⊕ B) ↔ (v is in the span of some p ∈ A⊥ and some q ∈ B⊥)
+because both just say that v = Fin.append v₀ v₁
+where v₀ ∈ A^⊥ and v₁ ∈ B^⊥.
+-/
+theorem linear_logic_equation'' {k l : ℕ}
+    (A : Set (Fin k → ℝ)) (B : Set (Fin l → ℝ))
+    [Nonempty A] [Nonempty B]
+    (v₀ : Fin k → ℝ) (v₁ : Fin l → ℝ) :
+    (∀ c d : ℝ, ∀ a ∈ A, ∀ b ∈ B, c • a ⬝ᵥ v₀ -- this has vector addition
+              + d • b ⬝ᵥ v₁ = 0) ↔
+    ∀ a ∈ A, ∀ b ∈ B, ∃ p q,
+           p ⬝ᵥ a = 0 -- this does not (on its face)
+         ∧ q ⬝ᵥ b = 0 ∧ Fin.append v₀ v₁ = Fin.append p q := by
+    constructor
+    · intro h a ha b hb
+      use v₀, v₁
+      have h₀ := h 0 1 a ha b hb
+      have h₁ := h 1 0 a ha b hb
+      simp at h₀ h₁
+      constructor
+      · rw [← h₁]
+        rw [dotProduct_comm]
+      · constructor
+        · rw [← h₀]
+          rw [dotProduct_comm]
+        · rfl
+    · intro h c d a ha b hb
+      specialize h a ha b hb
+      obtain ⟨p,q,hpq⟩ := h
+      have : v₀ = p := by
+        apply nifnif
+        exact hpq.2.2
+      subst this
+      have : v₁ = q := by
+        apply finfin
+        exact hpq.2.2
+      subst this
+      simp [dotProduct_comm]
+      rw [hpq.1, hpq.2.1]
+      simp
+
+
+/-- It begins... Feb 16, 2025
+
+
+The focal lengths are those at which we "clear the level"
+(at the next level they have to agree with `x`):
+
+      `01101` 01110
+          \  /
+0100 0101 `0110` 0111   4
+  \  /      \    /
+   010     `011`
+      \    /
+  00   `01`            2
+   \  /
+   `0`     1           1
+     \   /
+      `∅`              0
+-/
+def x : Fin 5 → Fin 2 := ![0,1,1,0,1]
+def focalLength : Fin 5 → Fin 6 := ![0,1,2,4,5]
+-- should be a set, to automatize that it's "increasing" and injective.
+
+def focalLen : Set (Fin 6) := {0,1,2,4,5}
+
+/-- The domain is determined by the "current approximation " `z`
+and the set of focal lengths.
+-/
+def lensDomain {s : ℕ} (z : Fin s → Fin 2) (focLen : Set (Fin s.succ)) (l : ℕ) :
+    Set (Fin l → Fin 2) := {σ |
+  ∀ f ∈ focLen, (h : f.1 < l) → ∀ j : Fin f, σ ⟨j.1, by omega⟩
+                                           = z ⟨j.1, by omega⟩}
+
+def rangeLengths : Fin 6 → ℕ := ![0,5,7,8,9,11]
+
+
+
+-- /-- A particular example of a tree for `x` and `focalLen` -/
+-- def T (k : Fin 6) (σ : lensDomain x focalLen k.1) :
+-- -- Lerman does not use "lens domain" but it goes well with "focal point".
+-- -- equivalently:
+-- -- def T (k : Fin 6) (σ : { τ : Fin k.1 → Fin 2 // τ ∈ lensDomain x focalLen k.1}) :
+--     Fin (rangeLengths k) → Fin 2 := by
+--   by_cases h₀ : k = 0
+--   · subst h₀
+--     intro i
+--     unfold rangeLengths at i
+--     have := i.2
+--     simp at this -- in other words T(∅)=∅
+--   · by_cases h₁ : k = 1
+--     · subst h₁
+--       unfold rangeLengths
+--       by_cases h₂ : σ.1 ⟨0,by omega⟩ = 0
+--       · exact ![0,0,0,0,0] -- in other words T(⟨0⟩)=⟨0,0,0,0,0⟩
+--       · exact ![1,0,1,1,1] -- in other words T(⟨1⟩)=⟨1,0,1,1,1⟩
+--     by_cases h₂ : k = 2
+--     · subst h₂
+--       by_cases g₀ : σ.1 ⟨0,by omega⟩ = 0
+--       by_cases h₃ : σ.1 = ![0,0]
+--       exact ![0,0,0,0,0,0,1]
+--       by_cases h₅ : σ.1 = ![0,1]
+--       exact ![0,0,0,0,0,1,1]
+--       by_cases h₄ : σ.1 ⟨1,by omega⟩ = 0
+--       · exfalso
+--         contrapose h₃
+--         simp
+--         ext l
+--         fin_cases l
+--         . simp at g₀ ⊢
+--           rw [g₀]
+--           simp
+--         · rw [h₄]
+--           simp
+--       exfalso
+--       apply h₅
+--       ext u
+--       fin_cases u
+--       · simp at g₀ ⊢
+
+--         rw [g₀]
+--         simp
+--       simp at h₄ ⊢
+--       have : (σ.1 ⟨1,by omega⟩).1 = 0 ∨ (σ.1 ⟨1,by omega⟩).1 = 1 := by omega
+--       cases this with
+--       | inl h => simp at h;exfalso;apply h₄;exact Eq.symm (Fin.eq_of_val_eq (id (Eq.symm h)))
+--       | inr h => simp at h;exact h
+--       have : σ.1 ⟨1,by omega⟩ = 1 := sorry
+
+--       by_cases h₃ : σ.1 = ![1,0]
+--       · rw [h₃] at *
+--         have h := σ.2
+--         unfold lensDomain at h
+--         -- simp at h
+--         specialize h 1 (by simp [focalLen]) (by simp) ⟨0,by simp⟩
+--         unfold x at h
+--         simp at h g₀
+--         tauto
+--         -- we could define exact ![1,0,1,1,1,0,1] but we want undefined
+--       ·
+--         have : σ.1 = ![1,1] := by
+--           ext l
+--           fin_cases l
+--           simp_all
+--           sorry
+--           sorry
+--         rw [this] at *
+--         have h := σ.2
+--         unfold lensDomain focalLen x at h
+--         simp at h g₀
+--         tauto
+--     have h := σ.2
+--     unfold lensDomain at h
+--     simp at h
+--     sorry -- too many cases
+
+
+/-- need the kind of extension where
+we can switch from `z` to `x` and, because there are fewer focal points
+(the ones where `z` and `x` differ being removed),
+`z` remains in the domain.
+-/
+def switchto {s : ℕ} (z x : Fin s → Fin 2)  (focLen : Set (Fin s.succ)) :=
+  lensDomain x {i : (Fin s.succ) | i ∈ focLen
+    ∧ ∀ j, (h : j < i) → x ⟨j.1,by omega⟩
+             = z ⟨j.1,by omega⟩
+  }
+
+
+theorem xlensDomain {s : ℕ} (_ x : Fin s → Fin 2)  (focLen : Set (Fin s.succ)):
+    x ∈ lensDomain x focLen _ := by
+  unfold lensDomain
+  intro f _ h j
+  rfl
+
+
+theorem zinswitchto {s : ℕ} (z x : Fin s → Fin 2)  (focLen : Set (Fin s.succ)):
+    z ∈ switchto z x focLen _ := fun f g h j => by
+  have := g.2 ⟨j.1, by omega⟩ j.2
+  symm
+  exact this
+
+theorem subset_switchto {s l : ℕ} (z x : Fin s → Fin 2)  (focLen : Set (Fin s.succ)):
+    lensDomain x focLen l ⊆ switchto z x focLen l := by
+  intro σ hσ
+  simp [switchto, lensDomain] at hσ ⊢
+  intro f hf hxz h j
+  specialize hxz ⟨j.1, by omega⟩ j.2
+  specialize hσ f hf h j
+  simp_all only
+
+theorem xinswitchto {s : ℕ} (z x : Fin s → Fin 2)  (focLen : Set (Fin s.succ)):
+    x ∈ switchto z x focLen _ := by
+  apply subset_switchto
+  intro f _ h j
+  rfl
+
+
+theorem lensDomain₁ : lensDomain x focalLen _ ![] := by
+  intro f _ h
+  simp at h
+
+theorem lensDomain₀ {b : Fin 2} : lensDomain x focalLen _ ![b] := by
+  intro i _ h
+  unfold x
+  simp at h
+  intro j
+  have := j.2
+  omega
+theorem lensDomain₁₂ {b : Fin 2} : lensDomain x focalLen _ ![0,b] := by
+  intro f g h
+  simp at h
+  unfold focalLen at g
+  have : f.1 = 0 ∨ f.1 = 1 := by omega
+  cases this with
+  | inl h =>
+    intro j
+    have := j.2
+    omega
+  | inr h =>
+    intro j
+    have := j.2
+    have : j.1 = 0 := by omega
+    simp_rw [this]
+    unfold x
+    rfl
+theorem lensDomain₃ {b : Fin 2} : ¬ lensDomain x focalLen _ ![1,b] := by
+  intro hc
+  unfold lensDomain x at hc
+  specialize hc 1 (by unfold focalLen;simp) (by aesop) ⟨0,by aesop⟩
+  simp at hc
+
+theorem lensDomain₄ {b : Fin 2} : ¬ lensDomain x focalLen _ ![0,0,b] := by
+  intro hc
+  unfold lensDomain x at hc
+  specialize hc 2 (by unfold focalLen;simp) (by aesop) ⟨1,by aesop⟩
+  simp at hc
+
+
+
+-- /-- σ extends x up to the last focalLength below |σ| -/
+-- def lensDomainain {l : Fin 6} (σ : Fin l.1 → Fin 2) : Prop :=
+--   ∀ i : Fin 5, (g : (focalLength i).1 < l.1) →
+--     ∀ j : Fin (focalLength i).1, σ ⟨j.1, by omega⟩ -- (Fin.castLT j (by omega)) --⟨j.1, by omega⟩
+--       = x ⟨j.1, by omega⟩ -- (Fin.castLT j (by omega))
+
+-- theorem ind : lensDomainain (l := 0) ![] := by
+--   unfold lensDomainain
+--   intro i g
+--   simp at g
+
+-- theorem xlensDomainain : lensDomainain (l := 5) x := fun _ _ _ => rfl
+-- theorem anotherlensDomainain' : ¬ lensDomainain (l := 2) ![1,0] := fun hc => by
+--   unfold lensDomainain at hc
+--   specialize hc 1
+--     (by unfold focalLength;simp)
+--     (by unfold focalLength;simp;exact 0)
+--   simp at hc
+--   unfold x at hc
+--   simp at hc
+
+-- theorem anotherlensDomainain'' : lensDomainain (l := 1) ![1] := by
+--   intro i g j
+--   simp at g
+--   have := j.2
+--   omega
+
+-- theorem anotherlensDomainain : lensDomainain (l := 2) ![0,1] := by
+--   intro i g j
+--   unfold x
+--   unfold focalLength at *
+--   fin_cases i
+--   · have := j.2
+--     simp at this
+--   · have := j.2
+--     conv at this =>
+--       right
+--       change 1
+--     have : ![(0 : Fin 2), 1, 1, 0, 1] = Fin.append ![0,1] ![1,0,1] := by
+--       ext k
+--       fin_cases k <;> aesop
+--     have : ![(0 : Fin 2), 1, 1, 0, 1] ⟨↑j, by omega⟩ =
+--            ![0, 1] ⟨↑j, by omega⟩ := by
+--       rw [this]
+--       simp [Fin.append, Fin.addCases]
+--       rfl
+--     rw [this]
+--   · conv at g =>
+--       lhs
+--       change 2
+--     simp at g
+--   · conv at g =>
+--       lhs
+--       change 4
+--     simp at g
+--   · conv at g =>
+--       lhs
+--       change 5
+--     simp at g
