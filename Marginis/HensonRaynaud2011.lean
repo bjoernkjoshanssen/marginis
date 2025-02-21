@@ -3,10 +3,8 @@ import Mathlib.MeasureTheory.Measure.Hausdorff
 /-
 
 # Quantifier elimination in the theory of Lp(Lq)-Banach lattices
-C WARD HENSON
-YVES RAYNAUD
 
-(JLA 2011)
+[C WARD HENSON and YVES RAYNAUD](http://logicandanalysis.org/index.php/jla/article/view/135)
 
 The paper concerns q.e. (for positive sentences) but does not give a definition of it.
 Here we show how to eliminate a quantifier for a positive sentence

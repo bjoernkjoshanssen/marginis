@@ -6,7 +6,8 @@ import Mathlib.MeasureTheory.Measure.Hausdorff
 /-!
 
 # Principles of bar induction and continuity on Baire space
-Kawai, 2019
+
+[Kawai](http://logicandanalysis.org/index.php/jla/article/view/342)
 
 The paper mentions the Uniform Continuity principle UC that each continuous function
 

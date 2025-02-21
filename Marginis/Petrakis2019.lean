@@ -4,8 +4,8 @@ import Mathlib.Topology.UniformSpace.Basic
 
 /-!
 
-# Constructive uniformities of pseudometrics and Bishop topologies1
-IOSIF PETRAKIS
+# Constructive uniformities of pseudometrics and Bishop topologies
+[IOSIF PETRAKIS](http://logicandanalysis.org/index.php/jla/article/view/339)
 
 discusses uniformities.
 Lean's Mathlib uses uniform spaces quite a bit.

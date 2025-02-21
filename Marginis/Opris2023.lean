@@ -7,7 +7,8 @@ import Mathlib.Data.Complex.ExponentialBounds
 /-!
 
 # On Preparation Theorems for R_an,exp –definable Functions
-by ANDRE OPRIS
+
+[ANDRE OPRIS](http://logicandanalysis.org/index.php/jla/article/view/450)
 
 We define Example 0.1 and show that f 0 0 = 0.
 A "LaTeX proof" of this would be:

@@ -10,7 +10,7 @@ import Mathlib.MeasureTheory.Measure.Hausdorff
 
 # Discretisations of higher order and the theorems of Faa di Bruno and DeMoivre-Laplace
 
-IMME VAN DEN BERG
+[IMME VAN DEN BERG](http://logicandanalysis.org/index.php/jla/article/view/173)
 
 We formalize Definition 7.3.
 

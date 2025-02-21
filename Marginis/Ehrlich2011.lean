@@ -1,4 +1,3 @@
--- import Mathlib.Init.Order.Defs
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Complex.Basic
@@ -7,7 +6,8 @@ import Mathlib.Data.Fin.Basic
 /-!
 
 # Conway names, the simplicity hierarchy and the surreal number tree
-PHILIP EHRLICH
+
+[PHILIP EHRLICH](http://logicandanalysis.org/index.php/jla/issue/view/5)
 
 A tree ⟨A,<ₛ⟩ is a partially  ordered  class  such  that  for  each x ∈ A,
 the  class {y ∈ A : y <ₛ x} of predecessors of x,  written  ‘pr_A(x)’,

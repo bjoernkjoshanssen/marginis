@@ -6,9 +6,8 @@ import Mathlib.Data.Complex.Basic
 /-!
 
 # K–theory of co-existentially closed continua
-by
-CHRISTOPHER J. EAGLE
-JOSHUA LAU
+
+[CHRISTOPHER J. EAGLE and JOSHUA LAU](http://logicandanalysis.org/index.php/jla/article/view/515)
 
 discusses algebraically closed fields.
 

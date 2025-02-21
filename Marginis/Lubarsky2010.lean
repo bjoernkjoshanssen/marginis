@@ -3,7 +3,8 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 /-!
 
 # Geometric spaces with no points
-ROBERT S. LUBARSKY
+
+[LUBARSKY](http://logicandanalysis.org/index.php/jla/article/view/64)
 
 
 The paper discusses the fact that "there is no continuous square root function on any

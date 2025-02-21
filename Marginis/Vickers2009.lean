@@ -8,7 +8,8 @@ import Mathlib.Data.Rat.Denumerable
 /-!
 
 ## Localic completion of generalized metric spaces II: Powerlocales
-by STEVEN VICKERS
+
+[STEVEN VICKERS](http://logicandanalysis.org/index.php/jla/article/view/34)
 
 The finite powerset of a set.
 We show that in the presence of a `Fintype` it is the same as the ordinary powerset,

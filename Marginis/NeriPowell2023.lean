@@ -4,8 +4,8 @@ import Mathlib.Data.Real.Basic
 /-!
 
 # A computational study of a class of recursive inequalities
-MORENIKEJI NERI
-THOMAS POWELL
+
+[MORENIKEJI NERI and THOMAS POWELL](http://logicandanalysis.org/index.php/jla/article/view/469)
 
 We formalize the first example from the paper.
 -/

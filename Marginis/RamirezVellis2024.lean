@@ -24,9 +24,8 @@ import Mathlib.Algebra.Algebra.Prod
 /-!
 
 # Time complexity of the Analyst’s Traveling Salesman algorithm
-by
-ANTHONY RAMIREZ
-VYRON VELLIS
+
+[ANTHONY RAMIREZ and VYRON VELLIS](http://logicandanalysis.org/index.php/jla/article/view/516)
 
 We prove for any `N` the `n = 2` version of
 the statement on page 3 containing the phrase "it is clear that".

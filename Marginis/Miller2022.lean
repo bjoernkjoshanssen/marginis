@@ -16,7 +16,8 @@ import Mathlib.Data.Nat.Digits
 /-!
 
 # Effectivizing Lusin’s Theorem
-RUSSELL MILLER
+
+[RUSSELL MILLER](http://logicandanalysis.org/index.php/jla/article/view/382)
 
 The paper discusses Turing degrees among other things.
 Here we formalize Turing reducibility (Degrees of unsolvability).

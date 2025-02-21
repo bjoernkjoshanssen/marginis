@@ -7,8 +7,8 @@ import Mathlib.Data.Real.Archimedean
 /-!
 
 # Fractals and the monadic second order theory of one successor
-by PHILIPP HIERONYMI
-ERIK WALSBERG
+
+[PHILIPP HIERONYMI and ERIK WALSBERG](http://logicandanalysis.org/index.php/jla/article/view/448)
 
 Oscillation
 

@@ -5,7 +5,8 @@ import Mathlib.Data.Set.Finite
 
 /-!
 # An Algebraic Weak Factorisation System on 01-Substitution Sets: A Constructive Proof
-by ANDREW SWAN, JLA 2016
+
+[ANDREW SWAN](http://logicandanalysis.org/index.php/jla/article/view/274)
 
 On page 2 of the paper,
 Perm(𝔸) is the set of all finite permutations of 𝔸, i.e.,

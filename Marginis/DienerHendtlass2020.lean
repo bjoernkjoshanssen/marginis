@@ -6,7 +6,8 @@ import Mathlib.Algebra.Group.Basic
 /-!
 
 # Differentiating Convex Functions Constructively
-by Hannes Diener and Matthew Hendtlass
+
+[Hannes Diener and Matthew Hendtlass](http://logicandanalysis.org/index.php/jla/article/view/8)
 
 In the paper 'Differentiating Convex Functions Constructively'
 by Hannes Diener and Matthew Hendtlass, the increase in

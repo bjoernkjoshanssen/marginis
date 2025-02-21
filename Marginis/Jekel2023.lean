@@ -5,7 +5,8 @@ import Mathlib.Data.Complex.Basic
 /-!
 
 # Covering entropy for types in tracial W^*- algebras
-by DAVID JEKEL
+
+[DAVID JEKEL](http://logicandanalysis.org/index.php/jla/article/view/468)
 
 The first displayed equation in the paper
 includes the term

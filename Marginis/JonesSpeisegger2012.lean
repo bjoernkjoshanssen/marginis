@@ -3,7 +3,8 @@ import Mathlib.Analysis.SpecialFunctions.ExpDeriv
 /-!
 
 # Generating the Pfaffian closure with total Pfaffian functions
-by GARETH JONES and PATRICK SPEISSEGGER
+
+[GARETH JONES and PATRICK SPEISSEGGER](http://logicandanalysis.org/index.php/jla/issue/view/7)
 
 The paper
 concerns Pfaffian functions for which

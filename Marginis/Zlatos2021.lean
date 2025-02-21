@@ -3,7 +3,8 @@ import Mathlib.Data.Nat.Prime.Defs
 /-!
 
 # Gordon’s Conjectures 1 and 2: Pontryagin–van Kampen duality in the hyperfinite setting
-PAVOL ZLATOSˇ
+
+[PAVOL ZLATOS](http://logicandanalysis.org/index.php/jla/article/view/409)
 
 
 Proposition 2.1.3 concerns the set D - D.

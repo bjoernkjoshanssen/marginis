@@ -18,8 +18,8 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 /-!
 
 # PFA and complemented subspaces of ℓ_∞/c₀
-by Alan Dow
-Journal of Logic and Analysis, 2016
+
+[Alan Dow](http://logicandanalysis.org/index.php/jla/article/view/257)
 
 Section 2 of the paper starts:
 `Let A_n, n ∈ ℕ be a partition of ℕ into infinite sets.`

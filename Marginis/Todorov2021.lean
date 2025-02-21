@@ -4,7 +4,8 @@ import Mathlib.Data.Real.Basic
 /-!
 
 ## Infinite-Dimensional Linear Algebra and Solvability of Partial Differential Equations
-by TODOR D. TODOROV
+
+[TODOR D. TODOROV](http://logicandanalysis.org/index.php/jla/article/view/376)
 
 We prove some elementary versions of the statement that
 the standard basis of `ℝ³` is linearly independent.

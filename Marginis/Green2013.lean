@@ -3,7 +3,8 @@ import Mathlib.Data.Set.Lattice
 /-!
 
 # Embedding an analytic equivalence relation in the transitive closure of a Borel relation
-by EDWARD J GREEN
+
+[EDWARD J GREEN](http://logicandanalysis.org/index.php/jla/issue/view/11)
 
 This illustrates the concept of [A]_P from the footnote on the first page.
 

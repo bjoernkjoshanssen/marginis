@@ -6,7 +6,7 @@ import Mathlib.Topology.MetricSpace.Pseudo.Defs
 
 # How constructive is constructing measures?
 
-## Pauly and Fouche
+[Pauly and Fouche](http://logicandanalysis.org/index.php/jla/article/view/241)
 
 In the proof of Example 15 they write:
 `let d be the restriction of the usual metric on Cantor space.`

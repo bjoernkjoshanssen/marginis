@@ -9,11 +9,10 @@ import Mathlib.Probability.ProbabilityMassFunction.Integrals
 /-!
 
 # Randomness and Solovay degrees
-by
 
-## Miyabe, Nies, Stephan
+[Miyabe, Nies, Stephan](http://logicandanalysis.org/index.php/jla/article/view/317)
 
-JLA, 2018. Page 3 says:
+Page 3 says:
 
 `We sometimes identify a real α with its binary expansion X ∈ 2^ω`
 `and the corresponding set X = {n ∈ ℕ : X (n) = 1 }`

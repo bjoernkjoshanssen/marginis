@@ -3,7 +3,11 @@ import Mathlib.Topology.MetricSpace.Basic
 
 /-!
 
-Franklin and McNicholl define a metric on a graph by:
+#  Degrees of and lowness for isometric isomorphism
+
+[Franklin and McNicholl](http://logicandanalysis.org/index.php/jla/article/view/6)
+
+define a metric on a graph by:
 d_G(v₀,v₁) =
 0 if v₀ = v₁
 1 if (v₀,v₁) ∈ E;

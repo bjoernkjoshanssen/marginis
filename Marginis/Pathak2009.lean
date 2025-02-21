@@ -2,7 +2,8 @@ import Mathlib.MeasureTheory.Measure.Hausdorff
 /-!
 
 # A computational aspect of the Lebesgue differentiation theorem
-by NOOPUR PATHAK
+
+[NOOPUR PATHAK](http://logicandanalysis.org/index.php/jla/article/view/28)
 
 She writes
 `Another characterization of random points in ℝ^d is given by Solovay's Lemma. [...]`

@@ -4,7 +4,8 @@ import Mathlib.Data.Real.Basic
 /-!
 
 # Reverse mathematics, trichotomy, and dichotomy
-by Dorais, Hirst and Shafer
+
+[Dorais, Hirst and Shafer](http://logicandanalysis.org/index.php/jla/article/view/170)
 
 We formalize Weak König's Lemma in the form of their Theorem 16, item 2:
 

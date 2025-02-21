@@ -3,7 +3,8 @@ import Mathlib.Data.Vector.Basic
 /-!
 
 # Projective sets, intuitionistically
-by Veldman
+
+[Veldman](http://logicandanalysis.org/index.php/jla/article/view/472)
 
 Definition 29 gives two inductive conditions (i),(ii)
 for membership in a set CB.

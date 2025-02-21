@@ -4,7 +4,8 @@ import Mathlib.RingTheory.Regular.RegularSequence
 /-!
 
 # On factoring of unlimited integers
-by KAREL HRBACEK
+
+[KAREL HRBACEK](http://logicandanalysis.org/index.php/jla/article/view/5)
 
 We prove a special case of Dickson's Conjecture as stated in the paper:
 the case where

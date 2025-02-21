@@ -5,8 +5,9 @@ import Mathlib.RingTheory.Regular.RegularSequence
 
 ## Abraham Robinson (6 October 1918 - 11 April 1974)
 
-This paper by EDITORS, Journal of Logic & Analysis,
-is a reminiscence of Abraham Robinson.
+[EDITORS, Journal of Logic & Analysis](http://logicandanalysis.org/index.php/jla/article/view/350)
+
+This paper is a reminiscence of Abraham Robinson.
 
 We include here a formalization of
 the ordering of a countable nonstandard model of `Th(N,<)`,

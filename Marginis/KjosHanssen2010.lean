@@ -1,8 +1,9 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 /-!
-# Permutations of the integers induce only the trivial automorphism of the Turing degrees
-by Kjos-Hanssen, Bjørn
+# The probability distribution as a computational resource for randomness testing
+
+[Kjos-Hanssen](http://logicandanalysis.org/index.php/jla/article/view/78)
 
 https://arxiv.org/pdf/1408.2850.pdf
 

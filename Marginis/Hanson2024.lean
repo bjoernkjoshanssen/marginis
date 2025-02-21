@@ -6,7 +6,8 @@ import Mathlib.Data.Real.Basic
 /-!
 
 # Some semilattices of definable sets in continuous logic
-JAMES E. HANSON
+
+[JAMES E. HANSON](http://logicandanalysis.org/index.php/jla/article/view/493)
 
 Definition 1.1 defines a topometric space.
 

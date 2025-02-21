@@ -11,7 +11,8 @@ import Mathlib.Combinatorics.Quiver.Path
 /-!
 
 # Ends of groups: a nonstandard perspective
-Isaac Goldbring
+
+[Isaac Goldbring](http://logicandanalysis.org/index.php/jla/issue/view/5)
 
 Inspired by the paper we give a definition of the Cayley graph of a group.
 We start from Kyle Miller's Lean 3 code at
