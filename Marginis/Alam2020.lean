@@ -5,9 +5,10 @@ import Mathlib.Analysis.SpecialFunctions.Integrals
 /-!
 
 # Limiting probability measures
-by Irfan Alam
 
-concerns integrals. Here we compute some.
+[Irfan Alam](http://logicandanalysis.org/index.php/jla/article/view/1)
+
+concerns integrals. Here we merely compute some.
 
 -/
 

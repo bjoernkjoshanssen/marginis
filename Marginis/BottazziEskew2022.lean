@@ -3,7 +3,7 @@ import Mathlib.MeasureTheory.Measure.Hausdorff
 /-!
 
 # Integration with filters
-by Emanuele Bottazzi, Monroe Eskew
+[Emanuele Bottazzi and Monroe Eskew](http://logicandanalysis.org/index.php/jla/article/view/403)
 
 The paper concerns measures over [0,∞].
 

@@ -5,7 +5,8 @@ import Mathlib.Topology.Homeomorph
 /-!
 
 # Locally compact Stone duality
-by Tristan Bice, Charles Starling
+
+[Tristan Bice and Charles Starling](http://logicandanalysis.org/index.php/jla/article/view/287)
 
 It is proved that "Compact clopen pseudobasic posets are characterized by separativity."
 

@@ -4,7 +4,8 @@ import Mathlib.RingTheory.Regular.RegularSequence
 
 /-!
 # First order irrationality criteria for series
-by LEE A. BUTLER
+
+[LEE A. BUTLER](http://logicandanalysis.org/index.php/jla/article/view/233)
 
 Corollary 2.2 in the paper is inspired by some work of `Viggo Brun`.
 It is mentioned that Corollary 2.2 applies to the sequence qₙ below.

@@ -2,9 +2,8 @@ import Mathlib.Data.Real.Hyperreal
 /-!
 
 ## Elementary numerosity and measures
-by VIERI BENCI
-EMANUELE BOTTAZZI
-MAURO DI NASSO
+
+[VIERI BENCI, EMANUELE BOTTAZZI, and MAURO DI NASSO](http://logicandanalysis.org/index.php/jla/article/view/212)
 
 We construct a cardinality map from the powerset of any Fintype to the hyperreals.
 -/

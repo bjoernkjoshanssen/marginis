@@ -3,9 +3,8 @@ import Mathlib.Data.Nat.Prime.Defs
 /-!
 
 # Enlargements of schemes
-by Lars Brünjes and Christian Serpé
 
-JLA 2007
+[Lars Brünjes and Christian Serpé](http://logicandanalysis.org/index.php/jla/article/view/160)
 
 -/
 

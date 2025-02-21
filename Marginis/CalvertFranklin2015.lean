@@ -3,8 +3,8 @@ import Mathlib.RingTheory.Regular.RegularSequence
 
 /-!
 # Genericity and UD–random reals
-by
-## WESLEY CALVERT, JOHANNA N.Y. FRANKLIN.
+
+[WESLEY CALVERT and JOHANNA N.Y. FRANKLIN](http://logicandanalysis.org/index.php/jla/article/view/247)
 
 This concerns the second sentence in the Introduction in the paper.
 

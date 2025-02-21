@@ -7,7 +7,8 @@ import Mathlib.MeasureTheory.Measure.Typeclasses
 /-!
 
 ## Modular functionals and perturbations of Nakano spaces
-by ITAI BEN-YAACOV
+
+[ITAI BEN-YAACOV](http://logicandanalysis.org/index.php/jla/article/view/11)
 
 defines L₀(X,𝓑,μ) to be the space of measurable functions
 f:X→ℝ up to a.e. equality.

@@ -3,8 +3,9 @@ import Mathlib.Data.Real.Basic
 
 /-!
 
-# A metastable dominated convergence theorem.
-by Jeremy Avigad, Edward T Dean, Jason Rute.
+# A metastable dominated convergence theorem
+
+[Jeremy Avigad, Edward T Dean, Jason Rute](http://logicandanalysis.org/index.php/jla/article/view/138)
 
 We prove the equivalence between the two first displayed
 equations mentioned on page 2.

@@ -7,8 +7,8 @@ import Mathlib.Order.Interval.Set.OrdConnected
  /-!
 
 # A constructive proof of Simpson’s Rule
-by THIERRY COQUAND
-BAS SPITTERS
+
+[THIERRY COQUAND and BAS SPITTERS](http://logicandanalysis.org/index.php/jla/article/view/174)
 
 In the paper, uniform continuity is discussed.
 

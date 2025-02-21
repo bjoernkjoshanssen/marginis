@@ -3,8 +3,8 @@ import Mathlib.Data.Real.Pi.Irrational
 /-!
 
 # Models of true arithmetic are integer parts of models of real exponentiation
-by MERLIN CARL
-LOTHAR SEBASTIAN KRAPP
+
+[MERLIN CARL and LOTHAR SEBASTIAN KRAPP](http://logicandanalysis.org/index.php/jla/article/view/298)
 
 discusses Schanuel's Conjecture.
 Here we would like to consider a simple case of it, such as `e` being transcendental.

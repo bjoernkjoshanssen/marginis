@@ -5,11 +5,8 @@ import Mathlib.Data.Real.Basic
 /-!
 
 # On Multilinear Inequalities of Hölder-Brascamp-Lieb Type for Torsion-Free Discrete Abelian Groups
-by MICHAEL CHRIST
-JAMES DEMMEL
-NICHOLAS KNIGHT
-THOMAS SCANLON
-KATHERINE YELICK
+
+[MICHAEL CHRIST, JAMES DEMMEL, NICHOLAS KNIGHT, THOMAS SCANLON and KATHERINE YELICK](http://logicandanalysis.org/index.php/jla/article/view/313)
 
 In Section 2.1 it is remarked that
 "there is no loss of generality in restricting attention to exponent tuples `s ∈ [0,1]^m`

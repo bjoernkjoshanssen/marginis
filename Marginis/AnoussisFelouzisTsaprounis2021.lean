@@ -2,9 +2,8 @@ import Mathlib.SetTheory.Cardinal.Cofinality
 /-!
 
 # Almost disjoint families and ultrapowers
-by MICHALIS ANOUSSIS
-VAGGELIS FELOUZIS
-KONSTANTINOS TSAPROUNIS
+
+[MICHALIS ANOUSSIS, VAGGELIS FELOUZIS, and KONSTANTINOS TSAPROUNIS](http://logicandanalysis.org/index.php/jla/article/view/398)
 
 discusses regular cardinals. Here we prove that no natural nunmber is regular.
 -/

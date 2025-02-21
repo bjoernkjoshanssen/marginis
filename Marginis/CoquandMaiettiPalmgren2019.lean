@@ -4,9 +4,8 @@ import Mathlib.Topology.Homeomorph
 /-!
 
 # Preface to the special issue for The Fifth Workshop on Formal Topology
-by THIERRY COQUAND
-MARIA EMILIA MAIETTI
-ERIK PALMGREN
+
+[THIERRY COQUAND, MARIA EMILIA MAIETTI, and ERIK PALMGREN](http://logicandanalysis.org/index.php/jla/article/view/380)
 
 The paper introduces Formal Topology, which is a constructive approach to pointfree topology.
 Here we instead look at topologies *with points*, over finite sets and show:

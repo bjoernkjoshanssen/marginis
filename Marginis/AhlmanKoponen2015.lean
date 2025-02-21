@@ -14,9 +14,20 @@ import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import Mathlib.RingTheory.AdjoinRoot
 import Mathlib.LinearAlgebra.Matrix.PosDef
 
-/- Reading "Limit Laws and Automorphism Groups of Nonrigid Structures" by Ove Ahlman and Vera Koponen, one observes the claim cited in the first sentence of the introduction: "it has been shown that for any finite relational vocabulary(also called signature), the proportion of labelled n-element structures which are rigid, ie have no nontrivial automorphism, approaches 1 as n approaches infinity"
+/-!
 
-  While their paper is about nonrigid structures, we have shown that there exists a rigid 2-element structure, namely Fin 2.
+# Limit Laws and Automorphism Groups of Nonrigid Structures
+
+[Ove Ahlman and Vera Koponen](http://logicandanalysis.org/index.php/jla/article/view/213)
+
+The first sentence of the introduction reads as follows.
+
+"[...] it has been shown that for any finite relational vocabulary (also called signature),
+the proportion of labelled n-element structures which are rigid, ie have no nontrivial automorphism,
+approaches 1 as n approaches infinity"
+
+While their paper is about nonrigid structures, here we show that there exists a rigid 2-element structure, namely `Fin 2`
+under addition.
 
 -/
 def automorphism_of_fin_2 (f : Fin 2 → Fin 2) :=

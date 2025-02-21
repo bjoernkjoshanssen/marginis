@@ -4,7 +4,8 @@ import Mathlib.RingTheory.Regular.RegularSequence
 /-!
 
 # Decomposition of terms in Lucas sequences
-by ABDELMADJID BOUDAOUD
+
+[ABDELMADJID BOUDAOUD](http://logicandanalysis.org/index.php/jla/article/view/18)
 
 We define the Lucas sequences from the paper and verify that the Fibonacci sequence appears.
 -/

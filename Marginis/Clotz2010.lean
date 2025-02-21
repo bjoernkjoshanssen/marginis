@@ -1,10 +1,11 @@
 import Mathlib.Analysis.SpecialFunctions.Integrals
 import Mathlib.Topology.Separation
 
-/-
-Description of locally finite families from a nonstandard
-point of view
-ULF LEONARD CLOTZ
+/-!
+
+# Description of locally finite families from a nonstandard point of view
+
+[ULF LEONARD CLOTZ](http://logicandanalysis.org/index.php/jla/article/view/42)
 
 studies the neighbourhood-monads of the standard points.
 Here we look at neighborhood filter in Lean and prove uniqueness of

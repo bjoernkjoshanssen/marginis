@@ -8,9 +8,8 @@ import Mathlib.MeasureTheory.Measure.Hausdorff
 /-!
 
 # A Constructive Examination of Rectifiability
-by DOUGLAS S. BRIDGES
-MATTHEW HENDTLASS
-ERIK PALMGREN
+
+[DOUGLAS S. BRIDGES, MATTHEW HENDTLASS, and ERIK PALMGREN](http://logicandanalysis.org/index.php/jla/article/view/260)
 
 The first displayed equation on page 2 suggests that
 
