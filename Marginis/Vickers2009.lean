@@ -1,9 +1,8 @@
 
 import Mathlib.Data.Vector.Basic
-import Mathlib.Data.Nat.Digits
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Complex.Basic
-import Mathlib.Data.Rat.Denumerable
+import Mathlib.Data.Set.Finite
 
 /-!
 

@@ -1,5 +1,8 @@
 import Mathlib.Data.Real.Basic
-import Mathlib.RingTheory.Regular.RegularSequence
+import Mathlib.Algebra.CharP.Defs
+import Mathlib.Data.Finset.Card
+import Mathlib.Data.Fintype.Basic
+import Mathlib.Tactic.Ring.RingNF
 
 /-!
 # Genericity and UD–random reals

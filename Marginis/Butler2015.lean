@@ -1,5 +1,4 @@
-import Mathlib.Algebra.BigOperators.Group.Finset
-import Mathlib.RingTheory.Regular.RegularSequence
+import Mathlib.Tactic.Ring.RingNF
 
 
 /-!

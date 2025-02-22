@@ -1,6 +1,6 @@
-import Mathlib.Topology.MetricSpace.Basic
 import Mathlib.Data.Real.Basic
-import Mathlib.Topology.UniformSpace.Basic
+import Mathlib.Tactic.Linarith.Lemmas
+import Mathlib.Tactic.Ring.Basic
 
 /-!
 

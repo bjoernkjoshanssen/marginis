@@ -1,5 +1,10 @@
 import Mathlib.Algebra.BigOperators.Group.Finset
-import Mathlib.RingTheory.Regular.RegularSequence
+import Mathlib.Tactic.Zify
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Tactic.Linarith.Lemmas
+import Mathlib.Tactic.Ring.Basic
+import Mathlib.Algebra.Order.Ring.Int
+import Mathlib.Data.Nat.Prime.Basic
 
 /-!
 

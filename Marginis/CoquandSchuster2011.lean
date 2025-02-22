@@ -1,4 +1,6 @@
-import Mathlib.Topology.MetricSpace.PiNat
+import Mathlib.Data.Set.Finite
+import Mathlib.Algebra.Order.Ring.Nat
+import Mathlib.Data.Nat.Cast.Order.Basic
 
 /-!
 

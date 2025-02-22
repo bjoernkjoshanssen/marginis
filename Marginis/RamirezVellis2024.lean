@@ -1,7 +1,3 @@
-import Mathlib.Topology.MetricSpace.Basic
-import Mathlib.Topology.MetricSpace.Defs
-import Mathlib.Data.Real.Sqrt
-import Mathlib.Data.Complex.Basic
 -- Austin's imports
 import Mathlib.Data.Set.Countable
 import Mathlib.Data.Set.Function
@@ -19,7 +15,8 @@ import Mathlib.Algebra.CharZero.Lemmas
 import Mathlib.Algebra.Ring.Parity
 import Mathlib.Algebra.Group.Even
 import Mathlib.Algebra.Group.Basic
-import Mathlib.Algebra.Algebra.Prod
+import Mathlib.Algebra.CharP.Defs
+import Mathlib.Topology.MetricSpace.Pseudo.Pi
 
 /-!
 

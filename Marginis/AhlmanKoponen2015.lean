@@ -1,18 +1,7 @@
-import Mathlib.Topology.Clopen
 
-import Mathlib.Algebra.BigOperators.Group.Finset
-import Mathlib.RingTheory.Regular.RegularSequence
 
-import Mathlib.NumberTheory.SmoothNumbers
-import Mathlib.Data.Real.Basic
-import Mathlib.LinearAlgebra.Matrix.Trace
-import Mathlib.Data.Matrix.Reflection
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.LinearAlgebra.Matrix.ZPow
 import Mathlib.Data.Fin.Basic
-import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
-import Mathlib.RingTheory.AdjoinRoot
-import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Data.ZMod.Defs
 
 /-!
 

@@ -1,8 +1,6 @@
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
-import Mathlib.Analysis.SpecialFunctions.Log.Basic
-import Mathlib.Data.Real.Sqrt
-import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Real.Archimedean
+import Mathlib.Order.OmegaCompletePartialOrder
+import Mathlib.Topology.MetricSpace.Basic
 
 /-!
 

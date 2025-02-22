@@ -8,10 +8,8 @@ import Mathlib.Computability.Halting
 import Mathlib.Computability.Primrec
 import Mathlib.Data.Fintype.Pi
 import Mathlib.Tactic.Linarith.Frontend
-import Mathlib.Computability.NFA
-import Mathlib.MeasureTheory.Constructions.Prod.Basic
-import Mathlib.Data.Matrix.Basic
-import Mathlib.Data.Nat.Digits
+import Mathlib.Data.Nat.PartENat
+import Mathlib.Logic.Function.CompTypeclasses
 
 /-!
 

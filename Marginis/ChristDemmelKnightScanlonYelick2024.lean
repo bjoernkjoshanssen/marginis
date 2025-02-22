@@ -1,6 +1,3 @@
-import Mathlib.Data.Nat.Factors
-import Mathlib.NumberTheory.Padics.PadicVal.Defs
-import Mathlib.Data.Finset.Card
 import Mathlib.Data.Real.Basic
 /-!
 

@@ -1,7 +1,6 @@
-import Mathlib.Topology.MetricSpace.Basic
 import Mathlib.Topology.MetricSpace.Defs
-import Mathlib.Topology.Instances.Nat
 import Mathlib.Data.Real.Basic
+import Mathlib.Topology.MetricSpace.Pseudo.Lemmas
 
 /-!
 

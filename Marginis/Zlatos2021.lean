@@ -1,4 +1,5 @@
-import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Order.Lattice
+import Mathlib.Algebra.Group.Nat
 
 /-!
 

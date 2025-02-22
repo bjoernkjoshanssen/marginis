@@ -1,5 +1,5 @@
-import Mathlib.Algebra.BigOperators.Group.Finset
-import Mathlib.RingTheory.Regular.RegularSequence
+import Mathlib.Data.Fin.VecNotation
+import Mathlib.Data.Fintype.Basic
 
 /-!
 

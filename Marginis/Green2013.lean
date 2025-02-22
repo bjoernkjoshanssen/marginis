@@ -1,5 +1,5 @@
 import Mathlib.Data.Nat.Prime.Defs
-import Mathlib.Data.Set.Lattice
+import Mathlib.Data.Set.Basic
 /-!
 
 # Embedding an analytic equivalence relation in the transitive closure of a Borel relation

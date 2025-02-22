@@ -1,5 +1,5 @@
 import Mathlib.Combinatorics.SimpleGraph.Basic
-import Mathlib.Topology.MetricSpace.Basic
+import Mathlib.Topology.MetricSpace.Defs
 
 /-!
 

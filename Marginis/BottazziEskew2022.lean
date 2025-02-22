@@ -1,5 +1,4 @@
-import Mathlib.Topology.MetricSpace.PiNat
-import Mathlib.MeasureTheory.Measure.Hausdorff
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 /-!
 
 # Integration with filters

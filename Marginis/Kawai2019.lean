@@ -1,7 +1,13 @@
 import Batteries.Data.List.Basic
 import Mathlib.Data.Vector.Basic
-import Mathlib.Algebra.BigOperators.Fin
-import Mathlib.MeasureTheory.Measure.Hausdorff
+import Mathlib.Tactic.Zify
+import Mathlib.Topology.NoetherianSpace
+import Mathlib.Data.Nat.SuccPred
+import Mathlib.Tactic.Linarith.Lemmas
+import Mathlib.Tactic.Ring.Basic
+import Mathlib.Topology.Instances.Discrete
+import Mathlib.Topology.UniformSpace.Compact
+import Mathlib.Algebra.Order.Star.Basic
 
 /-!
 

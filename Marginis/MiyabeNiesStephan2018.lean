@@ -4,8 +4,7 @@ import KolmogorovExtension4.ProductMeasure
 import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 import Mathlib.Probability.ProbabilityMassFunction.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Base
-import Mathlib.Probability.Variance
-import Mathlib.Probability.ProbabilityMassFunction.Integrals
+import Mathlib.Probability.ProbabilityMassFunction.Constructions
 /-!
 
 # Randomness and Solovay degrees

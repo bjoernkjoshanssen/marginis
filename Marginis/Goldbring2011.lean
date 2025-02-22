@@ -3,11 +3,10 @@ import Mathlib.Algebra.Group.Action.Defs
 import Mathlib.Algebra.Group.Int
 import Mathlib.Algebra.Group.TypeTags
 
-import Mathlib.Combinatorics.SimpleGraph.Basic
-import Mathlib.Topology.MetricSpace.Basic
 
 import Mathlib.Combinatorics.Quiver.Basic
 import Mathlib.Combinatorics.Quiver.Path
+import Mathlib.Data.Set.Operations
 /-!
 
 # Ends of groups: a nonstandard perspective

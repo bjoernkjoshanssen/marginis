@@ -1,4 +1,4 @@
-import Mathlib.MeasureTheory.Measure.Hausdorff
+import Mathlib.MeasureTheory.Measure.Haar.OfBasis
 /-!
 
 # A computational aspect of the Lebesgue differentiation theorem

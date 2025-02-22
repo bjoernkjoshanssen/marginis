@@ -1,6 +1,6 @@
 import Mathlib.Topology.Defs.Basic
-import Mathlib.MeasureTheory.Measure.Hausdorff
 import Mathlib.Topology.Homeomorph
+import Mathlib.Algebra.CharP.Two
 /-!
 
 # Preface to the special issue for The Fifth Workshop on Formal Topology

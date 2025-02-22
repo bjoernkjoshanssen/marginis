@@ -1,9 +1,5 @@
-import Mathlib.LinearAlgebra.Matrix.Trace
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Complex.Basic
-import Mathlib.Data.Fin.Basic
-import Mathlib.Topology.MetricSpace.PiNat
-import Mathlib.MeasureTheory.Measure.Hausdorff
+import Mathlib.Data.Rat.Defs
+import Mathlib.Data.Nat.Choose.Basic
 
 
 /-!

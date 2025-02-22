@@ -1,8 +1,7 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Algebra.Order.Group.Abs
-import Mathlib.Topology.MetricSpace.PiNat
-import Mathlib.SetTheory.ZFC.Basic
 import Mathlib.Order.Interval.Set.OrdConnected
+import Mathlib.Tactic.Ring.RingNF
 
  /-!
 

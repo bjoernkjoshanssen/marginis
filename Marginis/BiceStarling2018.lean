@@ -1,6 +1,5 @@
 import Mathlib.Topology.Defs.Basic
-import Mathlib.MeasureTheory.Measure.Hausdorff
-import Mathlib.Topology.Homeomorph
+import Mathlib.Topology.Clopen
 
 /-!
 
