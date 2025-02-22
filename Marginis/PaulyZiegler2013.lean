@@ -1,5 +1,7 @@
 import Mathlib.Logic.Nonempty
 import Mathlib.Tactic.PushNeg
+import Mathlib.Tactic.Tauto
+import Mathlib.Data.Fin.Basic
 
 /-
 
