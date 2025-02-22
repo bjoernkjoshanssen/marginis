@@ -53,11 +53,11 @@ theorem dickson_strong {ℓ : ℕ} (a b: Fin ℓ → ℕ)
   . simp at h
     obtain ⟨i,_⟩ := h
     exfalso
-    contrapose hc
+    revert hc
     simp
     exists Nat.gcd (a i) (b i)
     constructor
-    . let h₀ := ha i
+    . have := ha i
       tauto
     . intro k
       let h₀ := prod_dvd_prod_of_subset {i} univ

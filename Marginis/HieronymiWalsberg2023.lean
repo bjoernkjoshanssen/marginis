@@ -29,12 +29,13 @@ noncomputable def oscillation {X Y : Type} [MetricSpace X] [MetricSpace Y]
 theorem oscillation_const {c x : ℝ} : oscillation (fun _ : ℝ => c) x = 0 := by
   unfold oscillation
   simp
-  have : {δ : ENNReal | ∀ (ε : ENNReal), ε = 0} = ∅ := by
-    ext δ
+  suffices sSup ∅ = (0 : ENNReal) by
+    rw [← this]
+    congr
+    ext
     simp
     use 1
     simp
-  rw [this]
   have := @sSup_empty ENNReal _
   rw [this]
   simp

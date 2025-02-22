@@ -310,13 +310,30 @@ instance blah : Encodable (Bool → Bool) := {
 lemma encode_decode (k : ℕ) :
     Encodable.encode (@Encodable.decode (Bool → Bool) blah k) = ite (k < 4) k.succ 0 := by
   unfold blah
-  aesop
-  · suffices k = 1 by
-      subst this
-      aesop
-    omega
-  · exact Nat.eq_of_le_of_lt_succ h_2 h_1
-  · exact Nat.eq_of_le_of_lt_succ h_1 h
+  simp_all
+  split -- this is aesop output
+  next h =>
+    split
+    next h_1 =>
+      split
+      next h_2 =>
+        split
+        next h_3 =>
+          subst h_3
+          simp_all only [ofNat_pos, Encodable.encode_some, succ_eq_add_one, zero_add]
+        next h_3 =>
+          simp_all only [Encodable.encode_some, succ_eq_add_one, add_left_inj]
+          suffices k = 1 by
+            subst this
+            aesop
+          omega
+      next h_2 =>
+        simp_all only [not_lt, Encodable.encode_some, succ_eq_add_one, reduceAdd, reduceEqDiff]
+        exact Nat.eq_of_le_of_lt_succ h_2 h_1
+    next h_1 =>
+      simp_all only [not_lt, Encodable.encode_some, succ_eq_add_one, reduceAdd, reduceEqDiff]
+      exact Nat.eq_of_le_of_lt_succ h_1 h
+  next h => simp_all only [not_lt, Encodable.encode_none]
 
 instance blah₂: Primcodable (Bool → Bool) := {
   encode := by

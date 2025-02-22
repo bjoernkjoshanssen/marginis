@@ -101,7 +101,7 @@ lemma infiniteA_Dow {n:ℕ} : Infinite (A_Dow n) := by
     exact Nat.dvd_mul_right (2 ^ n) (2 * a + 1)
     intro hc
     obtain ⟨b,hb⟩ := hc
-    contrapose hb
+    revert hb
     suffices ¬2 ^ n * (2 * a + 1) = 2 ^ n  * (2 * b) by
       rw [Nat.pow_succ,Nat.mul_assoc]
       tauto

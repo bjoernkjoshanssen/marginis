@@ -98,7 +98,7 @@ lemma edist_of_diff {t f : ℕ → Bool} (h : t k ≠ f k) :
     rw [← R] at Q
     apply ENNReal.le_of_top_imp_top_of_toNNReal_le
     intro H;
-    contrapose H
+    revert H
     simp;intros
     rw [ENNReal_div_pow]
     exact Q
@@ -309,11 +309,11 @@ lemma one_or_other
           have : ¬ (fa ∈ S ∨ fa ∈ T) := by
             intro hc;cases hc with
             |inl hl =>
-              contrapose hS;simp;use tr;constructor;
+              revert hS;simp;use tr;constructor;
               tauto
               use fa;tauto
             |inr hr =>
-              contrapose hT;simp;use tr;constructor;
+              revert hT;simp;use tr;constructor;
               tauto
               use fa;tauto
           tauto;tauto
@@ -380,8 +380,8 @@ theorem measure_univ_prototype (S T : Set (ℕ → Bool)) (h : Set.univ ⊆ S �
           have : ¬ (tr ∈ S ∨ tr ∈ T) := by
             intro hc
             cases hc with
-            |inl hl => contrapose hS;simp;use tr;aesop
-            |inr hr => contrapose hT;simp;use tr;aesop
+            |inl hl => revert hS;simp;use tr;aesop
+            |inr hr => revert hT;simp;use tr;aesop
           tauto;tauto
         have hss: S ⊆ {x | x 0 = false} ∨ S ⊆ { x | x 0 = true} := by
           cases h₀ with

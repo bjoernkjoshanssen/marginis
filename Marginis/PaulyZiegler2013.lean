@@ -81,8 +81,8 @@ example : ¬ ∃ (R : (Fin n → Unit) → (Fin n → Unit) → Prop),
   (∀ x, ∃ y, R x y) ∧ ¬ Henkin R := by
     intro hc
     obtain ⟨R,hR⟩ := hc
-    contrapose hR
-    push_neg
+    revert hR
+    simp
     intro h
     exists (λ _ ↦ by
       intro; exact ()

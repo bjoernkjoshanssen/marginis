@@ -63,9 +63,9 @@ lemma Neighbors (f : ℝ → ℝ) (Con : ConvexOn ℝ (Set.Icc (0 : ℝ) 1) f) (
     simp
   rw [hzmy, hymx, div_mul_eq_div_div, div_mul_eq_div_div]
   apply (div_le_div_right hzx).mpr
-  apply (div_le_iff' htugh).mpr
+  apply (div_le_iff₀' htugh).mpr
   rw [←mul_div_assoc]
-  apply (le_div_iff' h0_lt_t).mpr
+  apply (le_div_iff₀' h0_lt_t).mpr
   rw[mul_sub_left_distrib, mul_sub_left_distrib, mul_sub_right_distrib, mul_sub_right_distrib, ← sub_add]
   simp
   apply abcdef (f z) (t * f z) (f y) (t * f y) (t * f x) (t * f y)
