@@ -2,7 +2,7 @@
 
 import Mathlib.Data.Fin.Basic
 import Mathlib.Data.ZMod.Defs
-
+import Mathlib.Tactic.FinCases
 /-!
 
 # Limit Laws and Automorphism Groups of Nonrigid Structures

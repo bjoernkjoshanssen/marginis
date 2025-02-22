@@ -2,6 +2,7 @@ import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Data.Complex.Basic
+import Mathlib.Data.Complex.ExponentialBounds
 
 /-!
 

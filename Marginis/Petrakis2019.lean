@@ -1,7 +1,8 @@
 import Mathlib.Data.Real.Basic
-import Mathlib.Tactic.Linarith.Lemmas
+import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring.Basic
-
+import Mathlib.Topology.UniformSpace.Basic
+import Mathlib.Topology.Instances.Real
 /-!
 
 # Constructive uniformities of pseudometrics and Bishop topologies

@@ -3,6 +3,7 @@ import Mathlib.Data.Vector.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Set.Finite
+import Mathlib.Data.Rat.Denumerable
 
 /-!
 

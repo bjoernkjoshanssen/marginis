@@ -8,6 +8,7 @@ import Mathlib.Tactic.Ring.Basic
 import Mathlib.Topology.Instances.Discrete
 import Mathlib.Topology.UniformSpace.Compact
 import Mathlib.Algebra.Order.Star.Basic
+import Mathlib.Tactic.Linarith
 
 /-!
 

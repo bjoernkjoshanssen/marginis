@@ -1,4 +1,5 @@
-import Batteries.Data.Rat.Basic
+import Mathlib.Data.Rat.Init
+import Mathlib.Data.Int.Notation
 
 /-!
 

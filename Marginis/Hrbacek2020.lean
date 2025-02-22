@@ -5,7 +5,7 @@ import Mathlib.Tactic.Linarith.Lemmas
 import Mathlib.Tactic.Ring.Basic
 import Mathlib.Algebra.Order.Ring.Int
 import Mathlib.Data.Nat.Prime.Basic
-
+import Mathlib.Tactic.Linarith
 /-!
 
 # On factoring of unlimited integers

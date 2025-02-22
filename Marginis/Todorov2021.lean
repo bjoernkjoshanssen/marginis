@@ -2,6 +2,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Algebra.Algebra.Defs
 import Mathlib.Data.Fintype.Basic
 import Mathlib.Algebra.Group.Fin.Tuple
+import Mathlib.Tactic.FinCases
 
 /-!
 

@@ -1,4 +1,5 @@
 import Mathlib.Order.RelIso.Basic
+import Mathlib.Tactic.Tauto
 
 /-!
 

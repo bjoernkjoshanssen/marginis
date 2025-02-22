@@ -99,8 +99,10 @@ example : 6 ∉ IntCayley.edges 4 5 := by
   unfold IntCayley cayley_graph schreier_graph
   intro hc
   have Q := hc.1
-  simp at Q
-
+  rcases Q with (g|g)
+  · simp at g
+  · have : 6 = -1 := g
+    simp at this
 instance : Quiver ℤ := {
   Hom := λ x y ↦ IntCayley.edges x y
 }
