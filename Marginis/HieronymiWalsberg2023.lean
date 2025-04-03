@@ -19,13 +19,14 @@ f at x is zero.
 -/
 
 -- We need to use `ENNReal` here since the oscillation may be ∞.
-noncomputable def oscillation {X Y : Type} [MetricSpace X] [MetricSpace Y]
+/--  `oscillation` was also added to Mathlib in 2024. We should prove that they coincide. -/
+noncomputable def oscillation' {X Y : Type} [MetricSpace X] [MetricSpace Y]
   (f : X → Y) (x : X) : ENNReal :=
   sSup { δ : ENNReal | ∀ ε > 0, ∃ y z, edist x y < ε ∧ edist x z < ε ∧ edist (f y) (f z) > δ}
 
-/-- The oscillation of a constant `c` is 0 at any `x`. -/
-theorem oscillation_const {c x : ℝ} : oscillation (fun _ : ℝ => c) x = 0 := by
-  unfold oscillation
+/-- The oscillation' of a constant `c` is 0 at any `x`. -/
+theorem oscillation'_const {c x : ℝ} : oscillation' (fun _ : ℝ => c) x = 0 := by
+  unfold oscillation'
   simp
   suffices sSup ∅ = (0 : ENNReal) by
     rw [← this]
@@ -38,9 +39,9 @@ theorem oscillation_const {c x : ℝ} : oscillation (fun _ : ℝ => c) x = 0 := 
   rw [this]
   simp
 
-/-- The oscillation of the identity is 0 at any `x`. -/
-theorem oscillation_id : oscillation (fun x : ℝ => x) x = 0 := by
-  unfold oscillation
+/-- The oscillation' of the identity is 0 at any `x`. -/
+theorem oscillation'_id : oscillation' (fun x : ℝ => x) x = 0 := by
+  unfold oscillation'
   simp
   have h₀ : {δ : ENNReal | ∀ (ε : ENNReal), 0 < ε → ∃ y, edist x y < ε ∧ ∃ x_1, edist x x_1 < ε ∧ δ < edist y x_1} ⊆ {0} := by
     intro δ
