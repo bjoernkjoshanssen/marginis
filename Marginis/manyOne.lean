@@ -308,6 +308,41 @@ def complementMap {m : mon} : @𝓓 m → @𝓓 m := by
   exact Quotient.sound <| ⟨⟨f₁,hf₁.1, fun x => by unfold cpl; congr; exact hf₁.2 x⟩,
                            ⟨f₂,hf₂.1, fun x => by unfold cpl; congr; exact hf₂.2 x⟩⟩
 
+
+def induces {m : mon} (f : @𝓓 m → @𝓓 m) (F : (ℕ → Bool) → (ℕ → Bool)) :=
+  ∃ hF : (∀ A B : ℕ → Bool, @m_equivalent m A B → @m_equivalent m (F A) (F B)),
+    f =  Quotient.lift _ fun A B h => Quotient.sound (hF A B h)
+
+def induced {m : mon} (f : @𝓓 m → @𝓓 m) :=
+  ∃ F : (ℕ → Bool) → (ℕ → Bool), induces f F
+
+/-- Induced by a function on ℕ. -/
+def induced₀ {m : mon} (π : @𝓓 m → @𝓓 m) := ∃ f : ℕ → ℕ, induces π (fun A => A ∘ f)
+
+/-- The identity automorphism is induced by a function on ℕ. -/
+theorem id_induced₀ {m : mon} :
+  induced₀ (id : @𝓓 m → 𝓓) := ⟨id, (fun _ _ => id), funext <| Quot.ind <| fun _ => rfl⟩
+
+
+/-- The complement automorphism is not induced by a function on ℕ. -/
+theorem complementMap_is_not_induced₀ {m : mon} :
+  ¬ induced₀ (@complementMap m) := by
+  intro ⟨f,h₀,h₁⟩
+  have ⟨⟨g₀,h₀⟩,_⟩ : @m_equivalent m (cpl (fun _ => false)) ((fun _ => false) ∘ f) :=
+    Quotient.eq''.mp <| congrFun h₁ ⊥
+  simp [cpl] at h₀
+
+theorem complementMap_is_induced {m : mon} :
+  induced (@complementMap m) := by
+  use cpl
+  use (by
+    intro A B ⟨⟨f₁,hf₁⟩,⟨f₂,hf₂⟩⟩
+    exact ⟨⟨f₁,hf₁.1, fun x => by unfold cpl; congr; exact hf₁.2 x⟩,
+           ⟨f₂,hf₂.1, fun x => by unfold cpl; congr; exact hf₂.2 x⟩⟩)
+  rfl
+
+
+
 /-- In 𝓓ₘ, ⊥ ≠ ⊤. -/
 lemma emp_univ_m_degree {m : mon} : (⊥ : @𝓓 m) ≠ ⊤ := by
   intro hc
@@ -579,6 +614,134 @@ def joinFun (f₁ f₂ : ℕ → ℕ) := fun k ↦ if Even k then f₁ (k / 2) e
 structure monₘ extends mon₁ where
   join : ∀ {f₁ f₂}, func f₁ → func f₂ → func (joinFun f₁ f₂)
   const : ∀ c, func (fun _ => c)
+
+
+lemma botSwap_is_induced_helper
+  {m : monₘ}
+  {A B : ℕ → Bool}
+  (hAB : @m_equivalent m.tomon₁.tomon A B) :
+  @m_reducible m.tomon₁.tomon
+  (if A = fun _ ↦ false then fun _ ↦ true else if A = fun _ ↦ true then fun _ ↦ false else A)
+  (if B = fun _ ↦ false then fun _ ↦ true else if B = fun _ ↦ true then fun _ ↦ false else B)
+  := by
+      by_cases h₀ : A = fun _ => false
+      · subst h₀
+        by_cases h₁ : B = fun _ => false
+        · subst h₁
+          simp
+          use id
+          simp
+          exact m.id
+        · rw [if_neg h₁]
+          simp
+          by_cases h₂ : B = fun _ => true
+          · subst h₂
+            simp
+            exact hAB.2 -- faster than exfalso
+          · rw [if_neg h₂]
+            have ⟨k,hk⟩ : ∃ k, B k = true := by
+              by_contra hc
+              push_neg at hc
+              apply h₁
+              simp at hc
+              exact (Set.eqOn_univ B fun _ ↦ false).mp fun ⦃x⦄ _ ↦ hc x
+            use fun _ => k
+            simp
+            constructor
+            · exact m.const k
+            · exact hk
+      · rw [if_neg h₀]
+        by_cases h₁ : A = fun _ => true
+        · subst h₁
+          simp
+          clear h₀
+          by_cases h₂ : B = fun _ => false
+          · subst h₂
+            simp
+            exact hAB.2
+          · rw [if_neg h₂]
+            have : B = fun _ => true := by
+              ext k
+              obtain ⟨f,hf⟩ := hAB.2
+              have := hf.2 k
+              simp at this
+              exact this
+            subst this
+            simp
+            apply m_refl
+        · rw [if_neg h₁]
+          by_cases h₂ : B = fun _ => false
+          · subst h₂
+            exfalso
+            apply h₀
+            ext k
+            obtain ⟨f,hf⟩ := hAB.1
+            have := hf.2 k
+            simp at this
+            exact this
+          · rw [if_neg h₂]
+            by_cases h₃ : B = fun _ => true
+            · subst h₃
+              have : A = fun _ => true := by
+                ext k
+                obtain ⟨f,hf⟩ := hAB.1
+                have := hf.2 k
+                simp at this
+                exact this
+              subst this
+              exfalso
+              apply h₁
+              simp
+            · rw [if_neg h₃]
+              exact hAB.1
+
+/-- The `botSwap` automorphism is induced by a function on reals. -/
+theorem botSwap_is_induced {m : monₘ} : induced (@botSwap m.tomon₁.tomon) := by
+  let f := fun _ : ℕ => false
+  let t := fun _ : ℕ => true
+  let m' := m.tomon₁.tomon
+  let s : (ℕ → Bool) → (ℕ → Bool) := fun A => if A = f then t else if A = t then f else A
+  have h : ∀ (A B : ℕ → Bool), @m_equivalent m' A  B →
+    @m_equivalent m' (s A) (s B) := by
+    intro A B hAB
+    constructor
+    · apply botSwap_is_induced_helper hAB
+    · apply botSwap_is_induced_helper hAB.symm
+  have h' : ∀ (A B : ℕ → Bool), (@𝓓setoid m').r A B →
+    (⟦s A⟧ : @𝓓 m') = (⟦s B⟧ : @𝓓 m') := by
+    intro A B hAB
+    specialize h A B hAB
+    simp_all only [Quotient.eq, f, t]
+    exact h
+  use fun A => ite (A = f) t <| ite (A = t) f A, h
+  apply funext
+  intro a
+  symm
+  unfold botSwap
+  split_ifs with g₀ g₁
+  · subst g₀
+    show Quotient.lift (fun a ↦ ⟦if a = f then t else if a = t then f else a⟧) h' ⟦f⟧ = ⟦t⟧
+    simp
+  · subst g₁
+    show Quotient.lift (fun a ↦ ⟦if a = f then t else if a = t then f else a⟧) h' ⟦t⟧ = ⟦f⟧
+    simp_all only [Quotient.lift_mk, ↓reduceIte, ite_self, m', s, f, t]
+  · suffices ∀ a, ¬a = ⊤ →  ¬a = ⊥ → Quotient.lift
+      (fun a ↦ ⟦if a = f then t else if a = t then f else a⟧) h' a = a by exact this a g₁ g₀
+    apply Quot.ind
+    intro A h₀ h₁
+    rw [show (⊤ : @𝓓 m') = Quot.mk 𝓓setoid.r t by rfl] at h₀
+    rw [show (⊥ : @𝓓 m') = Quot.mk 𝓓setoid.r f by rfl] at h₁
+    apply Quot.sound
+    have h₀ := @Quot.lift_mk (ℕ → Bool) (Quotient 𝓓setoid) (@m_equivalent m')
+      (fun A => (⟦s A⟧ : @𝓓 m')) h' f
+    have g₂ : A ≠ t := by
+      contrapose! g₀
+      simp_all only
+    have g₃ : A ≠ f := by
+      contrapose! g₀
+      simp_all only
+    simp_all only [↓reduceIte, Quotient.eq, implies_true, ne_eq]
+    exact Quotient.eq''.mp rfl
 
 
 
