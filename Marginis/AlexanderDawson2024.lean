@@ -25,20 +25,15 @@ def com (x y : Int) : Int := x * y
 /-- A "multiplication".  -/
 def starr (x y : Int) : Int := x + y
 
+open Int in
 /-- A "chain rule". -/
-theorem prim_com_eq_starr : ∀ x y : Int,
+theorem prim_com_eq_starr (x y : Int) :
   prim (com x y) = starr (com (prim x) y) (prim y) := by
-  intros x y
   simp [prim, com, starr]
-  suffices  x * y - 1 + 1 = (x - 1) * y + (y - 1) + 1 by
-    exact (Int.add_right_inj 1).mp this
-  have g₀ : (x - 1) * y = x * y - 1 * y := Int.sub_mul x 1 y
+  apply (Int.add_right_inj 1).mp
   by_cases h₀ : x * y = 0
-  · rw [h₀]
-    simp
-    rw [g₀]
+  · rw [h₀,sub_mul]
     ring_nf
     exact h₀.symm
-  · have : x * y - 1 + 1 = x* y := Int.sub_add_cancel (x * y) 1
-    rw [this, g₀]
+  · rw [sub_add_cancel, Int.sub_mul]
     simp

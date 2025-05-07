@@ -20,13 +20,41 @@ generalize it, by replacing 1 and 2 by real numbers
 -/
 
 open Classical
-noncomputable instance franklinMcNichollMetric {U : Type}  (G : SimpleGraph U) (a b : ℝ)
+
+noncomputable def franklinMcNicholl {U : Type}
+(G : SimpleGraph U) (a b : ℝ) : U → U → ℝ :=
+    λ x y ↦ ite (x=y) 0 (ite (G.Adj x y) a b)
+
+/-- When a=b we do have an ultrametric. -/
+theorem franklinMcNicholl_ultrametric {U : Type}
+    (G : SimpleGraph U) (a : ℝ) (h : 0 ≤ a) :
+  let d := franklinMcNicholl G a a
+  ∀ x y z, d x y ≤ max (d x z) (d y z) := by
+  intro d x y z
+  unfold d franklinMcNicholl
+  by_cases h₀ : x = y
+  · subst h₀
+    simp
+    aesop
+  · rw [if_neg h₀]
+    simp
+    by_cases h₁ : x = z
+    · subst h₁
+      simp
+      have : ¬ y = x := by aesop
+      rw [if_neg this]
+      simp
+    · rw [if_neg h₁]
+      simp
+
+noncomputable instance franklinMcNichollMetric {U : Type}
+(G : SimpleGraph U) (a b : ℝ)
 (h₀ : 0 < a) (h₁ : a ≤ b + b) (h₂ : b ≤ a + a)
 : MetricSpace U := {
-  dist := λ x y ↦ ite (x=y) 0 (ite (G.Adj x y) a b)
-  dist_self := λ x ↦ by simp only [reduceIte]
+  dist := franklinMcNicholl G a b
+  dist_self := λ x ↦ by simp only [franklinMcNicholl,reduceIte]
   dist_comm := λ x y ↦ by
-    unfold dist
+    unfold dist franklinMcNicholl
     simp
     by_cases H : x = y
     . rw [if_pos H, if_pos H.symm]
@@ -41,6 +69,7 @@ noncomputable instance franklinMcNichollMetric {U : Type}  (G : SimpleGraph U) (
         rw [if_neg this]
   dist_triangle := λ x y z ↦ by -- aesop <;> linarith or:
       simp_all only
+      unfold franklinMcNicholl
       split
       next h =>
         subst h
@@ -133,6 +162,7 @@ noncomputable instance franklinMcNichollMetric {U : Type}  (G : SimpleGraph U) (
   edist_dist := (λ x y ↦ by exact (ENNReal.ofReal_eq_coe_nnreal _).symm)
   eq_of_dist_eq_zero := by
     intro x y h
+    unfold franklinMcNicholl at h
     simp at h
     contrapose h
     push_neg
