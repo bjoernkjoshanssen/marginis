@@ -20,6 +20,8 @@ The idempotents on `Bool` are exactly AND, OR, π₁, π₂.
 Over `Fin 3` there exist functions that are idempotent and not
 left-distributive. (In fact, it is the norm rather than the exception.)
 
+We also prove some properties of Laver tables.
+
 -/
 
 def idempotent {U : Type*} (f : U → U → U) :=
@@ -219,3 +221,246 @@ theorem exists_leftdistributive_not_idempotent_bool :
   · intro hc
     specialize hc false
     simp at hc
+
+def laver {n : ℕ} (f : Fin (2^n) → Fin (2^n) → Fin (2^n)) :=
+  ∀ k, f k 1 = k + 1
+
+theorem laver₀ : ∃! f : Fin (2^0) → Fin (2^0) → Fin (2^0), laver f ∧ leftdistributive f := by
+  use fun _ _ => 0
+  constructor
+  · constructor
+    · intro k
+      simp
+      aesop
+    · intro _ _ _
+      simp
+  intro f _
+  ext x y
+  simp
+
+
+lemma help_deduce_laver {n : ℕ} {f : Fin (2^n) → Fin (2^n) → Fin (2^n)}
+    (hf₀ : laver f) (x y : Fin (2^n)):
+    f x y = f x (f (y-1) 1) := by
+  have := hf₀ (y-1)
+  rw [this]
+  simp
+
+
+theorem deduce_laver₀₂ {m : ℕ} {f : Fin (2^(m)) → Fin (2^m) → Fin (2^m)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 0 2 = 2 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  have : 2 - (1 : Fin (2^m)) = 1 := by
+    have := @eq_sub_of_add_eq' (Fin (2^(m))) _ 1 2 1
+        (by exact one_add_one_eq_two)
+    rw [← this]
+  rw [this]
+  rw [hf₀,hf₀]
+  simp
+  exact one_add_one_eq_two
+
+theorem deduce_laver₀₃ {m : ℕ} {f : Fin (2^(m)) → Fin (2^m) → Fin (2^m)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 0 3 = 3 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  have : 3 - (1 : Fin (2^m)) = 2 := by
+    have := @eq_sub_of_add_eq' (Fin (2^(m))) _ 2 3 1
+        (by rw [add_comm];exact two_add_one_eq_three)
+    rw [← this]
+  rw [this]
+  rw [deduce_laver₀₂ hf₀ hf₁]
+  rw [hf₀]
+  exact two_add_one_eq_three
+
+theorem laver₁ : ∃! f : Fin (2^1) → Fin (2^1) → Fin (2^1), laver f ∧ leftdistributive f := by
+  use !![0,1; 0,0]
+  constructor
+  · simp
+    constructor
+    · intro k
+      fin_cases k <;> simp
+    · intro a b c
+      fin_cases a <;> (fin_cases b <;> (fin_cases c <;> simp))
+  · intro f hf
+    have hf₀ := hf.1
+    have hf₁ := hf.2
+    have h₀ := hf₀ 0
+    have h₁ := hf₀ 1
+    simp at h₀ h₁
+    ext x y
+    fin_cases x
+    · fin_cases y
+      · simp
+        have h₀₁₁ := hf₁ 0 1 1
+        rw [h₀, h₁] at h₀₁₁
+        rw [h₀₁₁]
+        rfl
+      · simp
+        rw [hf.1 0]
+        rfl
+    · fin_cases y
+      · have : (f 1 0).1 = 0 ∨ (f 1 0).1 = 1 := by omega
+        cases this with
+        | inl h => exact h
+        | inr h =>
+        have h₀₁₁ := hf₁ 0 1 1
+        have h₁₁₁ := hf₁ 1 1 1
+        simp_all
+      · simp_all [hf.1 1]
+
+
+theorem deduce_laver₀₀ {f : Fin (2^2) → Fin (2^2) → Fin (2^2)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 0 0 = 0 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  rw [hf₀]
+  rw [show (-1 : Fin (2^2)) = 3 by rfl]
+  rw [deduce_laver₀₃ hf₀ hf₁]
+  simp
+
+theorem deduce_laver₃₂ {f : Fin (2^2) → Fin (2^2) → Fin (2^2)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 3 2 = 0 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  rw [hf₀]
+  apply deduce_laver₀₀ hf₀ hf₁
+
+theorem deduce_laver₃₃ {f : Fin (2^2) → Fin (2^2) → Fin (2^2)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 3 3 = 0 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  rw [deduce_laver₃₂ hf₀ hf₁, deduce_laver₀₀ hf₀ hf₁]
+
+theorem deduce_laver₃₀ {f : Fin (2^2) → Fin (2^2) → Fin (2^2)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 3 0 = 0 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  rw [show (-1 : Fin (2^2)) = 3 by rfl]
+  rw [deduce_laver₃₃ hf₀ hf₁, deduce_laver₀₀ hf₀ hf₁]
+
+theorem deduce_laver₂₂ {f : Fin (2^2) → Fin (2^2) → Fin (2^2)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 2 2 = 0 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  rw [hf₀]
+  simp
+  rw [deduce_laver₃₃ hf₀ hf₁]
+
+theorem deduce_laver₂₃ {f : Fin (2^2) → Fin (2^2) → Fin (2^2)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 2 3 = 3 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  rw [deduce_laver₂₂ hf₀ hf₁, deduce_laver₀₃ hf₀ hf₁]
+
+theorem deduce_laver₂₀ {f : Fin (2^2) → Fin (2^2) → Fin (2^2)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 2 0 = 0 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  rw [show (-1 : Fin (2^2)) = 3 by rfl]
+  rw [deduce_laver₂₃ hf₀ hf₁, deduce_laver₃₃ hf₀ hf₁]
+
+theorem deduce_laver₁₂ {f : Fin (2^2) → Fin (2^2) → Fin (2^2)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 1 2 = 0 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  rw [hf₀]
+  simp
+  rw [deduce_laver₂₂ hf₀ hf₁]
+
+theorem deduce_laver₁₃ {f : Fin (2^2) → Fin (2^2) → Fin (2^2)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 1 3 = 2 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  rw [deduce_laver₁₂ hf₀ hf₁, deduce_laver₀₂ hf₀ hf₁]
+
+theorem deduce_laver₁₀ {f : Fin (2^2) → Fin (2^2) → Fin (2^2)}
+    (hf₀ : laver f) (hf₁ : leftdistributive f) :
+    f 1 0 = 0 := by
+  rw [help_deduce_laver hf₀, hf₁, hf₀]
+  simp
+  rw [show (-1 : Fin (2^2)) = 3 by rfl]
+  rw [deduce_laver₁₃ hf₀ hf₁, deduce_laver₂₂ hf₀ hf₁]
+
+
+def mylaver₂ : Fin (2^2) → Fin (2^2) → Fin (2^2) := !![
+    0,1,2,3;
+    0,2,0,2;
+    0,3,0,3;
+    0,0,0,0]
+
+def mylaver₃ : Fin (2^3) → Fin (2^3) → Fin (2^3) := !![
+    0, 1, 2, 3, 4, 5, 6, 7;
+    0, 2, 4, 6, 0, 2, 4, 6;
+    0, 3, 4, 7, 0, 3, 4, 7;
+    0, 4, 0, 4, 0, 4, 0, 4;
+    0, 5, 6, 7, 0, 5, 6, 7;
+    0, 6, 0, 6, 0, 6, 0, 6;
+    0, 7, 0, 7, 0, 7, 0, 7;
+    0, 0, 0, 0, 0, 0, 0, 0]
+
+theorem laver₃ : ∃ f : Fin (2^3) → Fin (2^3) → Fin (2^3), laver f := by
+  use mylaver₃
+  unfold mylaver₃
+  intro x
+  fin_cases x <;> rfl
+
+theorem laver₂ : ∃! f : Fin (2^2) → Fin (2^2) → Fin (2^2), laver f ∧ leftdistributive f := by
+  use mylaver₂
+  unfold mylaver₂
+  constructor
+  · constructor
+    · intro x
+      fin_cases x <;> rfl
+    · intro a b c
+      fin_cases a <;> fin_cases b <;> fin_cases c <;> rfl
+  intro f hf
+  have hf₀ := hf.1
+  have hf₁ := hf.2
+  ext x y
+  fin_cases x
+  · have h₀₀ := deduce_laver₀₀ hf₀ hf₁
+    have := hf₀ 0
+    have h₀₂ := deduce_laver₀₂ hf₀ hf₁
+    have h₀₃ := deduce_laver₀₃ hf₀
+    fin_cases y <;> simp_all
+  · have h₁₀ := deduce_laver₁₀ hf₀ hf₁
+    have := hf₀ 1
+    have h₁₂ := deduce_laver₁₂ hf₀ hf₁
+    have h₁₃ := deduce_laver₁₃ hf₀ hf₁
+    fin_cases y <;> simp_all
+  · have h₂₀ := deduce_laver₂₀ hf₀ hf₁
+    have := hf₀ 2
+    have h₂₂ := deduce_laver₂₂ hf₀ hf₁
+    have h₂₃ := deduce_laver₂₃ hf₀ hf₁
+    fin_cases y <;> (simp_all; try rfl)
+  · have h₃₀ := deduce_laver₃₀ hf₀ hf₁
+    have := hf₀ 3
+    have h₃₂ := deduce_laver₃₂ hf₀ hf₁
+    have h₃₃ := deduce_laver₃₃ hf₀ hf₁
+    fin_cases y <;> (simp_all; try rfl)
+
+/-- See https://www.maths.tcd.ie/~lebed/Lebed_ATS14.pdf -/
+def color_propagation (f : Fin (2^2) → Fin (2^2) → Fin (2^2)) :
+    (Fin (2^2) × Fin (2^2)) → (Fin (2^2) × Fin (2^2)) := by
+  intro (a,b)
+  exact (f a b, a)
+
+theorem color_propagation_invertible : ¬ Function.Injective (color_propagation mylaver₂) := by
+  intro hc
+  specialize hc (by
+    show color_propagation mylaver₂ (1,0) = color_propagation mylaver₂ (1,2)
+    unfold color_propagation mylaver₂
+    simp)
+  simp at hc

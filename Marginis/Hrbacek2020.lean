@@ -28,8 +28,8 @@ and we do not need Hrbacek's assumption that ℓ ≥ 1.
 #eval Nat.gcd 0 5
 
 open Finset
-def prod_f {ℓ : ℕ} (a b : Fin ℓ → ℕ) : ℕ → ℕ :=
-  λ k ↦ Finset.prod univ (λ i : Fin ℓ ↦ a i + b i * k)
+def prod_f {ℓ : ℕ} (a b : Fin ℓ → ℕ) (k : ℕ) : ℕ :=
+  Finset.prod univ (fun i => a i + b i * k)
 
 
 theorem dickson_strong {ℓ : ℕ} (a b: Fin ℓ → ℕ)
@@ -66,7 +66,7 @@ theorem dickson_strong {ℓ : ℕ} (a b: Fin ℓ → ℕ)
       tauto
     . intro k
       let h₀ := prod_dvd_prod_of_subset {i} univ
-        (λ j : Fin ℓ ↦ a j + b j * k) (subset_univ {i})
+        (fun j : Fin ℓ => a j + b j * k) (subset_univ {i})
       rw [prod_singleton] at h₀
       unfold prod_f
       have h₁ : b i ∣ b i * k := Nat.dvd_mul_right (b i) k
@@ -82,19 +82,6 @@ theorem dickson_gcd {ℓ : ℕ} (a b: Fin ℓ → ℕ)
   (hc : ¬ (∃ n, n > 1 ∧ ∀ k, n ∣ (prod_f a b k))) (i : Fin ℓ) (n₀:ℕ) :
   ∃ n ≥ n₀, (a i + b i * n).Prime :=
   dickson_strong a b (by tauto) hc i n₀
-
-lemma gt_one (k:ℕ) (hk₀ : k ≠ 0) (hk₁ : k ≠ 1) : k > 1 := by
-        have : k > 1 ∨ k ≤ 1 := by exact Nat.lt_or_ge 1 k
-        cases this with
-        |inl hl => tauto
-        |inr hl =>
-          exfalso
-          have : k < 1 ∨ k = 1 := Nat.le_iff_lt_or_eq.mp hl
-          cases this with
-          |inl hl =>
-            have : k = 0 := Nat.lt_one_iff.mp hl
-            subst this;tauto
-          |inr hr => subst hr;tauto
 
 lemma dvd_helper' {a b : ℕ} (ha : b ∣ a) (h_b : b > 1):
   Nat.gcd a b > 1 := by
@@ -118,10 +105,8 @@ lemma dvd_helper' {a b : ℕ} (ha : b ∣ a) (h_b : b > 1):
       subst this;simp;tauto
     . have hk₀: k ≠ 0 := by intro hc;subst hc;simp at hk;tauto
       have hk₁: k ≠ 1 := by intro hc;subst hc;simp at hk;tauto
-      have hk1: k > 1 := gt_one _ hk₀ hk₁
-      have : b % (b * k) = b := by
-        refine Nat.mod_eq_of_lt ?h
-        exact (Nat.lt_mul_iff_one_lt_right (hb)).mpr hk1
+      have hk1: k > 1 := by omega
+      have : b % (b * k) = b := Nat.mod_eq_of_lt <| (Nat.lt_mul_iff_one_lt_right (hb)).mpr hk1
       rw [this]
       have g₀ : (b).gcd (b * k) ≠ 0 := by
         refine Nat.gcd_ne_zero_left ?_
@@ -134,7 +119,7 @@ lemma dvd_helper' {a b : ℕ} (ha : b ∣ a) (h_b : b > 1):
           (Nat.ModEq.dvd_iff (congrFun (congrArg HMod.hMod hc) (b.gcd (b * k))) hobby).mp hobby
         simp at this
         linarith
-      exact gt_one _ g₀ g₁
+      omega
 
 
 lemma dvd_helper {a b : ℕ} (ha : b ∣ a) (hb : b ≥ 1):
@@ -142,7 +127,7 @@ lemma dvd_helper {a b : ℕ} (ha : b ∣ a) (hb : b ≥ 1):
     by_cases H : b = 1
     tauto
     left
-    have hbi: b > 1 := Nat.lt_of_le_of_ne (hb) fun a ↦ H (id (Eq.symm a))
+    have hbi: b > 1 := Nat.lt_of_le_of_ne (hb) fun a => H (id (Eq.symm a))
     exact dvd_helper' ha hbi
 
 
@@ -150,7 +135,7 @@ lemma dickson_dvd {ℓ : ℕ} (a b: Fin ℓ → ℕ) (hb : ∀ i, b i ≥ 1)
   (ha : ∀ i, b i ∣ a i)
   (hc : ¬ (∃ n, n > 1 ∧ ∀ k, n ∣ (prod_f a b k))) (i : Fin ℓ) (n₀:ℕ) :
   ∃ n ≥ n₀, (a i + b i * n).Prime :=
-  dickson_strong a b (λ i ↦ dvd_helper (ha i) (hb i)) hc i n₀
+  dickson_strong a b (fun i => dvd_helper (ha i) (hb i)) hc i n₀
 
   -- We could also prove dickson_dvd without using dickson_strong and dvd_helper:
   -- by
@@ -175,10 +160,10 @@ lemma dickson_dvd {ℓ : ℕ} (a b: Fin ℓ → ℕ) (hb : ∀ i, b i ≥ 1)
   --   exact hp.2
   -- . simp at h;obtain ⟨i,hi⟩ := h;exfalso;contrapose hc;simp;exists b i
   --   constructor
-  --   . exact Nat.lt_of_le_of_ne (hb i) fun a ↦ hi (id (Eq.symm a))
+  --   . exact Nat.lt_of_le_of_ne (hb i) fun a => hi (id (Eq.symm a))
   --   . intro k
   --     let h₀ := prod_dvd_prod_of_subset {i} univ
-  --       (λ j : Fin ℓ ↦ a j + b j * k) (subset_univ {i})
+  --       (fun j : Fin ℓ => a j + b j * k) (subset_univ {i})
   --     rw [prod_singleton] at h₀
   --     unfold prod_f
   --     have h₁ : b i ∣ b i * k := Nat.dvd_mul_right (b i) k

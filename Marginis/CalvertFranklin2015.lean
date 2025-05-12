@@ -19,7 +19,8 @@ open Finset
 /-- The triple (a,b,ε) satisfies the conditions for uniform distribution of x. -/
 def uniformly_distributed_at (x : ℕ → Set.Ico (0:ℝ) 1) (a b ε : ℝ) :=
   ∃ n₀ : ℕ, ∀ n : ℕ, n ≥ n₀ →
-    abs (card (filter (λ i : Fin n ↦ a < x i ∧ x i < b) univ) - (b - a) * n) < n * ε
+    abs (card (filter (λ i : Fin n ↦ a < x i ∧ x i < b) univ)
+    - (b - a) * n) < n * ε
 
 /-- The sequence `x` is uniformly distributed in the half-open unit interval. -/
 def uniformly_distributed (x : ℕ → Set.Ico (0:ℝ) 1) :=
