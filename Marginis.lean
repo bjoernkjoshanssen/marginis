@@ -19,6 +19,7 @@ import Marginis.CalvertFranklin2015
 import Marginis.CarlKrapp2021
 import Marginis.ChristDemmelKnightScanlonYelick2024
 import Marginis.Ciraulo2025
+import Marginis.CirauloMaiettiSambin
 import Marginis.Clotz2010
 import Marginis.CoquandMaiettiPalmgren2019
 import Marginis.CoquandSchuster2011
@@ -30,8 +31,10 @@ import Marginis.EagleLau2024
 import Marginis.Editors2018
 import Marginis.Ehrlich2011
 import Marginis.FranklinMcNicholl2020
+import Marginis.Geometry
 import Marginis.Goldbring2011
 import Marginis.Green2013
+import Marginis.Hackathon
 import Marginis.Hanson2024
 import Marginis.Hanson2025
 import Marginis.HensonRaynaud2011
@@ -42,6 +45,9 @@ import Marginis.Jekel2023
 import Marginis.JonesSpeisegger2012
 import Marginis.Kawai2019
 import Marginis.KjosHanssen2010
+import Marginis.KjosHanssen2025
+import Marginis.LInnocenteMantova
+import Marginis.LatticeTable
 import Marginis.Lubarsky2010
 import Marginis.Miller2022
 import Marginis.MiyabeNiesStephan2018
@@ -56,6 +62,7 @@ import Marginis.RamirezVellis2024
 import Marginis.Ross2025
 import Marginis.Swan2016
 import Marginis.Todorov2021
+import Marginis.TuringReduce
 import Marginis.VanDenBerg2013
 import Marginis.Veldman2022
 import Marginis.Vickers2009
@@ -63,3 +70,9 @@ import Marginis.Vickers2019
 import Marginis.Weisshaupt2009
 import Marginis.Zlatos2021
 import Marginis.manyOne
+import Marginis.manyOneAntisymmetrization
+import Marginis.mwe
+import Marginis.«Ben-AmramKristiansen2025»
+import Marginis.«CirauloMaiettiSambin copy»
+import Marginis.«GrubmüllerPetrakis2025»
+import Marginis.«Vickers2019 copy»
