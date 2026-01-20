@@ -1,12 +1,12 @@
 
-import Mathlib.Algebra.BigOperators.Group.Finset
+-- import Mathlib.Algebra.BigOperators.Group.Finset
 
-import Mathlib.Data.Fin.Basic
-import Mathlib.Order.OmegaCompletePartialOrder
-import Mathlib.Algebra.Ring.Regular
-import Mathlib.Algebra.Order.Star.Basic
-import Mathlib.NumberTheory.Padics.PadicVal.Defs
-
+-- import Mathlib.Data.Fin.Basic
+-- import Mathlib.Order.OmegaCompletePartialOrder
+-- import Mathlib.Algebra.Ring.Regular
+-- import Mathlib.Algebra.Order.Star.Basic
+-- import Mathlib.NumberTheory.Padics.PadicVal.Defs
+import Mathlib
 
 /-!
 
@@ -132,3 +132,4 @@ lemma AbotI_Dow_contained : Abot ⊆ I_Dow := by
   unfold almost_disjoint at *
   rw [hC]
   trivial
+#min_imports
