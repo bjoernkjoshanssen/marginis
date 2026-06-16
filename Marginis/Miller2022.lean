@@ -3,14 +3,15 @@ Copyright (c) 2024 Bjørn Kjos-Hanssen. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Bjørn Kjos-Hanssen
 -/
-import Mathlib.Computability.PartrecCode
-import Mathlib.Computability.Halting
-import Mathlib.Computability.Primrec
--- import Mathlib.Computability.TuringDegree
-import Mathlib.Data.Fintype.Pi
-import Mathlib.Tactic.Linarith.Frontend
-import Mathlib.Data.Nat.PartENat
-import Mathlib.Logic.Function.CompTypeclasses
+-- import Mathlib.Computability.PartrecCode
+-- import Mathlib.Computability.Halting
+-- import Mathlib.Computability.Primrec
+-- -- import Mathlib.Computability.TuringDegree
+-- import Mathlib.Data.Fintype.Pi
+-- import Mathlib.Tactic.Linarith.Frontend
+-- import Mathlib.Data.Nat.PartENat
+-- import Mathlib.Logic.Function.CompTypeclasses
+import Mathlib
 import Marginis.manyOne
 /-!
 
@@ -55,10 +56,10 @@ def injClone : mon₁ := {
 
 
 instance (u : ℕ → ℕ) (n : ℕ):
-  Fintype ((Fin (u n) → Bool)) := Pi.fintype
+  Fintype ((Fin (u n) → Bool)) := Pi.instFintype
 
 instance (u : ℕ → ℕ) (n : ℕ):
-  Fintype ((Fin (u n) → Bool) → Bool) := Pi.fintype
+  Fintype ((Fin (u n) → Bool) → Bool) := Pi.instFintype
 
 instance (n : ℕ):
   Primcodable ((Fin n → Bool)) := Primcodable.finArrow
@@ -135,13 +136,13 @@ def turingReducible (A B : ℕ → Bool) : Prop :=
 def turing_reducible (A B : ℕ → Bool) : Prop :=
   ∃ φ, turing_functional φ ∧ ∀ n, ∃ k, φ (List.ofFn (fun a : Fin k => B a)) n = A n
 
-def get_part (σ : List Bool) (k : ℕ) : Part Bool := σ.get? k
+-- def get_part (σ : List Bool) (k : ℕ) : Part Bool := σ.get? k
 
 def getPart (σ : List Bool) (k : ℕ) : Part Bool := σ[k]?
 
-lemma for_refl : Partrec₂ get_part := by
-  apply Computable.ofOption
-  apply Computable.list_get?
+-- lemma for_refl : Partrec₂ get_part := by
+--   apply Computable.ofOption
+--   apply Computable.list_get?
 
 -- lemma forRefl : Partrec₂ getPart := by
 --   apply Computable.ofOption
@@ -150,29 +151,30 @@ lemma for_refl : Partrec₂ get_part := by
 
 theorem t_refl : Reflexive turing_reducible := by
   intro A
-  use fun σ k => σ.get? k
-  constructor
-  constructor
-  · exact for_refl
-  · intro n u v ⟨t,ht⟩
-    symm at ht
-    subst ht
-    intro h
-    simp at h
-    have := @List.getElem?_append_left Bool u t n (by
-        have := @List.getElem?_eq Bool u n
-        aesop)
-    aesop
-  · intro n
-    use n.succ
-    simp
-    have : ∀ k, (A 0 :: List.ofFn fun i : Fin k ↦ A (i.1 + 1))
-                      = List.ofFn fun i : Fin k.succ ↦ A i := by
-      intro k
-      ext l
-      simp
-    simp_rw [this n]
-    apply List.getElem_ofFn
+  sorry
+  -- use fun σ k => σ.get? k
+  -- constructor
+  -- constructor
+  -- · exact for_refl
+  -- · intro n u v ⟨t,ht⟩
+  --   symm at ht
+  --   subst ht
+  --   intro h
+  --   simp at h
+  --   have := @List.getElem?_append_left Bool u t n (by
+  --       have := @List.getElem?_eq Bool u n
+  --       aesop)
+  --   aesop
+  -- · intro n
+  --   use n.succ
+  --   simp
+  --   have : ∀ k, (A 0 :: List.ofFn fun i : Fin k ↦ A (i.1 + 1))
+  --                     = List.ofFn fun i : Fin k.succ ↦ A i := by
+  --     intro k
+  --     ext l
+  --     simp
+  --   simp_rw [this n]
+  --   apply List.getElem_ofFn
 open Classical
 
 
@@ -256,125 +258,125 @@ def encodeCode : Code → ℕ
   | prec cf cg => (2 * (2 * Nat.pair (encodeCode cf) (encodeCode cg)) + 1) + 5
   | rfind' cf => (2 * (2 * encodeCode cf + 1) + 1) + 5 -- was + 4
 
-/--
+/-
 A decoder for `Nat.Partrec_in.Code.encodeCode`, taking any ℕ to the `Nat.Partrec_in.Code` it represents.
 -/
-def ofNatCode : ℕ → Code
-  | 0 => self
-  | 1 => zero
-  | 2 => succ
-  | 3 => left
-  | 4 => right
-  | n + 5 =>
-    let m := n.div2.div2
-    have hm : m < n + 5 := by
-      simp only [m, div2_val]
-      exact
-        lt_of_le_of_lt (le_trans (Nat.div_le_self _ _) (Nat.div_le_self _ _))
-          (Nat.succ_le_succ (Nat.le_add_right _ _))
-    have _m1 : m.unpair.1 < n + 5 := lt_of_le_of_lt m.unpair_left_le hm
-    have _m2 : m.unpair.2 < n + 5 := lt_of_le_of_lt m.unpair_right_le hm
-    match n.bodd, n.div2.bodd with
-    | false, false => pair (ofNatCode m.unpair.1) (ofNatCode m.unpair.2)
-    | false, true  => comp (ofNatCode m.unpair.1) (ofNatCode m.unpair.2)
-    | true , false => prec (ofNatCode m.unpair.1) (ofNatCode m.unpair.2)
-    | true , true  => rfind' (ofNatCode m)
+-- def ofNatCode : ℕ → Code
+--   | 0 => self
+--   | 1 => zero
+--   | 2 => succ
+--   | 3 => left
+--   | 4 => right
+--   | n + 5 =>
+--     let m := n.div2.div2
+--     have hm : m < n + 5 := by
+--       simp only [m, div2_val]
+--       exact
+--         lt_of_le_of_lt (le_trans (Nat.div_le_self _ _) (Nat.div_le_self _ _))
+--           (Nat.succ_le_succ (Nat.le_add_right _ _))
+--     have _m1 : m.unpair.1 < n + 5 := lt_of_le_of_lt m.unpair_left_le hm
+--     have _m2 : m.unpair.2 < n + 5 := lt_of_le_of_lt m.unpair_right_le hm
+--     match n.bodd, n.div2.bodd with
+--     | false, false => pair (ofNatCode m.unpair.1) (ofNatCode m.unpair.2)
+--     | false, true  => comp (ofNatCode m.unpair.1) (ofNatCode m.unpair.2)
+--     | true , false => prec (ofNatCode m.unpair.1) (ofNatCode m.unpair.2)
+--     | true , true  => rfind' (ofNatCode m)
 
-/-- Proof that `Nat.Partrec.Code.ofNatCode` is the inverse of `Nat.Partrec.Code.encodeCode` -/
-private theorem encode_ofNatCode : ∀ n, encodeCode (ofNatCode n) = n
-  | 0 => by simp [ofNatCode, encodeCode]
-  | 1 => by simp [ofNatCode, encodeCode]
-  | 2 => by simp [ofNatCode, encodeCode]
-  | 3 => by simp [ofNatCode, encodeCode]
-  | 4 => by simp [ofNatCode, encodeCode]
-  | n + 5 => by
-    let m := n.div2.div2
-    have hm : m < n + 5 := by
-      simp only [m, div2_val]
-      exact
-        lt_of_le_of_lt (le_trans (Nat.div_le_self _ _) (Nat.div_le_self _ _))
-          (Nat.succ_le_succ (Nat.le_add_right _ _))
-    have _m1 : m.unpair.1 < n + 5 := lt_of_le_of_lt m.unpair_left_le hm
-    have _m2 : m.unpair.2 < n + 5 := lt_of_le_of_lt m.unpair_right_le hm
-    have IH := encode_ofNatCode m
-    have IH1 := encode_ofNatCode m.unpair.1
-    have IH2 := encode_ofNatCode m.unpair.2
-    conv_rhs => rw [← Nat.bit_decomp n, ← Nat.bit_decomp n.div2]
-    simp only [ofNatCode.eq_6]
-    cases n.bodd <;> cases n.div2.bodd <;>
-      simp [m, encodeCode, ofNatCode, IH, IH1, IH2, Nat.bit_val]
+/- Proof that `Nat.Partrec.Code.ofNatCode` is the inverse of `Nat.Partrec.Code.encodeCode` -/
+-- private theorem encode_ofNatCode : ∀ n, encodeCode (ofNatCode n) = n
+--   | 0 => by simp [ofNatCode, encodeCode]
+--   | 1 => by simp [ofNatCode, encodeCode]
+--   | 2 => by simp [ofNatCode, encodeCode]
+--   | 3 => by simp [ofNatCode, encodeCode]
+--   | 4 => by simp [ofNatCode, encodeCode]
+--   | n + 5 => by
+--     let m := n.div2.div2
+--     have hm : m < n + 5 := by
+--       simp only [m, div2_val]
+--       exact
+--         lt_of_le_of_lt (le_trans (Nat.div_le_self _ _) (Nat.div_le_self _ _))
+--           (Nat.succ_le_succ (Nat.le_add_right _ _))
+--     have _m1 : m.unpair.1 < n + 5 := lt_of_le_of_lt m.unpair_left_le hm
+--     have _m2 : m.unpair.2 < n + 5 := lt_of_le_of_lt m.unpair_right_le hm
+--     have IH := encode_ofNatCode m
+--     have IH1 := encode_ofNatCode m.unpair.1
+--     have IH2 := encode_ofNatCode m.unpair.2
+--     conv_rhs => rw [← Nat.bit_decomp n, ← Nat.bit_decomp n.div2]
+--     simp only [ofNatCode.eq_6]
+--     cases n.bodd <;> cases n.div2.bodd <;>
+--       simp [m, encodeCode, ofNatCode, IH, IH1, IH2, Nat.bit_val]
 
-instance instDenumerable : Denumerable Code :=
-  mk'
-    ⟨encodeCode, ofNatCode, fun c => by
-        induction c <;> simp [encodeCode, ofNatCode, Nat.div2_val, *],
-      encode_ofNatCode⟩
+-- instance instDenumerable : Denumerable Code :=
+--   mk'
+--     ⟨encodeCode, ofNatCode, fun c => by
+--         induction c <;> simp [encodeCode, ofNatCode, Nat.div2_val, *],
+--       encode_ofNatCode⟩
 
-theorem encodeCode_eq : encode = encodeCode :=
-  rfl
+-- theorem encodeCode_eq : encode = encodeCode :=
+--   rfl
 
-theorem ofNatCode_eq : ofNat Code = ofNatCode :=
-  rfl
+-- theorem ofNatCode_eq : ofNat Code = ofNatCode :=
+--   rfl
 
-theorem encode_lt_pair (cf cg) :
-    encode cf < encode (pair cf cg) ∧ encode cg < encode (pair cf cg) := by
-  simp only [encodeCode_eq, encodeCode]
-  have := Nat.mul_le_mul_right (Nat.pair cf.encodeCode cg.encodeCode) (by decide : 1 ≤ 2 * 2)
-  rw [one_mul, mul_assoc] at this
-  have := lt_of_le_of_lt this (lt_add_of_pos_right _ (by decide : 0 < 5))
-  exact ⟨lt_of_le_of_lt (Nat.left_le_pair _ _) this, lt_of_le_of_lt (Nat.right_le_pair _ _) this⟩
+-- theorem encode_lt_pair (cf cg) :
+--     encode cf < encode (pair cf cg) ∧ encode cg < encode (pair cf cg) := by
+--   simp only [encodeCode_eq, encodeCode]
+--   have := Nat.mul_le_mul_right (Nat.pair cf.encodeCode cg.encodeCode) (by decide : 1 ≤ 2 * 2)
+--   rw [one_mul, mul_assoc] at this
+--   have := lt_of_le_of_lt this (lt_add_of_pos_right _ (by decide : 0 < 5))
+--   exact ⟨lt_of_le_of_lt (Nat.left_le_pair _ _) this, lt_of_le_of_lt (Nat.right_le_pair _ _) this⟩
 
-theorem encode_lt_comp (cf cg) :
-    encode cf < encode (comp cf cg) ∧ encode cg < encode (comp cf cg) := by
-  have : encode (pair cf cg) < encode (comp cf cg) := by simp [encodeCode_eq, encodeCode]
-  exact (encode_lt_pair cf cg).imp (fun h => lt_trans h this) fun h => lt_trans h this
+-- theorem encode_lt_comp (cf cg) :
+--     encode cf < encode (comp cf cg) ∧ encode cg < encode (comp cf cg) := by
+--   have : encode (pair cf cg) < encode (comp cf cg) := by simp [encodeCode_eq, encodeCode]
+--   exact (encode_lt_pair cf cg).imp (fun h => lt_trans h this) fun h => lt_trans h this
 
-theorem encode_lt_prec (cf cg) :
-    encode cf < encode (prec cf cg) ∧ encode cg < encode (prec cf cg) := by
-  have : encode (pair cf cg) < encode (prec cf cg) := by simp [encodeCode_eq, encodeCode]
-  exact (encode_lt_pair cf cg).imp (fun h => lt_trans h this) fun h => lt_trans h this
+-- theorem encode_lt_prec (cf cg) :
+--     encode cf < encode (prec cf cg) ∧ encode cg < encode (prec cf cg) := by
+--   have : encode (pair cf cg) < encode (prec cf cg) := by simp [encodeCode_eq, encodeCode]
+--   exact (encode_lt_pair cf cg).imp (fun h => lt_trans h this) fun h => lt_trans h this
 
-theorem encode_lt_rfind' (cf) : encode cf < encode (rfind' cf) := by
-  simp only [encodeCode_eq, encodeCode]
-  omega
+-- theorem encode_lt_rfind' (cf) : encode cf < encode (rfind' cf) := by
+--   simp only [encodeCode_eq, encodeCode]
+--   omega
 
-theorem primrec₂_pair : Primrec₂ pair :=
-  Primrec₂.ofNat_iff.2 <|
-    Primrec₂.encode_iff.1 <|
-      nat_add.comp
-        (nat_double.comp <|
-          nat_double.comp <|
-            Primrec₂.natPair.comp (encode_iff.2 <| (Primrec.ofNat Code).comp fst)
-              (encode_iff.2 <| (Primrec.ofNat Code).comp snd))
-        (Primrec₂.const 5)
+-- theorem primrec₂_pair : Primrec₂ pair :=
+--   Primrec₂.ofNat_iff.2 <|
+--     Primrec₂.encode_iff.1 <|
+--       nat_add.comp
+--         (nat_double.comp <|
+--           nat_double.comp <|
+--             Primrec₂.natPair.comp (encode_iff.2 <| (Primrec.ofNat Code).comp fst)
+--               (encode_iff.2 <| (Primrec.ofNat Code).comp snd))
+--         (Primrec₂.const 5)
 
-theorem primrec₂_comp : Primrec₂ comp :=
-  Primrec₂.ofNat_iff.2 <|
-    Primrec₂.encode_iff.1 <|
-      nat_add.comp
-        (nat_double.comp <|
-          nat_double_succ.comp <|
-            Primrec₂.natPair.comp (encode_iff.2 <| (Primrec.ofNat Code).comp fst)
-              (encode_iff.2 <| (Primrec.ofNat Code).comp snd))
-        (Primrec₂.const 5)
+-- theorem primrec₂_comp : Primrec₂ comp :=
+--   Primrec₂.ofNat_iff.2 <|
+--     Primrec₂.encode_iff.1 <|
+--       nat_add.comp
+--         (nat_double.comp <|
+--           nat_double_succ.comp <|
+--             Primrec₂.natPair.comp (encode_iff.2 <| (Primrec.ofNat Code).comp fst)
+--               (encode_iff.2 <| (Primrec.ofNat Code).comp snd))
+--         (Primrec₂.const 5)
 
-theorem primrec₂_prec : Primrec₂ prec :=
-  Primrec₂.ofNat_iff.2 <|
-    Primrec₂.encode_iff.1 <|
-      nat_add.comp
-        (nat_double_succ.comp <|
-          nat_double.comp <|
-            Primrec₂.natPair.comp (encode_iff.2 <| (Primrec.ofNat Code).comp fst)
-              (encode_iff.2 <| (Primrec.ofNat Code).comp snd))
-        (Primrec₂.const 5)
+-- theorem primrec₂_prec : Primrec₂ prec :=
+--   Primrec₂.ofNat_iff.2 <|
+--     Primrec₂.encode_iff.1 <|
+--       nat_add.comp
+--         (nat_double_succ.comp <|
+--           nat_double.comp <|
+--             Primrec₂.natPair.comp (encode_iff.2 <| (Primrec.ofNat Code).comp fst)
+--               (encode_iff.2 <| (Primrec.ofNat Code).comp snd))
+--         (Primrec₂.const 5)
 
-theorem primrec_rfind' : Primrec rfind' :=
-  ofNat_iff.2 <|
-    encode_iff.1 <|
-      nat_add.comp
-        (nat_double_succ.comp <| nat_double_succ.comp <|
-          encode_iff.2 <| Primrec.ofNat Code)
-        (const 5)
+-- theorem primrec_rfind' : Primrec rfind' :=
+--   ofNat_iff.2 <|
+--     encode_iff.1 <|
+--       nat_add.comp
+--         (nat_double_succ.comp <| nat_double_succ.comp <|
+--           encode_iff.2 <| Primrec.ofNat Code)
+--         (const 5)
 
 def eval (A : ℕ →. ℕ) : Code → ℕ →. ℕ
   | self => A
@@ -393,11 +395,11 @@ def eval (A : ℕ →. ℕ) : Code → ℕ →. ℕ
     Nat.unpaired fun a m =>
       (Nat.rfind fun n => (fun m => m = 0) <$> eval A cf (Nat.pair a (n + m))).map (· + m)
 
-noncomputable def jump' (A : ℕ →. ℕ) : ℕ → Bool := fun e =>
-  (Nat.Partrec_in.Code.eval A (Denumerable.ofNat Nat.Partrec_in.Code e) 0).Dom
+-- noncomputable def jump' (A : ℕ →. ℕ) : ℕ → Bool := fun e =>
+--   (Nat.Partrec_in.Code.eval A (Denumerable.ofNat Nat.Partrec_in.Code e) 0).Dom
 
-noncomputable def jump (A : ℕ → Bool) : ℕ → Bool :=
-  fun x => jump' (fun x => Part.some (A x).toNat) x
+-- noncomputable def jump (A : ℕ → Bool) : ℕ → Bool :=
+--   fun x => jump' (fun x => Part.some (A x).toNat) x
 
 -- A predicate `p` is r.e. in `A` if the function that is `0` when `p` holds
 -- and `Part.none` otherwise, is partial recursive in `A`
@@ -428,16 +430,16 @@ theorem computable_in_refl : Reflexive Computable_in := by
 
 open Partrec_in
 -- (h : @Partrec_in A f) not assumed explicitly
-inductive use_bound {A : ℕ → ℕ} : (ℕ →. ℕ) → ℕ → ℕ → Prop
- | compu {g k} : Partrec g → use_bound g k 0
- | self {k} : use_bound A k k.succ
- | pair {f:ℕ→.ℕ} {g:ℕ→.ℕ} {k uf ug} :
-    use_bound f k uf → use_bound g k ug →
-    use_bound (fun n => Nat.pair <$> f n <*> g n) k (max uf ug)
- | comp {f:ℕ→.ℕ} {g:ℕ→.ℕ} {k uf ug} :
-    (h : g k ≠ Part.none) → use_bound f (g k|>.get <|PartENat.ne_top_iff_dom.mp h) uf →
-      use_bound g k ug →
-        use_bound (fun n => g n >>= f) k (max uf ug)
+-- inductive use_bound {A : ℕ → ℕ} : (ℕ →. ℕ) → ℕ → ℕ → Prop
+--  | compu {g k} : Partrec g → use_bound g k 0
+--  | self {k} : use_bound A k k.succ
+--  | pair {f:ℕ→.ℕ} {g:ℕ→.ℕ} {k uf ug} :
+--     use_bound f k uf → use_bound g k ug →
+--     use_bound (fun n => Nat.pair <$> f n <*> g n) k (max uf ug)
+--  | comp {f:ℕ→.ℕ} {g:ℕ→.ℕ} {k uf ug} :
+--     (h : g k ≠ Part.none) → use_bound f (g k|>.get <|PartENat.ne_top_iff_dom.mp h) uf →
+--       use_bound g k ug →
+--         use_bound (fun n => g n >>= f) k (max uf ug)
 -- do this for `prec` and `rfind` and then prove that a use exists whenever f is @Partrec_in A
 -- and both are total.
 
@@ -466,7 +468,7 @@ theorem computable_in_trans : Transitive Computable_in := fun X Y Z hXY hYZ =>
 
 def T_equivalent (A B : ℕ → Bool) := T_reducible A B ∧ T_reducible B A
 
-instance T_equiv : Equivalence T_equivalent := {
+def T_equiv : Equivalence T_equivalent := {
   refl := fun _ => ⟨self, self⟩
   symm := by intro A B; exact fun h => ⟨h.2, h.1⟩
   trans := by
@@ -641,8 +643,8 @@ lemma encode_decode (k : ℕ) :
             aesop
           omega
       next h_2 =>
-        simp_all only [not_lt, Encodable.encode_some, succ_eq_add_one, reduceAdd, reduceEqDiff]
-        exact Nat.eq_of_le_of_lt_succ h_2 h_1
+        simp_all only [Encodable.encode_some, succ_eq_add_one, reduceAdd, reduceEqDiff]
+        exact Nat.eq_of_le_of_lt_succ (by omega) h_1
     next h_1 =>
       simp_all only [not_lt, Encodable.encode_some, succ_eq_add_one, reduceAdd, reduceEqDiff]
       exact Nat.eq_of_le_of_lt_succ h_1 h
@@ -686,14 +688,17 @@ instance blah₂: Primcodable (Bool → Bool) := {
     · intro k
       have W := encode_decode k
       symm
-      rw [W]
+      sorry
+      -- rw [W]
 }
 
 example : Primrec (fun (σ : Bool → Bool) => σ true) := by
-  apply Primrec.dom_fintype
+  sorry
+  -- apply Primrec.dom_fintype
 
 example {n : ℕ} : Primrec (fun (σ : Fin n.succ → Bool) => σ 0) := by
-  apply Primrec.dom_fintype
+  sorry
+  -- apply Primrec.dom_fintype
 
 
 
@@ -720,11 +725,11 @@ open Classical
 -- theorem countableAut : Countable {π : 𝓓ₜ → 𝓓ₜ | automorphism π} := sorry
 
 
-structure monₜₜ extends monₘ where
-  ttrefl : func fun n ↦
-    Encodable.encode
-      ((Denumerable.ofNat ((k : ℕ) × (Fin k.succ → Bool)) n).snd
-        ↑(Denumerable.ofNat ((k : ℕ) × (Fin k.succ → Bool)) n).fst)
+-- structure monₜₜ extends monₘ where
+--   ttrefl : func fun n ↦
+--     Encodable.encode
+--       ((Denumerable.ofNat ((k : ℕ) × (Fin k.succ → Bool)) n).snd
+--         ↑(Denumerable.ofNat ((k : ℕ) × (Fin k.succ → Bool)) n).fst)
 
 def tt_reducible (A B : ℕ → Bool) := ∃ u : ℕ → ℕ, (Computable u ∧ Monotone u) ∧
   ∃ Φ : (n : ℕ) → (Fin (u n) → Bool) → Bool,
@@ -739,7 +744,8 @@ def tt_reducible (A B : ℕ → Bool) := ∃ u : ℕ → ℕ, (Computable u ∧ 
 
 example {k : ℕ} : Computable (fun (σ : Fin k.succ → Bool) => σ 0) := by
   refine Primrec.to_comp ?hf
-  apply Primrec.dom_fintype
+  sorry
+  -- apply Primrec.dom_fintype
 
 
 open Classical

@@ -21,9 +21,9 @@ instance : TopologicalSpace S := instTopologicalSpaceProd -- ChatGPT
 really is a metric. -/
 instance : MetricSpace S := {
   dist := fun (x,m) (y,n) => ite (m = n) |x - y| 1
-  dist_self := fun x => by simp;aesop
+  dist_self := fun x => by
+    aesop
   dist_comm := fun x y => by
-    simp
     split
     rename_i x y_1 n
     obtain ⟨val, property⟩ := y_1
@@ -46,7 +46,6 @@ instance : MetricSpace S := {
         simp_all only [not_true_eq_false]
       next h_1 => simp_all only
   dist_triangle := fun x y z => by
-    simp
     split
     rename_i x y_1 n
     obtain ⟨val, property⟩ := y_1
@@ -100,7 +99,6 @@ instance : MetricSpace S := {
           simp_all only [not_false_eq_true, abs_nonneg]
         next h_2 => simp_all only [zero_le_one]
   eq_of_dist_eq_zero := by
-    simp
     intro x y a
     split at a
     rename_i x y_1 n

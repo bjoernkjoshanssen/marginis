@@ -1,5 +1,6 @@
-import Mathlib.Analysis.RCLike.Basic
-import Mathlib.Data.Complex.Abs
+import Mathlib
+-- import Mathlib.Analysis.RCLike.Basic
+-- import Mathlib.Data.Complex.Abs
 
 /-
 
@@ -23,7 +24,6 @@ lemma mul_of_div {a b c : ℝ} (h : a = b / c) (h₀ : c ≠ 0) : a * c = b := b
 
 lemma minu {y : ℝ} (h : y ≠ 1) : y - 1 ≠ 0 := by
       contrapose h
-      simp at *
       linarith
 
 lemma moebius_one (a b y : ℝ) (ha : a ≠ b) : (∃ x, y = (x + a) / (x + b)) ↔ y ≠ 1 := by
@@ -61,3 +61,4 @@ lemma moebius_one (a b y : ℝ) (ha : a ≠ b) : (∃ x, y = (x + a) / (x + b)) 
 example (y : ℝ) : (∃ x, y = (x + 2) / (x - 2)) ↔ y ≠ 1 := by
   apply moebius_one
   linarith
+#min_imports

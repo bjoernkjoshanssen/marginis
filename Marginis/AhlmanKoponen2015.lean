@@ -1,8 +1,6 @@
-
-
-import Mathlib.Data.Fin.Basic
-import Mathlib.Data.ZMod.Defs
-import Mathlib.Tactic.FinCases
+module
+public import Mathlib.Algebra.Group.Fin.Basic
+public import Mathlib.AlgebraicTopology.SimplexCategory.Basic
 /-!
 
 # Limit Laws and Automorphism Groups of Nonrigid Structures

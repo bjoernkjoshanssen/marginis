@@ -1,8 +1,5 @@
--- import Mathlib.Init.Set
-import Mathlib.Data.Finite.Defs
-import Mathlib.Data.Fintype.Card
-import Mathlib.Data.Set.Finite
-
+module
+public import Mathlib.Data.Set.Finite.Basic
 /-!
 # An Algebraic Weak Factorisation System on 01-Substitution Sets: A Constructive Proof
 

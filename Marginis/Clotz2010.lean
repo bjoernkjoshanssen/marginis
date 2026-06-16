@@ -1,5 +1,5 @@
-import Mathlib.Analysis.SpecialFunctions.Integrals
-import Mathlib.Topology.Separation
+module
+public import Mathlib.Topology.Metrizable.Uniformity
 
 /-!
 

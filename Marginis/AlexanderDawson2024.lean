@@ -3,10 +3,12 @@ Copyright (c) 2024 Bjørn Kjos-Hanssen. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Bjørn Kjos-Hanssen
 -/
-import Mathlib.Data.Real.Basic
-import Mathlib.Topology.Defs.Basic
-import Mathlib.MeasureTheory.Measure.Hausdorff
-import Mathlib.Topology.Homeomorph
+module
+public import Mathlib.Analysis.Normed.Ring.Lemmas
+-- import Mathlib.Data.Real.Basic
+-- import Mathlib.Topology.Defs.Basic
+-- import Mathlib.MeasureTheory.Measure.Hausdorff
+-- import Mathlib.Topology.Homeomorph
 
 /-!
 # Hyperreal differentiation with an idempotent ultrafilter
@@ -35,5 +37,4 @@ theorem prim_com_eq_starr (x y : Int) :
   · rw [h₀,sub_mul]
     ring_nf
     exact h₀.symm
-  · rw [sub_add_cancel, Int.sub_mul]
-    simp
+  · ring_nf

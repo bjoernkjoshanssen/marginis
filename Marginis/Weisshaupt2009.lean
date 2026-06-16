@@ -1,6 +1,9 @@
-import Mathlib.Data.Real.Hyperreal
-import Mathlib.Data.Matrix.Basic
-import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+module
+public import Mathlib.AlgebraicTopology.SimplexCategory.Basic
+public import Mathlib.Analysis.Real.Hyperreal
+-- import Mathlib.Data.Real.Hyperreal
+-- import Mathlib.Data.Matrix.Basic
+-- import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 
 /-!
 

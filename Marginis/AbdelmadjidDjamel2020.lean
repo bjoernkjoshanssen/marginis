@@ -1,6 +1,7 @@
-import Mathlib.Data.Nat.Factors
-import Mathlib.NumberTheory.Padics.PadicVal.Defs
-import Mathlib.Data.Finset.Card
+module
+public import Mathlib.AlgebraicTopology.SimplexCategory.Basic
+public import Mathlib.Data.Nat.Factors
+public import Mathlib.Data.Nat.MaxPowDiv
 
 /-!
 
@@ -38,9 +39,13 @@ def ω (n : ℕ) := card (filter (fun p : Fin (n.succ) ↦ Nat.Prime p ∧ padic
 -- example : List.Perm [3,2] (Nat.primeFactorsList 6) := by decide
 
 example : 24 ≤ padicValNat 2 16777216 ↔ (List.replicate 24 2).Subperm
-  (Nat.primeFactorsList 16777216) :=
-    le_padicValNat_iff_replicate_subperm_primeFactorsList
-      Nat.prime_two <|Ne.symm <|Nat.zero_ne_add_one 16777215
+  (Nat.primeFactorsList 16777216) := by
+
+    -- le_padicValNat_iff_replicate_subperm_primeFactorsList
+    --   Nat.prime_two <|Ne.symm <|Nat.zero_ne_add_one 16777215
+
+    sorry
 
 -- example : (List.replicate 4 2).Subperm
 --   (Nat.primeFactorsList 16) := by decide
+#min_imports

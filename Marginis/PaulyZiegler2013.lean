@@ -1,5 +1,4 @@
 import Mathlib.Logic.Nonempty
-import Mathlib.Tactic.PushNeg
 import Mathlib.Tactic.Tauto
 import Mathlib.Data.Fin.Basic
 
@@ -42,7 +41,7 @@ lemma l₁ (a x : Fin 0 → U) (R : (Fin 0 → U) → (Fin 0 → U) → Prop) (y
 
 lemma zero_not_enough : ¬ ∃ U, ∃ (R : (Fin 0 → U) → (Fin 0 → U) → Prop),
   (∀ x, ∃ y, R x y) ∧ ¬ Henkin R := by
-    push_neg
+    push Not
     intro U R h
     use (λ k : Fin 0 ↦ False.elim (Nat.not_succ_le_zero k.1 k.2))
     intro x
@@ -54,7 +53,7 @@ lemma zero_not_enough : ¬ ∃ U, ∃ (R : (Fin 0 → U) → (Fin 0 → U) → P
 -- n=1 is not enough either. The proof uses Choice:
 lemma one_not_enough : ¬ ∃ U, ∃ (R : (Fin 1 → U) → (Fin 1 → U) → Prop),
   (∀ x, ∃ y, R x y) ∧ ¬ Henkin R := by
-    push_neg
+    push Not
     intro U R h
     use (λ _ x ↦ by
       let V := {y // R (λ _ ↦ x) y}
@@ -101,7 +100,7 @@ example : ∃ (R : (Fin 2 → Bool) → (Fin 2 → Bool) → Prop),
   . intro x
     use (λ _ ↦ xor (x 0) (x 1))
   unfold Henkin
-  push_neg
+  push Not
   intro Y
   by_cases H: (Y 0 false = false)
   . use (λ k ↦ ite (k=0) false true);simp;tauto

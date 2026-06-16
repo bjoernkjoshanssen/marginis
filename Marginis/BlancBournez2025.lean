@@ -15,7 +15,5 @@ def discrete_derivative₁ (f : ℤ → ℤ) : ℤ → ℤ :=
   λ x => f (x + 1) - f x
 
 -- More general version using type classes
-variable {α : Type*} [AddGroup α]
-
-def discrete_derivative₂ (f : ℤ → α) : ℤ → α :=
+def discrete_derivative₂ {α : Type*} [Sub α] (f : ℤ → α) : ℤ → α :=
   λ x => f (x + 1) - f x

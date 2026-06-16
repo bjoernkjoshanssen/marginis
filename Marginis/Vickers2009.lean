@@ -1,10 +1,8 @@
-
-import Mathlib.Data.Vector.Basic
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Complex.Basic
-import Mathlib.Data.Set.Finite
-import Mathlib.Data.Rat.Denumerable
-
+module
+public import Mathlib.Algebra.Order.Archimedean.Real.Basic
+public import Mathlib.Data.Complex.Basic
+public import Mathlib.Data.Set.Finite.Basic
+import Mathlib
 /-!
 
 ## Localic completion of generalized metric spaces II: Powerlocales
@@ -24,11 +22,11 @@ def setSetFin X := { A : Set X | Set.Finite A}
 def setSetUniv X := (Set.univ : Set (Set X))
 def powersetUniv X := 𝒫 (Set.univ : Set X)
 
-example : setSetUniv X = powersetUniv X := by
+example (X) : setSetUniv X = powersetUniv X := by
   unfold setSetUniv powersetUniv
-  simp only [Set.setOf_true, Set.powerset_univ]
+  simp only [Set.powerset_univ]
 
-example [Fintype X] : setSetFin X = setSetUniv X := by
+example (X) [Fintype X] : setSetFin X = setSetUniv X := by
   ext x
   constructor
   . intro; trivial

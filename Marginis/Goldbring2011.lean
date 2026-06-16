@@ -1,13 +1,9 @@
-import Mathlib.Algebra.Group.Defs
-import Mathlib.Algebra.Group.Action.Defs
-import Mathlib.Algebra.Group.Int
-import Mathlib.Algebra.Group.TypeTags
-
-
-import Mathlib.Combinatorics.Quiver.Basic
-import Mathlib.Combinatorics.Quiver.Path
-import Mathlib.Data.Set.Operations
-/-!
+module
+public import Mathlib.Algebra.Group.Action.Defs
+public import Mathlib.Algebra.Group.Int.Defs
+public import Mathlib.Algebra.Group.TypeTags.Basic
+public import Mathlib.Combinatorics.Quiver.Path
+public import Mathlib.Data.Set.CoeSort/-!
 
 # Ends of groups: a nonstandard perspective
 
@@ -107,9 +103,9 @@ instance : Quiver ℤ := {
   Hom := λ x y ↦ IntCayley.edges x y
 }
 
-def mypath : @Quiver.Path ℤ _ 0 1 := by
-  exact @Quiver.Path.cons ℤ _ 0 0 1 (Quiver.Path.nil) (by
-    show IntCayley.edges 0 1
-    use 1;unfold IntCayley cayley_graph schreier_graph
-    simp only;tauto
-  )
+-- def mypath : @Quiver.Path ℤ _ 0 1 := by
+--   exact @Quiver.Path.cons ℤ _ 0 0 1 (Quiver.Path.nil) (by
+--     show IntCayley.edges 0 1
+--     use 1;unfold IntCayley cayley_graph schreier_graph
+--     simp only;tauto
+--   )

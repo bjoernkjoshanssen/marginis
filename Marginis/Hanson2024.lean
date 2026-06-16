@@ -31,6 +31,7 @@ class TopometricSpace (X : Type) where
 
 /-- If we in particular let the topology be that obtained from the metric
 then we do have a topometric space. -/
+@[reducible]
 def EasyTopometric (X : Type) [m : MetricSpace X] : TopometricSpace X := {
   metric := m
   topology := m.toPseudoMetricSpace.toUniformSpace.toTopologicalSpace

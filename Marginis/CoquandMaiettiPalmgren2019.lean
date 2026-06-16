@@ -1,6 +1,8 @@
-import Mathlib.Topology.Defs.Basic
-import Mathlib.Topology.Homeomorph
-import Mathlib.Algebra.CharP.Two
+module
+public import Mathlib.AlgebraicTopology.SimplexCategory.Basic
+public import Mathlib.Data.ZMod.Defs
+public import Mathlib.Order.CompletePartialOrder
+public import Mathlib.Topology.Homeomorph.Defs
 /-!
 
 # Preface to the special issue for The Fifth Workshop on Formal Topology
@@ -88,6 +90,7 @@ lemma nonUniqueTopFin2 : ∃ ( σ τ : TopologicalSpace (Fin 2)), σ.IsOpen ≠ 
 /-- Here are two more topologies on `Fin 2`.
  In fact a topology on `Fin 2` must contain `Set.univ` and `∅`,
  and then there are four possibilities depending on which of `{0}`, `{1}` are included. -/
+@[reducible]
 def mytop (z : Fin 2): TopologicalSpace (Fin 2) :=
 {
   IsOpen := λ S ↦ S = ∅ ∨ S = Set.univ ∨ S = {z}
@@ -110,7 +113,6 @@ def mytop (z : Fin 2): TopologicalSpace (Fin 2) :=
           |inr h => subst h;simp
   isOpen_sUnion := by
     intro S hS
-    simp at hS
     by_cases H₀ : Set.univ ∈ S
     . right;left;refine Set.sUnion_eq_univ_iff.mpr ?_;
       intro a;exists Set.univ
@@ -141,10 +143,15 @@ def mytop (z : Fin 2): TopologicalSpace (Fin 2) :=
 def myequiv := @Equiv.mk (Fin 2) (Fin 2) (λ x ↦ x + 1) ((λ x ↦ x + 1))
   (by
     refine Function.leftInverse_iff_comp.mpr ?_
-    simp only [Fin.isValue, comp_add_right, CharTwo.add_self_eq_zero, add_zero];rfl
+    simp only [Fin.isValue, comp_add_right]
+    ext i
+    fin_cases i <;> simp
   ) (by
     refine Function.rightInverse_iff_comp.mpr ?_
-    simp only [Fin.isValue, comp_add_right, CharTwo.add_self_eq_zero, add_zero];rfl
+    simp only [Fin.isValue, comp_add_right]
+    ext i
+    fin_cases i <;> simp
+
   )
 
 def myhomeo := @Homeomorph.mk (Fin 2) (Fin 2) (mytop 0) (mytop 1) myequiv (by
@@ -181,3 +188,4 @@ def myhomeo := @Homeomorph.mk (Fin 2) (Fin 2) (mytop 0) (mytop 1) myequiv (by
         | inr h₀ => subst h₀;rfl
       . intro h; subst h;rfl
 )
+#min_imports

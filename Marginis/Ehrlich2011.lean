@@ -1,6 +1,7 @@
-import Mathlib.Order.RelIso.Basic
-import Mathlib.Tactic.Tauto
-
+module
+public import Mathlib.Order.RelIso.Basic
+public import Mathlib.Tactic.Tauto
+public import Mathlib.Data.Nat.Basic
 /-!
 
 # Conway names, the simplicity hierarchy and the surreal number tree
@@ -23,7 +24,8 @@ notation:10 a " ≤ₛ " b  => a ≤ b
 
 def pr (x : ℕ) := { y : ℕ // (y <ₛ x) }
 
-instance (x : ℕ) : IsTrichotomous { y : ℕ // y <ₛ x} (λ u v ↦ (u <ₛ v)) := instIsTrichotomousLt
+instance (x : ℕ) : IsTrichotomous { y : ℕ // y <ₛ x} (λ u v ↦ (u <ₛ v)) :=
+  Std.instTrichotomousLtOfLawfulOrderLTOfTotalOfAntisymmLe
 instance (x : ℕ) : IsTrans { y : ℕ // y <ₛ x} (λ u v ↦ (u <ₛ v)) := instIsTransLt
 instance (x : ℕ) : IsWellFounded { y : ℕ // y <ₛ x} (λ u v ↦ (u <ₛ v)) := Subtype.wellFoundedLT (fun y ↦ y < x)
 instance ehrlich_tree (x : ℕ) : IsWellOrder { y : ℕ // y <ₛ x} (λ u v ↦ (u <ₛ v)) := {} -- no fields are needed since they are all inferred
@@ -88,10 +90,8 @@ lemma lt_iff_le_not_le₀ : ∀ (a b : List ℕ), a <+: b ∧ a ≠ b ↔ a <+: 
   constructor
   . intro h₀
     contrapose h₀
-    simp at *
     apply prefix_antisymm a b h h₀
   . contrapose
-    simp
     intro h₀
     subst h₀
     exact h

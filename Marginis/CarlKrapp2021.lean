@@ -1,5 +1,5 @@
-import Mathlib.Data.Real.Pi.Irrational
-
+module
+public import Mathlib.Analysis.Real.Pi.Irrational
 /-!
 
 # Models of true arithmetic are integer parts of models of real exponentiation

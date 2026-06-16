@@ -1,7 +1,5 @@
-import Mathlib.Data.Real.Sqrt
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Analysis.SpecialFunctions.Integrals
-
+module
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 /-!
 
 # Limiting probability measures
@@ -45,7 +43,7 @@ lemma int011 : (∫ (_:ℝ) in (0:ℝ)..(1:ℝ), (1:ℝ)) = 1 := by
   rw [Q]
   simp only [sub_zero]
 
-example (c : ℝ) : (∫ (x:ℝ) in (0:ℝ)..(1:ℝ), 1 * (c:ℝ)) = c := by
+example (c : ℝ) : (∫ _ in (0:ℝ)..(1:ℝ), 1 * (c:ℝ)) = c := by
   let Q := @intervalIntegral.integral_mul_const 0 1
     MeasureTheory.volume ℝ _ c (λ _ ↦ 1)
   rw [Q,integral_one,sub_zero, one_mul]

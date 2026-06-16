@@ -46,7 +46,7 @@ lemma intcases (x : ℤ) : x ≤ 0 ∨ 1 ≤ x := by
       right
       simp
       refine Int.le_add_of_nonneg_left ?ofNat.succ.h.h
-      exact Int.ofNat_zero_le b
+      simp
   |negSucc a => left;exact Int.toNat_eq_zero.mp rfl
 
 
@@ -66,7 +66,7 @@ theorem cases3 (dave : my_type) :
 
 example : bob ≠ alice := noConfusion
 
-structure royale_high :=
+structure royale_high where
   bobby : my_type
 
 example (hi : royale_high) :

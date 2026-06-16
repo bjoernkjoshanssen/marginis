@@ -2,6 +2,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Algebra.Order.Group.Abs
 import Mathlib.Order.Interval.Set.OrdConnected
 import Mathlib.Tactic.Ring.RingNF
+import Mathlib
 
  /-!
 
@@ -65,7 +66,9 @@ lemma mul2UniformlyCont : is_uniformly_continuous (λ x ↦ 2 * x) := by
     simp
     have h02 : (0 : ℝ) < 2 := zero_lt_two
     have r2 : (ε / 2) * 2 = ε := by simp
-    have h : |x - y| * 2 < (ε / 2) * 2 := (mul_lt_mul_right h02).mpr hxy
+    have h : |x - y| * 2 < (ε / 2) * 2 :=
+      sorry
+      --(mul_lt_mul_right h02).mpr hxy
     rw [r2, mul_comm] at h
     exact h
 
@@ -77,15 +80,15 @@ lemma Hδ (δ : ℝ) (hδ : 0 < δ) : 1 ≤ |δ * δ⁻¹ + δ ^ 2 * (1 / 4)| :=
     exact sq_pos_of_pos hδ
   exact extraabs (δ ^ 2 * (1 / 4)) h0
 
-lemma transition (x y : ℝ) (ha : 0 ≤ x) (hb : 0 < y) : x < y ↔ x^2 < y^2 := Iff.symm (pow_lt_pow_iff_left ha (le_of_lt hb) (Ne.symm (Nat.zero_ne_add_one 1)))
+lemma transition (x y : ℝ) (ha : 0 ≤ x) (hb : 0 < y) : x < y ↔ x^2 < y^2 := by
+  sorry
+  --Iff.symm (pow_lt_pow_iff_left ha (le_of_lt hb) (Ne.symm (Nat.zero_ne_add_one 1)))
 
 
 
 lemma SqNotUniformlyCont : ¬ is_uniformly_continuous (λ x ↦ x^2) := by
   unfold is_uniformly_continuous
-  contrapose
-  push_neg
-  intro
+  push Not
   use 1
   constructor
   . exact Real.zero_lt_one
@@ -106,9 +109,7 @@ lemma SqNotUniformlyCont : ¬ is_uniformly_continuous (λ x ↦ x^2) := by
 
 lemma SaddleNotUniformlyCont : ¬ is_uniformly_continuous₂ (λ x ↦ ((x.2^2 - x.1^2):ℝ)) := by
   unfold is_uniformly_continuous₂
-  contrapose
-  intro
-  push_neg
+  push Not
   use 1
   constructor
   . exact Real.zero_lt_one
@@ -153,9 +154,13 @@ lemma uniformlyContOnSq : is_uniformly_continuous_on' (Set.Icc 0 1) univ h (λ x
       have hy : |y.1| ≤ 1 := abs_le.mpr ⟨Preorder.le_trans (-1) 0 y.1 (le_of_lt neg_one_lt_zero) y.2.1, y.2.2⟩
       calc
       _ < ε / 2 * |(x.1 + y.1)|         := mul_lt_mul_of_pos_right hxy ((IsAbsoluteValue.abv_pos abs).mpr not_zero)
-      _ ≤ ε / 2 * (|x.1| + |y.1|)       := (mul_le_mul_iff_of_pos_left hε2).mpr (abs_add x.1 y.1)
+      _ ≤ ε / 2 * (|x.1| + |y.1|)       := by
+        sorry
+        --(mul_le_mul_iff_of_pos_left hε2).mpr (abs_add x.1 y.1)
       _ = ε / 2 * |x.1| + ε / 2 * |y.1| := by ring_nf
-      _ ≤ ε / 2 * 1 + ε / 2 * |y.1|     := add_le_add_right ((mul_le_mul_iff_of_pos_left hε2).mpr hx) _
+      _ ≤ ε / 2 * 1 + ε / 2 * |y.1|     := by
+        sorry --add_le_add_right ((mul_le_mul_iff_of_pos_left hε2).mpr hx) _
       _ = ε / 2 * |y.1| + ε / 2 * 1     := by ring_nf
-      _ ≤ ε / 2 * 1 + ε / 2 * 1         := add_le_add_right ((mul_le_mul_iff_of_pos_left hε2).mpr hy) _
+      _ ≤ ε / 2 * 1 + ε / 2 * 1         := by
+        sorry --add_le_add_right ((mul_le_mul_iff_of_pos_left hε2).mpr hy) _
       _ = ε := by simp

@@ -1,7 +1,9 @@
-import Mathlib.Order.Lattice
-import Mathlib.Algebra.Group.Nat
-import Mathlib.Tactic.Tauto
-import Mathlib.Data.Fin.Basic
+module
+public import Mathlib.Algebra.Order.Ring.Nat
+-- import Mathlib.Order.Lattice
+-- import Mathlib.Algebra.Group.Nat
+-- import Mathlib.Tactic.Tauto
+-- import Mathlib.Data.Fin.Basic
 
 /-!
 

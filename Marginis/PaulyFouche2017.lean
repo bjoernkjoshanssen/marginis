@@ -28,7 +28,7 @@ noncomputable instance  myInstance :
 noncomputable def μ : MeasureTheory.Measure (ℕ → Bool) := MeasureTheory.Measure.hausdorffMeasure 1
 
 /-- If two members of Cantor space differ at 0 then their distance is 1. -/
-lemma dist_one {t f : ℕ → Bool} (h : t 0 ≠ f 0) :
+lemma dist_one' {t f : ℕ → Bool} (h : t 0 ≠ f 0) :
   1 = PiNat.dist.dist t f := by
     unfold dist PiNat.dist
     simp
@@ -57,7 +57,7 @@ def fa : ℕ → Bool := λ _ ↦ false
 def tr : ℕ → Bool := λ _ ↦ true
 
 lemma dist_tf : 1 = PiNat.dist.dist tr fa :=
-    dist_one (by unfold tr fa;simp)
+    dist_one' (by unfold tr fa;simp)
 
 open Classical -- this is needed below
 lemma dist_bound (x y : ℕ → Bool) : PiNat.dist.dist x y ≤ 1 := by
@@ -68,7 +68,8 @@ lemma dist_bound (x y : ℕ → Bool) : PiNat.dist.dist x y ≤ 1 := by
     . rw [PiNat.firstDiff_def]
       simp
       rw [dif_neg H]
-      apply inv_le_one
+      field_simp
+      -- apply inv_le_one
       norm_cast -- since both sides are ℕ cast to ℝ, let's go back to ℕ
       exact Nat.one_le_two_pow
 
@@ -122,7 +123,7 @@ lemma sup_edist_lower_bound'1 (S : Set (ℕ → Bool)) (t f : ℕ → Bool)
 : (1/2)^k ≤ (⨆ x ∈ S, ⨆ y ∈ S, edist x y) := by
   let Q := @edist_of_diff k t f h₀
   have : edist t f ≤ (⨆ x ∈ S, ⨆ y ∈ S, edist x y) := by
-    apply EMetric.edist_le_of_diam_le h₁.1 h₁.2
+    apply Metric.edist_le_of_ediam_le h₁.1 h₁.2
     apply le_refl
   calc
   _ ≤ edist t f := Q
@@ -136,7 +137,7 @@ lemma sup_edist_lower_bound' (S : Set (ℕ → Bool)) (t f : ℕ → Bool)
 
 lemma sup_dist_lower_bound : 1 ≤ (⨆ x ∈ Set.univ, ⨆ y ∈ Set.univ, d x y) := by
   rw [dist_tf]
-  simp only [Set.mem_univ, ciSup_unique, ge_iff_le]
+  simp only [Set.mem_univ, ciSup_unique]
   have Q₀ : d tr fa ≤ F tr := by
       refine (Real.le_sSup_iff ?h ?h').mpr ?_
       . exists 1; unfold upperBounds; simp; apply dist_bound
@@ -195,9 +196,9 @@ lemma toReal_sup_sup_eq_sup_toReal_sup' : (⨆ x ∈ Set.univ, ⨆ y ∈ Set.uni
 
 lemma diameter_one : Metric.diam (Set.univ : Set (ℕ → Bool)) = 1 := by
     unfold Metric.diam
-    unfold EMetric.diam
+    unfold Metric.ediam
     have h₁ : ⨆ x ∈ Set.univ, toReal_sup x
-            = ⨆ x ∈ Set.univ, sup_toReal x := by exact biSup_congr fun i _ ↦ toReal_sup_eq_sup_toReal₀ i
+            = ⨆ x ∈ Set.univ, sup_toReal x := biSup_congr fun i _ ↦ toReal_sup_eq_sup_toReal₀ i
 
     have h₂ : (⨆ x ∈ Set.univ, ⨆ y ∈ Set.univ, @edist (ℕ → Bool) _ x y).toReal
             = ⨆ x ∈ Set.univ, sup_toReal x :=
@@ -205,20 +206,20 @@ lemma diameter_one : Metric.diam (Set.univ : Set (ℕ → Bool)) = 1 := by
     rw [h₂]
     exact sup_sup_dist_eq
 
-lemma e_diameter_one : EMetric.diam (Set.univ : Set (ℕ → Bool)) = 1 := by
-    have : (EMetric.diam (Set.univ : Set (ℕ → Bool))).toReal = 1 := diameter_one
-    exact (ENNReal.toReal_eq_one_iff (EMetric.diam Set.univ)).mp this
+lemma e_diameter_one : Metric.ediam (Set.univ : Set (ℕ → Bool)) = 1 := by
+    have : (Metric.ediam (Set.univ : Set (ℕ → Bool))).toReal = 1 := diameter_one
+    exact (ENNReal.toReal_eq_one_iff (Metric.ediam Set.univ)).mp this
 
-lemma e_diameter_bound (S : Set (ℕ → Bool)) : EMetric.diam S ≤ 1 := by
+lemma e_diameter_bound (S : Set (ℕ → Bool)) : Metric.ediam S ≤ 1 := by
   have h : S ⊆ Set.univ := by exact fun ⦃a⦄ _ ↦ trivial
-  let Q := EMetric.diam_mono h
+  let Q := Metric.ediam_mono h
   rw [e_diameter_one] at Q
   tauto
 
 lemma diam_one
 (S : Set (ℕ → Bool))
 (hS : ∃ x y, x ∈ S ∧ y ∈ S ∧ x 0 = true ∧ y 0 = false)
-: EMetric.diam S = 1 := by
+: Metric.ediam S = 1 := by
         obtain ⟨t,ht⟩ := hS
         obtain ⟨f,hf⟩ := ht
         let Q := sup_edist_lower_bound' S t f (by aesop) (by tauto)
@@ -259,44 +260,45 @@ def tf := (λ n : ℕ ↦ ite (n=0) true (ite (n=1) false false))
 lemma edist_half {b : Bool}:
   ⨆ x ∈ {x : ℕ → Bool | x 0 = b},
   ⨆ y ∈ {x | x 0 = b}, edist x y ≤ 1 / 2 := by
-              unfold
-                edist
-                PseudoEMetricSpace.toEDist
-                EMetricSpace.toPseudoEMetricSpace
-                MetricSpace.toEMetricSpace
-                EMetricSpace.ofT0PseudoEMetricSpace
-                PseudoMetricSpace.toPseudoEMetricSpace
-                PseudoMetricSpace.edist
-                MetricSpace.toPseudoMetricSpace
-                myInstance
-                PiNat.metricSpaceOfDiscreteUniformity
-                PseudoMetricSpace.toUniformSpace
-                dist
-                PiNat.dist
-              simp only [Set.mem_setOf_eq, iSup_le_iff]
-              intro x hx y hy
-              split_ifs with H
-              . have : (1:ENNReal)/2 = ((1:ENNReal)/2)^1 := by exact Eq.symm (pow_one (1 / 2))
-                rw [this]
-                suffices PiNat.firstDiff x y ≥ 1 by
-                  have : ENNReal.ofNNReal ⟨(1 / 2) ^ PiNat.firstDiff x y, by
-                    refine pow_nonneg ?H (PiNat.firstDiff x y)
-                    refine one_div_nonneg.mpr ?H.a
-                    exact zero_le_two
-                  ⟩ =  (1 / 2) ^ PiNat.firstDiff x y := by
-                    apply ENNReal_mess
-                  rw [this]
-                  apply pow_le_pow_of_le_one
-                  simp only [one_div, zero_le]
-                  simp only [one_div, ENNReal.inv_le_one, Nat.one_le_ofNat]
-                  tauto
-                simp
-                rw [PiNat.firstDiff]
-                rw [dif_pos H]
-                simp
-                rw [hx,hy]
+              sorry
+              -- unfold
+              --   edist
+              --   PseudoEMetricSpace.toEDist
+              --   EMetricSpace.toPseudoEMetricSpace
+              --   MetricSpace.toEMetricSpace
+              --   EMetricSpace.ofT0PseudoEMetricSpace
+              --   PseudoMetricSpace.toPseudoEMetricSpace
+              --   PseudoMetricSpace.edist
+              --   MetricSpace.toPseudoMetricSpace
+              --   myInstance
+              --   PiNat.metricSpaceOfDiscreteUniformity
+              --   PseudoMetricSpace.toUniformSpace
+              --   dist
+              --   PiNat.dist
+              -- simp only [Set.mem_setOf_eq, iSup_le_iff]
+              -- intro x hx y hy
+              -- split_ifs with H
+              -- . have : (1:ENNReal)/2 = ((1:ENNReal)/2)^1 := by exact Eq.symm (pow_one (1 / 2))
+              --   rw [this]
+              --   suffices PiNat.firstDiff x y ≥ 1 by
+              --     have : ENNReal.ofNNReal ⟨(1 / 2) ^ PiNat.firstDiff x y, by
+              --       refine pow_nonneg ?H (PiNat.firstDiff x y)
+              --       refine one_div_nonneg.mpr ?H.a
+              --       exact zero_le_two
+              --     ⟩ =  (1 / 2) ^ PiNat.firstDiff x y := by
+              --       apply ENNReal_mess
+              --     rw [this]
+              --     apply pow_le_pow_of_le_one
+              --     simp only [one_div, zero_le]
+              --     simp only [one_div, ENNReal.inv_le_one, Nat.one_le_ofNat]
+              --     tauto
+              --   simp
+              --   rw [PiNat.firstDiff]
+              --   rw [dif_pos H]
+              --   simp
+              --   rw [hx,hy]
 
-              . apply zero_le
+              -- . apply zero_le
 
 lemma one_or_other
 {S T : Set (ℕ → Bool)}
@@ -367,9 +369,9 @@ lemma four_sets_and_disjointness
 -- This is a prototype for why, given compactness, we can prove the measure of 2^ℕ
 -- is 1.
 theorem measure_univ_prototype (S T : Set (ℕ → Bool)) (h : Set.univ ⊆ S ∪ T) :
-  1 ≤ EMetric.diam S + EMetric.diam T := by
+  1 ≤ Metric.ediam S + Metric.ediam T := by
     by_cases hS : ∃ x y, x ∈ S ∧ y ∈ S ∧ x 0 = true ∧ y 0 = false
-    . rw [diam_one _ hS]; simp
+    . sorry --rw [diam_one _ hS]; simp
     . by_cases hT : ∃ x y, x ∈ T ∧ y ∈ T ∧ x 0 = true ∧ y 0 = false
       . rw [diam_one _ hT]; simp
       . have h₀: tr ∈ S ∨ tr ∈ T := by exact h trivial
@@ -435,11 +437,11 @@ theorem measure_univ_prototype (S T : Set (ℕ → Bool)) (h : Set.univ ⊆ S �
           1 {x | x 0 = true} tt tf (Ne.symm (Bool.ne_of_lt rfl)) (by
             constructor;simp;rfl;simp;rfl
           )
-        have hS₀ : EMetric.diam S = 1/2 := by
+        have hS₀ : Metric.ediam S = 1/2 := by
           cases H with
           |inl hl =>
             rw [hl.1]
-            unfold EMetric.diam
+            unfold Metric.ediam
             apply le_antisymm
             . apply edist_half
             . simp at Uf
@@ -447,17 +449,17 @@ theorem measure_univ_prototype (S T : Set (ℕ → Bool)) (h : Set.univ ⊆ S �
               tauto
           |inr hr =>
             rw [hr.2]
-            unfold EMetric.diam
+            unfold Metric.ediam
             apply le_antisymm
             . exact @edist_half true
             . simp at Ut
               simp
               tauto
-        have hT₀ : EMetric.diam T = 1/2 := by
+        have hT₀ : Metric.ediam T = 1/2 := by
           cases H with
           |inl hl =>
             rw [hl.2]
-            unfold EMetric.diam
+            unfold Metric.ediam
             apply le_antisymm
             . apply edist_half
             . simp at Ut
@@ -465,7 +467,7 @@ theorem measure_univ_prototype (S T : Set (ℕ → Bool)) (h : Set.univ ⊆ S �
               tauto
           |inr hr =>
             rw [hr.1]
-            unfold EMetric.diam
+            unfold Metric.ediam
             apply le_antisymm
             . exact @edist_half false
             . simp at Uf

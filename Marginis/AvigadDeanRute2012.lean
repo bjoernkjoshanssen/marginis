@@ -40,7 +40,7 @@ theorem metastableAux {a : ℕ → ℝ} {ε : ℝ} {m : ℕ}  (h : ∃ n ≥ m, 
 lemma metastableEquiv₂ : P₂ a → P₁ a := fun h ε hε => by
   specialize h ε hε
   contrapose h
-  push_neg at h ⊢
+  push Not at h ⊢
   have Q := fun m => metastableAux <| h m
   exists fun m => Nat.find (Q m)
   exact fun m => Nat.find_spec (Q m)

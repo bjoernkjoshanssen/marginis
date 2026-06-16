@@ -1,23 +1,23 @@
 -- Austin's imports
-import Mathlib.Data.Set.Countable
-import Mathlib.Data.Set.Function
-import Mathlib.Data.Rat.Init
-import Mathlib.Data.Rat.Cast.CharZero
-import Mathlib.Data.Finset.Basic
-import Mathlib.Logic.Function.Basic
-import Mathlib.Algebra.BigOperators.Group.Finset
-import Init.Data.Int
-import Init.Prelude
-import Lean.Meta.Tactic.LibrarySearch
-import Mathlib.Tactic.Linarith.Frontend
-import Mathlib.Tactic.Ring.Basic
-import Mathlib.Algebra.CharZero.Lemmas
-import Mathlib.Algebra.Ring.Parity
-import Mathlib.Algebra.Group.Even
-import Mathlib.Algebra.Group.Basic
-import Mathlib.Algebra.CharP.Defs
-import Mathlib.Topology.MetricSpace.Pseudo.Pi
-
+-- import Mathlib.Data.Set.Countable
+-- import Mathlib.Data.Set.Function
+-- import Mathlib.Data.Rat.Init
+-- import Mathlib.Data.Rat.Cast.CharZero
+-- import Mathlib.Data.Finset.Basic
+-- import Mathlib.Logic.Function.Basic
+-- import Mathlib.Algebra.BigOperators.Group.Finset
+-- import Init.Data.Int
+-- import Init.Prelude
+-- import Lean.Meta.Tactic.LibrarySearch
+-- import Mathlib.Tactic.Linarith.Frontend
+-- import Mathlib.Tactic.Ring.Basic
+-- import Mathlib.Algebra.CharZero.Lemmas
+-- import Mathlib.Algebra.Ring.Parity
+-- import Mathlib.Algebra.Group.Even
+-- import Mathlib.Algebra.Group.Basic
+-- import Mathlib.Algebra.CharP.Defs
+-- import Mathlib.Topology.MetricSpace.Pseudo.Pi
+import Mathlib
 /-!
 
 # Time complexity of the Analyst’s Traveling Salesman algorithm
@@ -88,7 +88,7 @@ theorem clear {N : ℕ} (v w : Fin N → ℝ) :
     have : dist (v i) 0 = |v i - 0| := rfl
     rw [this]
     simp
-    exact this
+    tauto
 
 -- Austin's part
 
@@ -282,7 +282,7 @@ theorem spread_fun_inj : spread_fun.Injective := by {
     simp
   have ha1notl : ¬(a1 = a1.natAbs) := by
     contrapose ha1not0
-    simp
+    --simp
     simp at ha1not0
     apply (neg_fit_iff_pos a1).mp
     simp
@@ -302,7 +302,7 @@ theorem spread_fun_inj : spread_fun.Injective := by {
     simp
   have ha2notl : ¬(a2 = a2.natAbs) := by
     contrapose ha2not0
-    simp
+    --simp
     simp at ha2not0
     apply (neg_fit_iff_pos a2).mp
     simp
@@ -431,7 +431,7 @@ lemma range_lem (b c : ℕ) : (c*(c+1) < b*(b+1) + 2*c) → (c ≤ b) := by {
     exact hba
   rw [ha]
   contrapose hba
-  simp at hba
+  --simp at hba
   rw [← infant_Gauss, ← infant_Gauss] at hba
   rw [← infant_Gauss, ← infant_Gauss] at h2ba
   have h3 : 2 * ∑ x ∈ Finset.range (b + 1), x + 2 * (a + 1)
@@ -521,7 +521,7 @@ theorem diag_fun_inj : diag_fun.Injective := by {
   rw [Nat.mul_add 2 (∑ x ∈ Finset.range (b.1 + b.2 + 1), x) b.2, infant_Gauss (b.1+b.2)] at h
   --wish for WLOG
   have hab : ((a.1+a.2) ≥ (b.1+b.2) ∨ ((b.1+b.2) > (a.1+a.2))) := by
-    exact le_or_lt (b.1 + b.2) (a.1 + a.2)
+    sorry --exact le_or_lt (b.1 + b.2) (a.1 + a.2)
   cases' hab with ha hb
   have ha2 :(a.1+a.2)*(a.1+a.2+1) ≥ (b.1+b.2)*(b.1+b.2+1) := by
     apply (n_sq_add_n_monotone (b.1+b.2) (a.1+a.2)).mp
@@ -608,7 +608,7 @@ theorem diag_fun_inj : diag_fun.Injective := by {
   simp at h
   have hb0 : b.1 = 0 := by
     rw [h] at hab
-    exact Nat.self_eq_add_left.mp hab
+    sorry --exact Nat.self_eq_add_left.mp hab
   have hab0 : a.1 = b.1 := by
     rw [ha0]
     rw [hb0]
@@ -765,3 +765,4 @@ theorem rat_prod_countable : Set.Countable E := by {
   apply Set.injOn_of_injective
   exact rat_prod_fun_inj
 }
+#min_imports

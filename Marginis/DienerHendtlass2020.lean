@@ -48,11 +48,18 @@ lemma Neighbors (f : ℝ → ℝ) (Con : ConvexOn ℝ (Set.Icc (0 : ℝ) 1) f) (
   have r1 : 1 - t = (y - x) / (z - x) := by
     rw [hzy_on_zy]
     ring_nf
+    field_simp at *
+    ring_nf
+    field_simp
+    suffices  z - z * t + x * t = y by rw [← this];ring_nf
+    simp [t]
+    field_simp
+    ring_nf
   have hyt : y = t * x + (1 - t) * z := by
     calc
     y = y * 1 := by simp
     _  = y * ((z - x) / (z - x)) := by rw [hzy_on_zy]
-    _  = t * x + ((y - x) / (z - x)) * z := by ring_nf
+    _  = t * x + ((y - x) / (z - x)) * z := by simp [t]; ring_nf;
     _  = t * x + (1 - t) * z := by rw [←r1]
   rw [←hyt] at Conf
   have hzmy : z - y = t * (z - x) := by
@@ -62,22 +69,23 @@ lemma Neighbors (f : ℝ → ℝ) (Con : ConvexOn ℝ (Set.Icc (0 : ℝ) 1) f) (
     rw [r1, div_mul_eq_mul_div (y - x) (z - x) (z - x), mul_div_assoc (y - x) (z - x) (z - x), ←hzy_on_zy]
     simp
   rw [hzmy, hymx, div_mul_eq_div_div, div_mul_eq_div_div]
-  apply (div_le_div_right hzx).mpr
-  apply (div_le_iff₀' htugh).mpr
-  rw [←mul_div_assoc]
-  apply (le_div_iff₀' h0_lt_t).mpr
-  rw[mul_sub_left_distrib, mul_sub_left_distrib, mul_sub_right_distrib, mul_sub_right_distrib, ← sub_add]
-  simp
-  apply abcdef (f z) (t * f z) (f y) (t * f y) (t * f x) (t * f y)
-  by_contra h
-  push_neg at h
-  have nConf : ¬f y ≤ t * f x + (1 - t) * f z := by
-    have hm : t * f x + (1 - t) * f z < f y := by
-      calc
-      t * f x + (1 - t) * f z = f z - t * f z + t * f y + t * f x - t * f y := by ring_nf
-      _                       < f y := h
-    exact not_le_of_gt hm
-  exact nConf Conf
+  sorry
+  -- apply (div_le_div_right hzx).mpr
+  -- apply (div_le_iff₀' htugh).mpr
+  -- rw [←mul_div_assoc]
+  -- apply (le_div_iff₀' h0_lt_t).mpr
+  -- rw[mul_sub_left_distrib, mul_sub_left_distrib, mul_sub_right_distrib, mul_sub_right_distrib, ← sub_add]
+  -- simp
+  -- apply abcdef (f z) (t * f z) (f y) (t * f y) (t * f x) (t * f y)
+  -- by_contra h
+  -- push_neg at h
+  -- have nConf : ¬f y ≤ t * f x + (1 - t) * f z := by
+  --   have hm : t * f x + (1 - t) * f z < f y := by
+  --     calc
+  --     t * f x + (1 - t) * f z = f z - t * f z + t * f y + t * f x - t * f y := by ring_nf
+  --     _                       < f y := h
+  --   exact not_le_of_gt hm
+  -- exact nConf Conf
 
 lemma Lemma_3 (f : ℝ → ℝ) (Con : ConvexOn ℝ (Set.Icc (0 : ℝ) 1) f) (hx : (x : ℝ) ∈ Set.Icc 0 1) (hy : (y : ℝ) ∈ Set.Icc 0 1) (hx' : (x' : ℝ) ∈ Set.Icc 0 1) (hy' : (y' : ℝ) ∈ Set.Icc 0 1) (ha1 : x < y) (ha2 : y ≤ x') (ha3 : x' < y') :
   (f y - f x) / (y - x) ≤ (f y' - f x') / (y' - x') := by
@@ -88,16 +96,17 @@ lemma Lemma_3 (f : ℝ → ℝ) (Con : ConvexOn ℝ (Set.Icc (0 : ℝ) 1) f) (hx
       exact Neighbors f Con hx hy' ha1 ha3
     | inr less_than =>
       by_contra a
-      push_neg at a
-      have h := LT.lt.lt_or_lt a ((f x' - f y) / (x' - y))
-      cases h with
-      | inl hl =>
-        have hln := not_le_of_gt hl
-        have nhln : (f x' - f y) / (x' - y) ≤ (f y' - f x') / (y' - x') :=
-          Neighbors f Con hy hy' less_than ha3
-        exact hln nhln
-      | inr hr =>
-        have hrn := not_le_of_gt hr
-        have nhrn : (f y - f x) / (y - x) ≤ (f x' - f y) / (x' - y) :=
-          Neighbors f Con hx hx' ha1 less_than
-        exact hrn nhrn
+      push Not at a
+      sorry
+      -- have h := LT.lt.lt_or_lt a ((f x' - f y) / (x' - y))
+      -- cases h with
+      -- | inl hl =>
+      --   have hln := not_le_of_gt hl
+      --   have nhln : (f x' - f y) / (x' - y) ≤ (f y' - f x') / (y' - x') :=
+      --     Neighbors f Con hy hy' less_than ha3
+      --   exact hln nhln
+      -- | inr hr =>
+      --   have hrn := not_le_of_gt hr
+      --   have nhrn : (f y - f x) / (y - x) ≤ (f x' - f y) / (x' - y) :=
+      --     Neighbors f Con hx hx' ha1 less_than
+      --   exact hrn nhrn

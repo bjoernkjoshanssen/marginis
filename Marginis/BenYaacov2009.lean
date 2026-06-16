@@ -1,9 +1,6 @@
-import Mathlib.MeasureTheory.MeasurableSpace.Defs
-import Mathlib.MeasureTheory.Measure.Haar.OfBasis
-import Mathlib.MeasureTheory.Function.LpSpace
-import Mathlib.MeasureTheory.Measure.FiniteMeasure
-import Mathlib.MeasureTheory.Measure.Typeclasses
-
+module
+public import Mathlib.MeasureTheory.Function.LpSpace.Basic
+public import Mathlib.MeasureTheory.Measure.Haar.OfBasis
 /-!
 
 ## Modular functionals and perturbations of Nakano spaces
@@ -18,6 +15,7 @@ Here we define that and give an example.
 Note that the Lp seminorm `MeasureTheory.eLpNorm` is equal to 0 for p=0.
 
 -/
+noncomputable section
 
 def L₀ {X : Type*} { _ : MeasureTheory.MeasureSpace X} :=
   @MeasureTheory.Lp X ℝ

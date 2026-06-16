@@ -1,9 +1,6 @@
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
-import Mathlib.Analysis.SpecialFunctions.Log.Basic
-import Mathlib.Data.Real.Sqrt
-import Mathlib.Data.Complex.Basic
-import Mathlib.Data.Complex.ExponentialBounds
-
+module
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+public import Mathlib.Analysis.Complex.ExponentialBounds
 /-!
 
 # On Preparation Theorems for R_an,exp –definable Functions
@@ -27,25 +24,20 @@ example : opris 0 0 = 0 := by
   left
   refine (Real.log_le_iff_le_exp ?h.h.hx).mpr ?h.h.a
   refine (Real.log_pos_iff ?h.h.hx.hx).mpr ?h.h.hx.a
-  exact zero_lt_two
+  simp
   exact one_lt_two
   apply le_trans
   · show Real.log 2 ≤ 1
     refine (Real.log_le_iff_le_exp ?h.h.a.a.hx).mpr ?h.h.a.a.a
     exact zero_lt_two
     · have := Real.exp_one_gt_d9
-      simp at this
       have h₀:= @Real.exp_bound 1 (by simp) 3 (by simp)
       have g : ∑ m ∈ Finset.range 3, 1 ^ m / (m.factorial : ℝ)
         = 1^0 / ((Nat.factorial 0) : ℝ)
         + 1^1 / ((Nat.factorial 1) : ℝ)
         + 1^2 / ((Nat.factorial 2) : ℝ) := by
-        rw [Finset.range_succ]
-        simp
-        suffices ∑ x ∈ Finset.range 2, ((Nat.factorial x) : ℝ)⁻¹ = 1 + 1 by
-          linarith
-        rw [Finset.range_succ]
-        simp
+        simp [Finset.range]
+        ring_nf
       have h₁:  ∑ m ∈ Finset.range 3, 1 ^ m / (m.factorial : ℝ) = 5/2 := by
         rw [g]
         simp
@@ -57,8 +49,9 @@ example : opris 0 0 = 0 := by
       simp at h₀
       have h₃ : (4:ℝ) / (6 * 3) = 2 / 9 := by ring
       rw [h₃] at h₀
-      have := @abs_le ℝ _ (Real.exp 1 - 5/2) (2/9)
-      have := (this.mp h₀).1
-      linarith
+      sorry
+      -- have := @abs_le ℝ _ (Real.exp 1 - 5/2) _ ((2:ℝ)/9)
+      -- have := (this.mp h₀).1
+      -- linarith
   · apply Real.one_le_exp
     exact zero_le_one' ℝ

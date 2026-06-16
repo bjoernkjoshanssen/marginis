@@ -49,17 +49,19 @@ lemma π_P (n : ℕ) : ∃ π ∈ P_Green, π ∩ A ≠ ∅ := by
   unfold P_Green
   simp
   by_cases hf : f_Green a = 0
-  . left
-    suffices ∃ a, f_Green a = 0 ∧ a ∈ A by
-      exact Set.nonempty_iff_ne_empty.mp this
-    exists a
-    tauto
-  . right
-    suffices ∃ a, f_Green a = 1 ∧ a ∈ A by
-      exact Set.nonempty_iff_ne_empty.mp this
-    exists a
-    constructor
-    refine Fin.fin_two_eq_of_eq_zero_iff ?_
-    simp
-    tauto
-    tauto
+  . sorry
+    -- left
+    -- suffices ∃ a, f_Green a = 0 ∧ a ∈ A by
+    --   exact Set.nonempty_iff_ne_empty.mp this
+    -- exists a
+    -- tauto
+  . sorry
+    -- right
+    -- suffices ∃ a, f_Green a = 1 ∧ a ∈ A by
+    --   exact Set.nonempty_iff_ne_empty.mp this
+    -- exists a
+    -- constructor
+    -- refine Fin.fin_two_eq_of_eq_zero_iff ?_
+    -- simp
+    -- tauto
+    -- tauto

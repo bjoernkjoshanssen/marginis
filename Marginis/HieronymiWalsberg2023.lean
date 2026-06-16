@@ -46,29 +46,30 @@ theorem coincide_osc {X Y : Type} [MetricSpace X] [MetricSpace Y]
   · refine le_iInf₂ ?_
     intro S hS
     simp only [sSup_le_iff, Set.mem_setOf_eq] at hS ⊢
-    intro b h ε hε
-    use b.toNNReal
-    simp at hε
-    have ⟨y,hy⟩ := h 1 (by simp)
-    have ⟨z,hz⟩ := hy.2
-    have : edist (f y) (f z) ≠ ⊤ := by exact edist_ne_top (f y) (f z)
-    have : edist (f y) (f z) < ⊤ := by exact edist_lt_top (f y) (f z)
-    have : b < ⊤ := by apply lt_trans hz.2 this
-    have : b ≠ ⊤ := by exact LT.lt.ne_top this
-    constructor
-    · refine (WithTop.untop_eq_iff this).mp ?h.intro.intro.left.a
-      unfold WithTop.untop
-      simp
-      aesop
-    · suffices b ≤ ε by
-        apply toNNReal_le_ENNReal _ _ this
-      rw [← hε]
-      -- use hS to get a certain δ
-      -- rw [nhds] at hS
-      -- have := @mem_nhds_iff X x (f⁻¹' S) _
-      rw [mem_nhds_iff] at hS
-      obtain ⟨t,ht⟩ := hS
-      sorry
+    sorry
+    -- intro b h ε hε
+    -- use b.toNNReal
+    -- simp at hε
+    -- have ⟨y,hy⟩ := h 1 (by simp)
+    -- have ⟨z,hz⟩ := hy.2
+    -- have : edist (f y) (f z) ≠ ⊤ := by exact edist_ne_top (f y) (f z)
+    -- have : edist (f y) (f z) < ⊤ := by exact edist_lt_top (f y) (f z)
+    -- have : b < ⊤ := by apply lt_trans hz.2 this
+    -- have : b ≠ ⊤ := by exact LT.lt.ne_top this
+    -- constructor
+    -- · refine (WithTop.untop_eq_iff this).mp ?h.intro.intro.left.a
+    --   unfold WithTop.untop
+    --   simp
+    --   aesop
+    -- · suffices b ≤ ε by
+    --     apply toNNReal_le_ENNReal _ _ this
+    --   rw [← hε]
+    --   -- use hS to get a certain δ
+    --   -- rw [nhds] at hS
+    --   -- have := @mem_nhds_iff X x (f⁻¹' S) _
+    --   rw [mem_nhds_iff] at hS
+    --   obtain ⟨t,ht⟩ := hS
+    --   sorry
   ·
     sorry
 
@@ -79,10 +80,15 @@ theorem oscillation'_const {c x : ℝ} : oscillation' (fun _ : ℝ => c) x = 0 :
   suffices sSup ∅ = (0 : ENNReal) by
     rw [← this]
     congr
-    ext
+    ext x
     simp
-    use 1
-    simp
+    constructor
+    intro h
+    specialize h 1
+    simp at h
+    intro h
+    exfalso
+    exact Ne.elim (fun a ↦ h) this
   have := @sSup_empty ENNReal _
   rw [this]
   simp

@@ -1,15 +1,8 @@
-import Batteries.Data.List.Basic
-import Mathlib.Data.Vector.Basic
-import Mathlib.Tactic.Zify
-import Mathlib.Topology.NoetherianSpace
-import Mathlib.Data.Nat.SuccPred
-import Mathlib.Tactic.Linarith.Lemmas
-import Mathlib.Tactic.Ring.Basic
-import Mathlib.Topology.Instances.Discrete
-import Mathlib.Topology.UniformSpace.Compact
-import Mathlib.Algebra.Order.Star.Basic
-import Mathlib.Tactic.Linarith
-
+module
+public import Mathlib.Data.Nat.SuccPred
+public import Mathlib.Topology.Instances.Discrete
+public import Mathlib.Topology.NoetherianSpace
+public import Mathlib.Topology.UniformSpace.HeineCantor
 /-!
 
 # Principles of bar induction and continuity on Baire space
@@ -59,7 +52,8 @@ theorem bounded_of_continuous_compact
   simp at this
   obtain ⟨i,hi⟩ := this
   have : i.1 < k := i.2
-  linarith
+  omega
+
 
 theorem bounded_of_continuous (f : (ℕ → Bool) → ℕ) (hf : Continuous f) :
   ∃ a, ∀ A, f A ≤ a := bounded_of_continuous_compact _ hf

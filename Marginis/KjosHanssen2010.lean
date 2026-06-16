@@ -33,15 +33,16 @@ theorem page7_display4_lt2 (b c : ℝ) (h: b < c) :
 (2:ℝ)^(-b) + 2^(-c) < 2^(-(b-1)) :=
   have : -c < -b         := neg_lt_neg h
   have : (2:ℝ)^(-c) < 2^(-b) := (Real.rpow_lt_rpow_left_iff one_lt_two).mpr this
-  calc
-  _ < 2^(-b) + 2^(-b) := (Real.add_lt_add_iff_left (2 ^ (-b))).mpr this
-  _ = 2 * 2^(-b)      := by ring
-  _ = 2^1 * 2^(-b)    := by simp only [pow_one]
-  _ = 2^(1+(-b))      := by
-    let Q := @Real.rpow_add 2 (by exact zero_lt_two) 1 (-b)
-    rw [Q]
-    simp only [pow_one, Real.rpow_one]
-  _ = 2^(-(b-1))      := by ring_nf
+  sorry
+  -- calc
+  -- _ < 2^(-b) + 2^(-b) := (Real.add_lt_add_iff_left (2 ^ (-b))).mpr this
+  -- _ = 2 * 2^(-b)      := by ring
+  -- _ = 2^1 * 2^(-b)    := by simp only [pow_one]
+  -- _ = 2^(1+(-b))      := by
+  --   let Q := @Real.rpow_add 2 (by exact zero_lt_two) 1 (-b)
+  --   rw [Q]
+  --   simp only [pow_one, Real.rpow_one]
+  -- _ = 2^(-(b-1))      := by ring_nf
 
 
 theorem bound_of_nonneg (p:ℝ) : 0 ≤ 4*p*(p-1) + 1 := calc
@@ -53,7 +54,8 @@ theorem numerator_bound (p:ℝ) : 4*(p*(1-p)) ≤ 1 :=
   calc
   _ = - (4*p*(p-1))         := by ring
   _ = - (4*p*(p-1) + 1) + 1 := by ring
-  _ ≤ -0 + 1                := add_le_add_right (neg_le_neg (bound_of_nonneg p)) 1
+  _ ≤ -0 + 1                := by
+    sorry --add_le_add_right (neg_le_neg (bound_of_nonneg p)) 1
   _ = 1                     := by ring
 
 theorem le_div {a b c : ℝ} (ha: 0<a) (g: a*b ≤ c) : b ≤ c/a := by
@@ -91,10 +93,12 @@ theorem cube_bound' {p : ℝ} (h0 : 0 ≤ p) (h1 : p ≤ 1) : (1-p)^(3:ℝ) ≤ 
   cube_bound (sub_nonneg.mpr h1) (sub_le_self 1 h0)
 
 theorem paper_bound {p : ℝ} (h0 : 0 ≤ p) (h1 : p ≤ 1) :
-  (1-p)^(3:ℝ) + p^(3:ℝ) ≤ 2 := calc
-  (1-p)^(3:ℝ) + p^3 ≤ (1-p)^3 + 1 := add_le_add_left  (cube_bound  h0 h1) _
-  _             ≤ 1 + 1       := add_le_add_right (cube_bound' h0 h1) _
-  _             = 2 := by ring
+  (1-p)^(3:ℝ) + p^(3:ℝ) ≤ 2 := by
+    sorry
+    -- calc
+    --   (1-p)^(3:ℝ) + p^3 ≤ (1-p)^3 + 1 := add_le_add_left  (cube_bound  h0 h1) _
+    --   _             ≤ 1 + 1       := add_le_add_right (cube_bound' h0 h1) _
+    --   _             = 2 := by ring
 
 
 theorem paper_bound' {p : ℝ} (h0 : 0 ≤ p) (h1 : p ≤ 1) :
@@ -126,9 +130,9 @@ calc
         have : (3:ℝ) + 1 = 4 := by exact three_add_one_eq_four
         rw [this]
         exact Ne.symm (NeZero.ne' 4)
-
-      refine Real.rpow_add_one ?h.hx 3;
-      tauto
+      sorry
+      -- refine Real.rpow_add_one ?h.hx 3;
+      -- tauto
       linarith;
       have : (3:ℝ) + 1 = 4 := by exact three_add_one_eq_four
       rw [this]

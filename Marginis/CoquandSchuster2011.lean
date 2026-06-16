@@ -1,8 +1,5 @@
-import Mathlib.Data.Set.Finite
-import Mathlib.Algebra.Order.Ring.Nat
-import Mathlib.Data.Nat.Cast.Order.Basic
-
-/-!
+module
+public import Mathlib.AlgebraicTopology.SimplexCategory.Basic/-!
 
 # Unique paths as formal points
 
@@ -39,7 +36,7 @@ lemma wklFin0 : @WKL (Fin 0) := by
 
 lemma notWklFinNat : ¬ @WKL ℕ := by
   unfold WKL
-  push_neg
+  push Not
   use (λ σ ↦ σ.length ≤ 1)
   constructor
   unfold tree
@@ -58,7 +55,7 @@ lemma notWklFinNat : ¬ @WKL ℕ := by
     (λ σ ↦ dite (σ.1.length = 0) (λ _ ↦ 0) (λ h ↦ σ.1.get ⟨0,Nat.zero_lt_of_ne_zero h⟩
     )) (by intro n; use ⟨[n],by simp⟩; simp)
   unfold has_a_path
-  push_neg
+  push Not
   intro p
   use 2
   simp
@@ -70,10 +67,9 @@ theorem zerolist : ∀ (σ : List (Fin 1)), σ = List.replicate σ.length 0
 | [] => by simp
 | a :: y => by
   rw [zerolist y]
-  simp only [List.replicate, List.pure_def, List.bind_eq_bind, List.bind_nil, List.cons_ne_self]
-  rw [List.length_replicate]
+  fin_cases a
   simp
-  exact Fin.fin_one_eq_zero a
+  rfl
 
 lemma wklFin1 : @WKL (Fin 1) := by
   intro T hT hi

@@ -15,8 +15,9 @@ Here we show how √2 arises as the length of a diagonal in Euclidean geometry.
 
 -/
 
-def x : EuclideanSpace ℝ (Fin 2) := ![0, 0]
-def y : EuclideanSpace ℝ (Fin 2) := ![1, 1]
+def x : EuclideanSpace ℝ (Fin 2) := { ofLp := ![0, 0] }
+
+def y : EuclideanSpace ℝ (Fin 2) := { ofLp := ![1, 1] }
 
 example :  dist x y = √2 := by
   let Q := @EuclideanSpace.dist_eq ℝ _ (Fin 2) _ x y

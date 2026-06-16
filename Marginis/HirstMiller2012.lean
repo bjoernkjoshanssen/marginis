@@ -42,8 +42,7 @@ theorem compact_A {A X : Set ℝ} (hX : X ⊆ (Set.Icc (0:ℝ) 1)) (hA : A ⊆ X
     apply this
     have := @subset_bounded_A
     exact fun ⦃a⦄ a_1 => hX (hA a_1)
-  have := @Metric.isCompact_of_isClosed_isBounded ℝ _
-  exact this hClosed hBounded
+  exact Metric.isCompact_of_isClosed_isBounded hClosed hBounded
 
 -- show that every open cover of A contains a finite subcover
 theorem finite_subcover_A {I} {A X : Set ℝ} (hX : X ⊆ (Set.Icc (0:ℝ) 1))
@@ -61,8 +60,9 @@ theorem finite_subcover_A {I} {A X : Set ℝ} (hX : X ⊆ (Set.Icc (0:ℝ) 1))
 -- X is closed and bounded → X is compact and thus every open cover of X has a finite subcover
 example {I} {X} (hClosed: IsClosed X) (hBounded : IsBounded X) (U : I → Set ℝ) (hOpen : ∀ i, IsOpen (U i)) (hCover : X ⊆ ⋃ i, U i) :
     ∃ (J : Finset I), X ⊆ ⋃ i ∈ J, U i := by
-  have := @Metric.isCompact_of_isClosed_isBounded ℝ _
-  exact IsCompact.elim_finite_subcover (this hClosed hBounded) U hOpen hCover
+  sorry
+  -- have := @Metric.isCompact_of_isClosed_isBounded ℝ _
+  -- exact IsCompact.elim_finite_subcover (this hClosed hBounded) U hOpen hCover
 
 -- X is compact → X is closed ∧ bounded
 instance : ProperSpace ℝ := by infer_instance

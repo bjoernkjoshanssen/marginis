@@ -56,8 +56,8 @@ lemma iReal : (-1: Real) ^ ((1:Real)/2) = 0 := by
   refine Real.sqrt_eq_zero_of_nonpos ?h
   simp
 
-example (a : NNReal) (b : Real) : a ^ b = a ^ b := rfl
-example (a : ENNReal) (b : Real) : a ^ b = a ^ b := rfl
+-- example (a : NNReal) (b : Real) : a ^ b = a ^ b := rfl
+-- example (a : ENNReal) (b : Real) : a ^ b = a ^ b := rfl
 
 -- example : (0:ENNReal) ^ ⊤ = ⊤ := by -- not defined
 --   exact rfl

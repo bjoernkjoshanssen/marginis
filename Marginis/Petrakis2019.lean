@@ -1,8 +1,9 @@
-import Mathlib.Data.Real.Basic
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring.Basic
-import Mathlib.Topology.UniformSpace.Basic
-import Mathlib.Topology.Instances.Real
+module
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Ring.Basic
+public import Mathlib.Topology.UniformSpace.Defs
+public import Mathlib
 /-!
 
 # Constructive uniformities of pseudometrics and Bishop topologies
@@ -15,8 +16,7 @@ Consequently, here we use uniformities to prove that x^2 is not uniformly contin
 
 lemma extraabs (a : ℝ) (h : 0 < a) : 1 ≤ |1 + a| := by
   have : |1+a| = 1+a := by
-    let E := (@abs_eq_self ℝ _ (1+a)).mpr
-    apply E
+    simp
     linarith
   rw [this]
   linarith
@@ -29,11 +29,12 @@ lemma Hδ (δ : ℝ) (hδ : 0 < δ) : 1 ≤ |δ * δ⁻¹ + δ ^ 2 * (1 / 4)| :=
     exact sq_pos_of_pos hδ
   exact extraabs (δ ^ 2 * (1 / 4)) h0
 
+
 /-- Example by Bjørn Kjos-Hanssen. -/
 example : ¬ UniformContinuous (λ x : ℝ ↦ x^2) := by
   rw [uniformContinuous_def]
   show ¬∀ r, r ∈ uniformity ℝ → {x | (x.1 ^ 2, x.2 ^ 2) ∈ r} ∈ uniformity ℝ
-  push_neg
+  push Not
   use {x | dist x.1 x.2 < 1}
   let Q := @Metric.mem_uniformity_dist ℝ _ {x | dist x.1 x.2 < 1}
   constructor
@@ -45,18 +46,15 @@ example : ¬ UniformContinuous (λ x : ℝ ↦ x^2) := by
   let W := @Metric.mem_uniformity_dist ℝ _
     ({x | (x.1 ^ 2, x.2 ^ 2) ∈ {x | dist x.1 x.2 < 1}})
   rw [W]
-  push_neg
+  push Not
   simp
   intro δ hδ
   use (1/δ)
   use (1/δ + δ/2)
   constructor
   simp
-  unfold dist PseudoMetricSpace.toDist Real.pseudoMetricSpace
-  simp
-  have : |δ/2| = δ/2 := by
-    let E := (@abs_eq_self ℝ _ (δ/2)).mpr
-    apply E
+  have : |δ|/2 = δ/2 := by
+    simp
     linarith
   rw [this]
   linarith
