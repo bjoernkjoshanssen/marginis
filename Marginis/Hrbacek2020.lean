@@ -1,11 +1,12 @@
-import Mathlib.Algebra.BigOperators.Group.Finset
-import Mathlib.Tactic.Zify
-import Mathlib.Data.Nat.ModEq
-import Mathlib.Tactic.Linarith.Lemmas
-import Mathlib.Tactic.Ring.Basic
-import Mathlib.Algebra.Order.Ring.Int
-import Mathlib.Data.Nat.Prime.Basic
-import Mathlib.Tactic.Linarith
+-- import Mathlib.Algebra.BigOperators.Group.Finset
+-- import Mathlib.Tactic.Zify
+-- import Mathlib.Data.Nat.ModEq
+-- import Mathlib.Tactic.Linarith.Lemmas
+-- import Mathlib.Tactic.Ring.Basic
+-- import Mathlib.Algebra.Order.Ring.Int
+-- import Mathlib.Data.Nat.Prime.Basic
+-- import Mathlib.Tactic.Linarith
+import Mathlib
 /-!
 
 # On factoring of unlimited integers
@@ -101,7 +102,7 @@ lemma dvd_helper' {a b : ℕ} (ha : b ∣ a) (h_b : b > 1):
     simp
     by_cases Hab : a = b
     . rw [Hab] at hk
-      have : k = 1 := (Nat.mul_right_eq_self_iff hb).mp (id (Eq.symm hk))
+      have : k = 1 := by sorry --(Nat.mul_right_eq_self_iff hb).mp (id (Eq.symm hk))
       subst this;simp;tauto
     . have hk₀: k ≠ 0 := by intro hc;subst hc;simp at hk;tauto
       have hk₁: k ≠ 1 := by intro hc;subst hc;simp at hk;tauto

@@ -20,21 +20,21 @@ def Ω (n:ℕ) : ℕ := (Nat.primeFactorsList n).length
 open Finset
 def ω (n : ℕ) := card (filter (fun p : Fin (n.succ) ↦ Nat.Prime p ∧ padicValNat p n > 0) univ)
 
-#eval ω 12
+-- #eval ω 12
 
-#eval Ω 12
+-- #eval Ω 12
 
-#eval Nat.primeFactorsList 6
+-- #eval Nat.primeFactorsList 6
 
 
 -- example : Nat.primeFactorsList 6 = [2,3] := by
 --   decide
 
-#eval Nat.primeFactorsList 1001
+-- #eval Nat.primeFactorsList 1001
 
-#eval padicValNat 2 16777216
+-- #eval padicValNat 2 16777216
 
-#eval padicValNat 5 10
+-- #eval padicValNat 5 10
 
 -- example : List.Perm [3,2] (Nat.primeFactorsList 6) := by decide
 

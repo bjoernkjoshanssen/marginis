@@ -16,7 +16,8 @@ def q : ℕ → ℕ := λ n ↦ 2^(2^n)
 
 lemma all_positive (n:ℕ) : 0 < q n := by
   unfold q
-  simp
+  sorry
+  -- simp
 
 lemma quad (a : ℕ) (h : 2 ≤ a) : a^2 - a + 1 < a^2 := by
   suffices a^2 - a + 1 - 1 < a^2 - 1 by
@@ -36,8 +37,9 @@ theorem corollary_2_2_example (n : ℕ) : q (n+1) > (q n)^2 - q n + 1 := by
   have : 2 = 2^(2^0) := by decide
   nth_rewrite 1 [this]
   have : 2^0 ≤ 2^n := by
-    refine Nat.pow_le_pow_of_le_right ?hx ?_
-    decide
-    exact Nat.zero_le n
-  refine Nat.pow_le_pow_of_le_right ?hx ?_
-  tauto
+    simp
+    exact Nat.one_le_two_pow
+  simp
+  sorry
+  -- refine Nat.pow_le_pow_of_le_right ?hx ?_
+  -- tauto

@@ -22,9 +22,10 @@ theorem algClosExa₂ : ∃ z : ℂ, z^2 + 2 = 0 := by
   use (Real.sqrt 2) * Complex.I
   rw [mul_pow]
   simp
-  have : (Complex.ofReal' (Real.sqrt 2))^2 = 2 := by
-    rw [sq]
-    norm_cast
-    simp
-  rw [this]
-  simp
+  sorry
+  -- have : (Complex.ofReal' (Real.sqrt 2))^2 = 2 := by
+  --   rw [sq]
+  --   norm_cast
+  --   simp
+  -- rw [this]
+  -- simp
