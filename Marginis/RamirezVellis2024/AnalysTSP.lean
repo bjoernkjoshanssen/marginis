@@ -29,7 +29,6 @@ import Mathlib.Topology.MetricSpace.Pseudo.Basic
 import Mathlib.Topology.MetricSpace.Pseudo.Lemmas
 import Mathlib.Topology.MetricSpace.Pseudo.Pi
 
---gitttest
 --The ultimate goal is to show there exists no rectifiable path
 --covering ℚ×ℚ ∩ [0,1]×[0,1] in the plane, as an example
 --of a bounded countable set for which no solution to the
@@ -688,4 +687,3 @@ def myPoint3 : (ℝ × ℝ) :=
 #eval (dist myPoint1 myPoint3 : ℝ)
 
 #check (euclideanDist myPoint1 myPoint3)
-
