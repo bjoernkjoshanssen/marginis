@@ -16,9 +16,13 @@ open AnalyticTSP
 open ManualEuclideanR2
 
 /-!
-# Analyst's Traveling Salesman Problem (TSP) Failure
+# Analyst's Traveling Salesman Problem (TSP) Failure on countable bounded set
+From page 2 in paper: "For example, if
+V is the set of all points in the unit square [0,1]
+with rational coordinates, it is not hard to see that V
+is bounded and countable but there exists no rectifiable curve that contains V"
 
-The ultimate goal is to show there exists no rectifiable path
+Our formalizastion shows there exists no rectifiable path
 covering ℚ×ℚ ∩ [0,1]×[0,1] in the plane, as an example
 of a bounded countable set for which no solution to the
 analyst's travelling salesman problem exists. We build
@@ -26,11 +30,6 @@ countability of the set from elementary principles and use a
 compactness argument.
 -/
 
-/--
-There exists no rectifiable path covering ℚ×ℚ ∩ [0,1]×[0,1] in the plane,
-as an example of a bounded countable set for which no solution to the
-analyst's travelling salesman problem exists.
--/
 theorem Main_ATSP_Failure :
   ¬ ∃ (S : Set (ℝ × ℝ)) (L : ℝ), IsPathInR2 S ∧ CtsRectifiable S L ∧ UnitRationalSquare ⊆ S := by {
   exact ATSP_Rational_Failure
