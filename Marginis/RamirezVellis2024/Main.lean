@@ -16,7 +16,7 @@ open AnalyticTSP
 open ManualEuclideanR2
 
 /-!
-# Analyst's Traveling Salesman Problem (TSP) Failure on countable bounded set
+# Countable bounded set with no rectifiable path cover
 From page 2 in paper: "For example, if
 V is the set of all points in the unit square [0,1]
 with rational coordinates, it is not hard to see that V
