@@ -188,7 +188,7 @@ lemma babyCauchySchwarzR (a b c d : ℝ) : (a*c + b*d)^2 ≤ (a^2 + b^2)*(c^2 + 
   linarith
 }
 
-#print algIneq1Rlemma
+--#print algIneq1Rlemma
 
 lemma algIneq1R (a b c d : ℝ) :
   2*a*c + 2*b*d ≤ 2*√((a^2+b^2)*(c^2+d^2)) := by {
@@ -411,8 +411,8 @@ def IsCptR2SubcoverCompl {ι : Type u} (K : Set (ℝ × ℝ)) : Prop :=
 #check ι
 #check IsCptR2SubcoverCompl
 #check @IsCptR2SubcoverCompl
-set_option pp.all true in
-#print IsCptR2SubcoverCompl
+--set_option pp.all true in
+--#print IsCptR2SubcoverCompl
 
 lemma TypeEqSetInterLemma (s : Finset ι) (F : ι → Set (ℝ × ℝ)) : (⋂ i ∈ s, F i) = (⋂ i : s, (F i)) := by {
   exact Eq.symm (Set.iInter_subtype (Membership.mem s) fun x => F ↑x)
