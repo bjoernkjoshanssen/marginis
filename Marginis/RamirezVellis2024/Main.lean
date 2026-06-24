@@ -18,7 +18,7 @@ open ManualEuclideanR2
 /-!
 # Countable bounded set with no rectifiable path cover
 From page 2 in paper: "For example, if
-V is the set of all points in the unit square [0,1]
+V is the set of all points in the unit square [0,1]^2
 with rational coordinates, it is not hard to see that V
 is bounded and countable but there exists no rectifiable curve that contains V"
 
